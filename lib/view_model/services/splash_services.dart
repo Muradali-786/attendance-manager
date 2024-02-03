@@ -6,7 +6,7 @@ class SplashServices {
   void isLogin(BuildContext context) {
     Timer(
         const Duration(seconds: 3),
-        () => Navigator.pushNamed(context, RouteName.homePage)
+        () => Navigator.pushReplacementNamed(context, RouteName.homePage)
 
     );
   }

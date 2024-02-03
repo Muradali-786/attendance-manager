@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:attendance_manager/utils/routes/route_name.dart';
 import 'package:attendance_manager/utils/routes/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -19,20 +18,22 @@ void main() async {
         )
       : Firebase.initializeApp();
 
-  runApp(const MyApp());
+  runApp(
+    const MyApp(),
+  );
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const  MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(useMaterial3: false),
       title: 'Attendance Manager',
       initialRoute: RouteName.splash,
       onGenerateRoute: Routes.generateRoute,
-
     );
   }
 }

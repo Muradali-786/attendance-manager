@@ -17,7 +17,6 @@ class _SplashState extends State<Splash> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     splashServices.isLogin(context);
   }
@@ -26,8 +25,6 @@ class _SplashState extends State<Splash> {
   Widget build(BuildContext context) {
     double h = MediaQuery.sizeOf(context).height;
     double w = MediaQuery.sizeOf(context).width;
-    bool isPortrait =
-        MediaQuery.of(context).orientation == Orientation.portrait;
     return Scaffold(
       body: Container(
         width: w,
