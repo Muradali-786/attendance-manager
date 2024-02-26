@@ -73,6 +73,7 @@ flutter:
 
   assets:
     - assets/images_png/
+    - assets/icon_svg/
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
@@ -102,3 +103,16 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+
+
+
+#For the Roboto font, you can use the following weights:
+#
+#Regular (400): For general text and paragraphs.
+#Medium (500): For slightly emphasized text or subheadings.
+#Bold (700): For strong emphasis, such as section headings or important information.
+#For the Montserrat font, you can use:
+#
+#Regular (400): For general headings and titles.
+#Bold (700): For stronger emphasis, such as section titles or important headings.
