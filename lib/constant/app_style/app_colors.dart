@@ -100,13 +100,13 @@ class AppColor {
   static const Color kMonaLisa = Color(0xffFf9893);
   static const Color kSubmarine = Color(0xffB4bdc2);
 
-  static const Color kPrimary = Color(0xff009788);
+  static const Color kPrimaryColor = Color(0xff009788);
   static const Color kSecondaryColor = Color(0xffFe6464);
   static const Color kSecondary54Color = Color(0xffFf9893);
 
   static const Color kFocusBorderColor = Color(0xffFe6464);
   static const Color kBorderColor = Color(0xff919191);
-  static const Color kSecondaryButtonColor = Color(0xffFe6464);
+  static const Color kButtonColor = Color(0xffFe6464);
 
   static const Color kPrimaryTextColor = Color(0xff009788);
   static const Color kSecondaryTextColor = Color(0xffFe6464);

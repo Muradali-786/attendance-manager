@@ -1,4 +1,4 @@
-import 'package:attendance_manager/constant/app_colors.dart';
+import 'package:attendance_manager/constant/app_style/app_colors.dart';
 import 'package:attendance_manager/view_model/services/splash_services.dart';
 import 'package:flutter/material.dart';
 

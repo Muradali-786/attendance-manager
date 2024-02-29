@@ -1,5 +1,5 @@
-import 'package:attendance_manager/constant/app_colors.dart';
-import 'package:attendance_manager/constant/app_styles.dart';
+import 'package:attendance_manager/constant/app_style/app_colors.dart';
+import 'package:attendance_manager/constant/app_style/app_styles.dart';
 import 'package:attendance_manager/constant/constant_size.dart';
 import 'package:attendance_manager/view/myTabBar/attendance/attendance_tab.dart';
 import 'package:attendance_manager/view/myTabBar/history/history_tab.dart';

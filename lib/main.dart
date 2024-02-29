@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:attendance_manager/constant/app_style/app_colors.dart';
+import 'package:attendance_manager/utils/component/custom_stepper.dart';
 import 'package:attendance_manager/utils/routes/route_name.dart';
 import 'package:attendance_manager/utils/routes/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,8 +29,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(useMaterial3: false),
+      theme: ThemeData(
+        useMaterial3: false,
+        scaffoldBackgroundColor: AppColor.kBgColor,
+        appBarTheme: const AppBarTheme(
+          color: AppColor.kPrimaryColor,
+        ),
+      ),
       title: 'Attendance Manager',
+
       initialRoute: RouteName.splash,
       onGenerateRoute: Routes.generateRoute,
     );

@@ -1,14 +1,14 @@
-import 'package:attendance_manager/constant/app_colors.dart';
-import 'package:attendance_manager/constant/app_styles.dart';
+import 'package:attendance_manager/constant/app_style/app_colors.dart';
+import 'package:attendance_manager/constant/app_style/app_styles.dart';
 import 'package:attendance_manager/constant/constant_size.dart';
+import 'package:attendance_manager/size_config.dart';
 import 'package:attendance_manager/utils/component/custom_round_botton.dart';
-import 'package:attendance_manager/utils/component/time_line_widget.dart';
-import 'package:attendance_manager/utils/component/input_text_filed/input_text_filed.dart';
+import 'package:attendance_manager/utils/component/custom_stepper.dart';
+import 'package:attendance_manager/utils/component/input_text_filed/custom_input_text_filed.dart';
 import 'package:attendance_manager/utils/routes/route_name.dart';
 import 'package:attendance_manager/utils/utils.dart';
 import 'package:attendance_manager/view_model/class_input/class_input_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class ClassInputPage extends StatefulWidget {
   const ClassInputPage({super.key});
@@ -18,6 +18,7 @@ class ClassInputPage extends StatefulWidget {
 }
 
 class _ClassInputPageState extends State<ClassInputPage> {
+  final _formKey = GlobalKey<FormState>();
   TextEditingController subjectController = TextEditingController();
   FocusNode subjectFocus = FocusNode();
   TextEditingController batchController = TextEditingController();
@@ -27,11 +28,8 @@ class _ClassInputPageState extends State<ClassInputPage> {
   TextEditingController percentageController = TextEditingController();
   FocusNode percentageFocus = FocusNode();
 
-  final _formKey = GlobalKey<FormState>();
-
   @override
   void dispose() {
-    // TODO: implement dispose
     subjectController.dispose();
     subjectFocus.dispose();
     batchController.dispose();
@@ -43,149 +41,124 @@ class _ClassInputPageState extends State<ClassInputPage> {
     super.dispose();
   }
 
-   bool loading =false;
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
 
-    double h = MediaQuery.sizeOf(context).height;
-    double w = MediaQuery.sizeOf(context).width;
-    SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return Scaffold(
-        backgroundColor: AppColors.kAppBackgroundColor,
-        body: Container(
-          height: h,
-          width: w,
-          decoration:
-          const BoxDecoration(gradient: AppColors.kPrimaryLinearGradient),
-          child: SafeArea(
-            child: Container(
-              decoration: const BoxDecoration(color: AppColors.kWhite),
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: kPadding15),
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 9),
-                        height: 92,
-                        width: double.infinity,
-                        child: TimeLineWidget(isFirstPage: false),
-                      ),
-                      Form(
-                          key: _formKey,
-                          child: Column(
-                            children: [
-                              InputTextField(
-                                  myController: subjectController,
-                                  focusNode: subjectFocus,
-                                  onFieldSubmittedValue: (val) {
-                                    Utils.onFocusChange(
-                                        context, subjectFocus, departmentFocus);
-                                  },
-                                  hint: 'Subject',
-                                  onValidator: (val) {
-                                    return null;
-                                  },
-                                  keyBoardType: TextInputType.text),
-                              InputTextField(
-                                  myController: departmentController,
-                                  focusNode: departmentFocus,
-                                  onFieldSubmittedValue: (val) {
-                                    Utils.onFocusChange(
-                                        context, departmentFocus, batchFocus);
-                                  },
-                                  hint: 'Department',
-                                  onValidator: (val) {
-                                    return null;
-                                  },
-                                  keyBoardType: TextInputType.text),
-                              InputTextField(
-                                  myController: batchController,
-                                  focusNode: batchFocus,
-                                  onFieldSubmittedValue: (val) {
-                                    Utils.onFocusChange(
-                                        context, batchFocus, percentageFocus);
-                                  },
-                                  hint: 'Semester/Batch',
-                                  onValidator: (val) {
-                                    return null;
-                                  },
-                                  keyBoardType: TextInputType.text),
-                              InputTextField(
-                                  myController: percentageController,
-                                  focusNode: percentageFocus,
-                                  onFieldSubmittedValue: (val) {},
-                                  hint: 'Attendance Requirement (%)',
-                                  onValidator: (val) {
-                                    return null;
-                                  },
-                                  keyBoardType: TextInputType.number),
-                              // SizedBox(height: 10,),
-                              // CustomTextField2(controller:departmentController,
-                              //     focusNode:departmentFocus,
-                              //     keyboardType: TextInputType.text,
-                              //     hintText: 'Class'
-                              // )
+        backgroundColor: AppColor.kWhite,
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: kPadding15),
+              child: Column(
+                children: [
+                  SizedBox(height: SizeConfig.screenHeight! * 0.03),
+                  const CustomStepper(),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        CustomInputTextField(
+                          myController: subjectController,
+                          focusNode: subjectFocus,
+                          onFieldSubmittedValue: (val) {
+                            Utils.onFocusChange(
+                                context, subjectFocus, departmentFocus);
+                          },
+                          labelText: 'Subject',
+                          onValidator: (val) {
+                            return null;
+                          },
+                          keyBoardType: TextInputType.text,
+                        ),
+                        CustomInputTextField(
+                            myController: departmentController,
+                            focusNode: departmentFocus,
+                            onFieldSubmittedValue: (val) {
 
-
-                            ],
-                          ),
-
-
-                      ),
-                    ],
+                              Utils.onFocusChange(
+                                  context, departmentFocus, batchFocus);
+                            },
+                            labelText: 'Department',
+                            onValidator: (val) {
+                              return null;
+                            },
+                            keyBoardType: TextInputType.emailAddress),
+                        CustomInputTextField(
+                            myController: batchController,
+                            focusNode: batchFocus,
+                            onFieldSubmittedValue: (val) {
+                              Utils.onFocusChange(
+                                  context, batchFocus, percentageFocus);
+                            },
+                            labelText: 'Semester/Batch',
+                            onValidator: (val) {
+                              return null;
+                            },
+                            keyBoardType: TextInputType.streetAddress),
+                        CustomInputTextField(
+                            myController: percentageController,
+                            focusNode: percentageFocus,
+                            onFieldSubmittedValue: (val) {},
+                            labelText: 'Attendance Requirement (%)',
+                            onValidator: (val) {
+                              return null;
+                            },
+                            keyBoardType: TextInputType.number),
+                      ],
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           ),
         ),
-        bottomNavigationBar: CustomRoundButton(
-            height: 53,
+        bottomSheet: CustomRoundButton(
+            height: getProportionalHeight(55),
             loading: loading,
-            width: w,
+            width: double.infinity,
             borderRaduis: 0,
             title: 'Next',
             textStyle:
-            AppStyles().defaultStyle(20, Colors.white, FontWeight.bold),
-
-            onPress: (){
+                AppStyles().defaultStyle(20, Colors.white, FontWeight.w500),
+            onPress: () {
               setState(() {
-                loading=true;
+                loading = true;
               });
               int percentage = int.parse(percentageController.text);
               String classId = DateTime.now().millisecondsSinceEpoch.toString();
 
-              ClassInputController().addClass(classId,subjectController.text,
-                  departmentController.text, batchController.text, percentage).then((value) {
-                Navigator.pushReplacementNamed(context, RouteName.addStudentPage,
+              ClassInputController()
+                  .addClass(
+                      classId,
+                      subjectController.text,
+                      departmentController.text,
+                      batchController.text,
+                      percentage)
+                  .then((value) {
+                Navigator.pushReplacementNamed(
+                    context, RouteName.addStudentPage,
                     arguments: {
-                      'subject':subjectController.text,
-                      'classId':classId.toString(),
-                    }
-
-                );
+                      'subject': subjectController.text,
+                      'classId': classId.toString(),
+                    });
                 subjectController.clear();
                 departmentController.clear();
                 batchController.clear();
                 percentageController.clear();
                 setState(() {
-                  loading=false;
+                  loading = false;
                 });
-              }).onError((error, stackTrace){
-
+              }).onError((error, stackTrace) {
                 Utils.toastMessage(error.toString());
                 setState(() {
-                  loading=false;
+                  loading = false;
                 });
               });
-
-
-
-            })
-    );
+            }));
   }
 }
-

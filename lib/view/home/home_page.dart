@@ -1,7 +1,6 @@
-import 'package:attendance_manager/constant/app_colors.dart';
-import 'package:attendance_manager/constant/app_styles.dart';
+import 'package:attendance_manager/constant/app_style/app_colors.dart';
+import 'package:attendance_manager/constant/app_style/app_styles.dart';
 import 'package:attendance_manager/constant/constant_size.dart';
-import 'package:attendance_manager/utils/component/app_bar/custom_app_bar.dart';
 import 'package:attendance_manager/utils/component/custom_list_tile.dart';
 import 'package:attendance_manager/utils/component/dialoge_boxes/import_dialog_box.dart';
 import 'package:attendance_manager/utils/routes/route_name.dart';
@@ -10,6 +9,8 @@ import 'package:attendance_manager/view_model/class_input/class_input_controller
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+
+import '../../utils/component/custom_shimmer_effect.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -23,12 +24,19 @@ class _HomePageState extends State<HomePage> {
       FirebaseFirestore.instance.collection('Class').snapshots();
   @override
   Widget build(BuildContext context) {
+    int activeStep = 2;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.kAppBackgroundColor,
-      appBar: const CustomAppBar(
-        titleText: 'Attendance Manager',
-        preferredHeight: 58,
+      appBar: AppBar(
+        title: Text(
+          "Attendance Manager",
+          style: AppStyles().defaultStyle(
+            20,
+            AppColors.kTextWhiteColor,
+            FontWeight.w600,
+          ),
+        ),
       ),
       body: SafeArea(
           child: Column(
@@ -137,52 +145,19 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       )),
-      floatingActionButton:  FloatingActionButton(
+      floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushNamed(context, RouteName.classInputPage);
         },
-        backgroundColor: AppColors.kThemePinkColor,
+        backgroundColor: AppColor.kButtonColor,
         elevation: 4,
         child: const Icon(
           Icons.add,
-          color: AppColors.kWhite,
+          color: AppColor.kWhite,
         ),
       ),
     );
   }
 }
 
-class ShimmerLoadingEffect extends StatelessWidget {
-  final double height;
-  const ShimmerLoadingEffect({Key? key, this.height = 84}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
-      direction: ShimmerDirection.ltr,
-      period: const Duration(milliseconds: 1500),
-      child: ListView.builder(
-        itemCount: 6, // Number of shimmer items you want to show
-        itemBuilder: (_, __) => Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white54,
-              borderRadius: BorderRadius.circular(4),
-            ),
-            padding: const EdgeInsets.only(
-              left: 10,
-              right: kPadding20,
-              top: kPadding15,
-              bottom: 12,
-            ),
-            height: height,
-            width: double.infinity,
-          ),
-        ),
-      ),
-    );
-  }
-}

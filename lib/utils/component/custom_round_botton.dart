@@ -1,5 +1,5 @@
-import 'package:attendance_manager/constant/app_colors.dart';
-import 'package:attendance_manager/constant/app_styles.dart';
+import 'package:attendance_manager/constant/app_style/app_colors.dart';
+import 'package:attendance_manager/constant/app_style/app_styles.dart';
 import 'package:flutter/material.dart';
 
 class CustomRoundButton extends StatelessWidget {
