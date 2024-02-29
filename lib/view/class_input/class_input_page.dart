@@ -122,8 +122,19 @@ class _ClassInputPageState extends State<ClassInputPage> {
                                     return null;
                                   },
                                   keyBoardType: TextInputType.number),
+                              // SizedBox(height: 10,),
+                              // CustomTextField2(controller:departmentController,
+                              //     focusNode:departmentFocus,
+                              //     keyboardType: TextInputType.text,
+                              //     hintText: 'Class'
+                              // )
+
+
                             ],
-                          )),
+                          ),
+
+
+                      ),
                     ],
                   ),
                 ),

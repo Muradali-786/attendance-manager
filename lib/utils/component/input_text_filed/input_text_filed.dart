@@ -66,3 +66,70 @@ class InputTextField extends StatelessWidget {
     );
   }
 }
+
+
+
+class CustomTextField2 extends StatelessWidget {
+  final TextEditingController controller;
+  final FocusNode focusNode;
+  final ValueChanged<String>? onChanged;
+  final TextInputType keyboardType;
+  final bool obscureText;
+  final String hintText;
+  final Color cursorColor;
+  final bool enabled;
+  final bool autoFocus;
+
+  const CustomTextField2({
+    Key? key,
+    required this.controller,
+    required this.focusNode,
+    this.onChanged,
+    required this.keyboardType,
+    this.obscureText = false,
+    required this.hintText,
+    this.cursorColor = Colors.black,
+    this.enabled = true,
+    this.autoFocus = false,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20.0),
+      child: TextField(
+        controller: controller,
+        focusNode: focusNode,
+        onChanged: onChanged,
+        keyboardType: keyboardType,
+        obscureText: obscureText,
+        cursorColor: cursorColor,
+        enabled: enabled,
+        autofocus: autoFocus,
+        onTapOutside:   (event) => FocusScope.of(context).unfocus(),
+        style:AppStyles().defaultStyle(18, AppColors.kTextSkyColor, FontWeight.normal),
+        decoration: InputDecoration(
+          labelText: hintText,
+          contentPadding: const EdgeInsets.all(16.0),
+         labelStyle: AppStyles().defaultStyle(20, AppColors.kTextBlackColor.withOpacity(0.5), FontWeight.w400),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey.withOpacity(0.6), width: 1.3),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.pink, width: 1.3),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.red, width: 1.3),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey.withOpacity(0.6), width: 1.3),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+        ),
+      ),
+    );
+  }
+}

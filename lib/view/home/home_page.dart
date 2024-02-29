@@ -137,29 +137,15 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       )),
-      floatingActionButton: GestureDetector(
-        onTap: () {
+      floatingActionButton:  FloatingActionButton(
+        onPressed: () {
           Navigator.pushNamed(context, RouteName.classInputPage);
         },
-        child: Container(
-          height: 60,
-          width: 60,
-          decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColors.kThemePinkColor,
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.kBlack.withOpacity(0.3),
-                  spreadRadius: 0,
-                  blurRadius: 3,
-                  offset: const Offset(0, 1),
-                )
-              ]),
-          child: const Icon(
-            Icons.add,
-            size: 30,
-            color: AppColors.kWhite,
-          ),
+        backgroundColor: AppColors.kThemePinkColor,
+        elevation: 4,
+        child: const Icon(
+          Icons.add,
+          color: AppColors.kWhite,
         ),
       ),
     );
