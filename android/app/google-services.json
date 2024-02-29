@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "490857828192",
-    "project_id": "attendance-app-cd946",
-    "storage_bucket": "attendance-app-cd946.appspot.com"
+    "project_number": "868175613153",
+    "project_id": "attendance-manager-4e159",
+    "storage_bucket": "attendance-manager-4e159.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:490857828192:android:c72f11e29b26aae8249805",
+        "mobilesdk_app_id": "1:868175613153:android:6992370f24caf82278fba0",
         "android_client_info": {
           "package_name": "com.example.attendance_manager"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBE_rbUwRR11oIhGGzF7EpyJGMTd7uaeSM"
+          "current_key": "AIzaSyCGFzozTh1w79r1R2WJB79fg1f82ZJ-zOA"
         }
       ],
       "services": {

@@ -6,17 +6,14 @@ import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Platform.isAndroid
-      ? await Firebase.initializeApp(
-          options: const FirebaseOptions(
-            apiKey: "AIzaSyBE_rbUwRR11oIhGGzF7EpyJGMTd7uaeSM",
-            appId: "1:490857828192:android:c72f11e29b26aae8249805",
-            messagingSenderId: "490857828192",
-            projectId: "attendance-app-cd946",
-            storageBucket: "gs://attendance-app-cd946.appspot.com",
-          ),
-        )
-      : Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+      apiKey: "AIzaSyCGFzozTh1w79r1R2WJB79fg1f82ZJ-zOA",
+      appId: "1:868175613153:android:6992370f24caf82278fba0",
+      messagingSenderId: "868175613153",
+      projectId: "attendance-manager-4e159",
+    ),
+  );
 
   runApp(
     const MyApp(),
@@ -24,7 +21,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
