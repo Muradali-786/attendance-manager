@@ -5,6 +5,7 @@ import 'package:attendance_manager/utils/component/custom_round_botton.dart';
 import 'package:attendance_manager/utils/component/input_text_filed/custom_input_text_filed.dart';
 import 'package:attendance_manager/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../view_model/sign_up/sign_up_controller.dart';
 
@@ -107,19 +108,26 @@ class _SignUpPageState extends State<SignUpPage> {
                   const SizedBox(
                     height: 20,
                   ),
-                  CustomRoundButton(
-                      title: 'Sign up',
-                      onPress: () async {
-                        SignUpModel signUpModel = SignUpModel(
-                          name: nameController.text,
-                          email: emailController.text,
-                        );
+                  Consumer<SignUpController>(
+                    builder: (context, provider, child) {
+                      return CustomRoundButton2(
+                        title: 'Sign Up',
+                        loading: provider.loading,
+                        onPress: () async {
+                          SignUpModel signUpModel = SignUpModel(
+                            name: nameController.text,
+                            email: emailController.text,
+                          );
 
-                        await SignUpController().registerTeacher(
-                          signUpModel,
-                          pasController.text,
-                        );
-                      })
+                         await provider.registerTeacher(
+                            signUpModel,
+                            pasController.text,
+                          );
+                        },
+                        buttonColor: AppColor.kPrimaryColor,
+                      );
+                    },
+                  )
                 ],
               ),
             ),

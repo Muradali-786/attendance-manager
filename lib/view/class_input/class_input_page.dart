@@ -5,7 +5,6 @@ import 'package:attendance_manager/size_config.dart';
 import 'package:attendance_manager/utils/component/custom_round_botton.dart';
 import 'package:attendance_manager/utils/component/custom_stepper.dart';
 import 'package:attendance_manager/utils/component/input_text_filed/custom_input_text_filed.dart';
-import 'package:attendance_manager/utils/routes/route_name.dart';
 import 'package:attendance_manager/utils/utils.dart';
 import 'package:attendance_manager/view_model/class_input/class_input_controller.dart';
 import 'package:flutter/material.dart';

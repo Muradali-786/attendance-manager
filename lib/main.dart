@@ -1,9 +1,12 @@
 import 'package:attendance_manager/constant/app_style/app_colors.dart';
-import 'package:attendance_manager/utils/routes/route_name.dart';
-import 'package:attendance_manager/utils/routes/routes.dart';
-
+import 'package:attendance_manager/view_model/login/login_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'utils/routes/route_name.dart';
+import 'utils/routes/routes.dart';
+import 'view_model/sign_up/sign_up_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +29,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MultiProvider(providers: [
+      ChangeNotifierProvider<SignUpController>(create: (_) => SignUpController()),
+      ChangeNotifierProvider<LoginController>(create: (_) => LoginController()),
+
+    ],
+    child: MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: false,
@@ -41,6 +49,8 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: Routes.generateRoute,
 
 
+
+    ),
     );
   }
 }

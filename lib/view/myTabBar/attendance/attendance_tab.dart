@@ -2,7 +2,6 @@ import 'package:attendance_manager/constant/app_style/app_colors.dart';
 import 'package:attendance_manager/constant/app_style/app_styles.dart';
 import 'package:attendance_manager/constant/constant_size.dart';
 import 'package:attendance_manager/utils/routes/route_name.dart';
-import 'package:attendance_manager/view/home/home_page.dart';
 import 'package:attendance_manager/view_model/std_attendance/student_attendance_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
