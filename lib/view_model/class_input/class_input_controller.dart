@@ -1,5 +1,6 @@
 import 'package:attendance_manager/model/class_model.dart';
 import 'package:attendance_manager/utils/utils.dart';
+import 'package:attendance_manager/view_model/sign_up/sign_up_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -65,13 +66,25 @@ class ClassController {
     try {
       await fireStore
           .collection(CLASS)
-          .doc()
-          .set(classInputModel.toMap())
-          .then((value) {
+          .add(classInputModel.toMap())
+          .then((doc) {
         Utils.toastMessage('Success');
       });
     } catch (e) {
       print('error during creating class');
+    }
+  }
+
+  Future<void> updateTeacherSubjectIds(
+      String teacherId, String subjectId) async {
+    String tid = "VOk6MgJ95BNzk8XcpO7g";
+    try {
+      await fireStore.collection(TEACHER).doc(tid).update({
+        'subjectIds': FieldValue.arrayUnion([subjectId])
+      });
+      print('subject register to teacher');
+    } catch (e) {
+      print('error during updating teacher subject IDs: $e');
     }
   }
 }
