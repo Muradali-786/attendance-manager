@@ -1,19 +1,19 @@
 class ClassInputModel {
-  late final int? id;
+  String? subjectId;
   final String? subjectName;
   final String? departmentName;
   final String? batchName;
   final int? percentage;
 
   ClassInputModel({
-    required this.id,
+    this.subjectId,
     required this.subjectName,
     required this.departmentName,
     required this.batchName,
     required this.percentage,
   });
   ClassInputModel.fromMap(Map<dynamic, dynamic> res)
-      : id = res['id'],
+      : subjectId = res['subjectId'],
         subjectName = res['subjectName'],
         departmentName = res['departmentName'],
         batchName = res['batchName'],
@@ -21,7 +21,7 @@ class ClassInputModel {
 
   Map<String, Object?> toMap() {
     return {
-      'id': id,
+      'subjectId': subjectId,
       'subjectName': subjectName,
       'departmentName': departmentName,
       'batchName': batchName,

@@ -48,117 +48,135 @@ class _ClassInputPageState extends State<ClassInputPage> {
     SizeConfig().init(context);
 
     return Scaffold(
-        backgroundColor: AppColor.kWhite,
-        resizeToAvoidBottomInset: false,
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: kPadding15),
-              child: Column(
-                children: [
-                  SizedBox(height: SizeConfig.screenHeight! * 0.03),
-                  const CustomStepper(),
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        CustomInputTextField(
-                          myController: subjectController,
-                          focusNode: subjectFocus,
+      backgroundColor: AppColor.kWhite,
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: kPadding15),
+            child: Column(
+              children: [
+                SizedBox(height: SizeConfig.screenHeight! * 0.03),
+                const CustomStepper(),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      CustomInputTextField(
+                        myController: subjectController,
+                        focusNode: subjectFocus,
+                        onFieldSubmittedValue: (val) {
+                          Utils.onFocusChange(
+                              context, subjectFocus, departmentFocus);
+                        },
+                        labelText: 'Subject',
+                        onValidator: (val) {
+                          return null;
+                        },
+                        keyBoardType: TextInputType.text,
+                      ),
+                      CustomInputTextField(
+                          myController: departmentController,
+                          focusNode: departmentFocus,
                           onFieldSubmittedValue: (val) {
                             Utils.onFocusChange(
-                                context, subjectFocus, departmentFocus);
+                                context, departmentFocus, batchFocus);
                           },
-                          labelText: 'Subject',
+                          labelText: 'Department',
                           onValidator: (val) {
                             return null;
                           },
-                          keyBoardType: TextInputType.text,
-                        ),
-                        CustomInputTextField(
-                            myController: departmentController,
-                            focusNode: departmentFocus,
-                            onFieldSubmittedValue: (val) {
-
-                              Utils.onFocusChange(
-                                  context, departmentFocus, batchFocus);
-                            },
-                            labelText: 'Department',
-                            onValidator: (val) {
-                              return null;
-                            },
-                            keyBoardType: TextInputType.emailAddress),
-                        CustomInputTextField(
-                            myController: batchController,
-                            focusNode: batchFocus,
-                            onFieldSubmittedValue: (val) {
-                              Utils.onFocusChange(
-                                  context, batchFocus, percentageFocus);
-                            },
-                            labelText: 'Semester/Batch',
-                            onValidator: (val) {
-                              return null;
-                            },
-                            keyBoardType: TextInputType.streetAddress),
-                        CustomInputTextField(
-                            myController: percentageController,
-                            focusNode: percentageFocus,
-                            onFieldSubmittedValue: (val) {},
-                            labelText: 'Attendance Requirement (%)',
-                            onValidator: (val) {
-                              return null;
-                            },
-                            keyBoardType: TextInputType.number),
-                      ],
-                    ),
+                          keyBoardType: TextInputType.emailAddress),
+                      CustomInputTextField(
+                          myController: batchController,
+                          focusNode: batchFocus,
+                          onFieldSubmittedValue: (val) {
+                            Utils.onFocusChange(
+                                context, batchFocus, percentageFocus);
+                          },
+                          labelText: 'Semester/Batch',
+                          onValidator: (val) {
+                            return null;
+                          },
+                          keyBoardType: TextInputType.streetAddress),
+                      CustomInputTextField(
+                          myController: percentageController,
+                          focusNode: percentageFocus,
+                          onFieldSubmittedValue: (val) {},
+                          labelText: 'Attendance Requirement (%)',
+                          onValidator: (val) {
+                            return null;
+                          },
+                          keyBoardType: TextInputType.number),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
-        bottomSheet: CustomRoundButton(
-            height: getProportionalHeight(55),
-            loading: loading,
-            width: double.infinity,
-            borderRaduis: 0,
-            title: 'Next',
-            textStyle:
-                AppStyles().defaultStyle(20, Colors.white, FontWeight.w500),
-            onPress: () {
-              setState(() {
-                loading = true;
-              });
-              int percentage = int.parse(percentageController.text);
-              String classId = DateTime.now().millisecondsSinceEpoch.toString();
+      ),
+      bottomSheet: CustomRoundButton(
+          height: getProportionalHeight(55),
+          loading: loading,
+          width: double.infinity,
+          borderRaduis: 0,
+          title: 'Next',
+          textStyle:
+              AppStyles().defaultStyle(20, Colors.white, FontWeight.w500),
+          onPress: () {
+            setState(() {
+              loading = true;
+            });
+            int percentage = int.parse(percentageController.text);
+            String classId = DateTime.now().millisecondsSinceEpoch.toString();
 
-              ClassInputController()
-                  .addClass(
-                      classId,
-                      subjectController.text,
-                      departmentController.text,
-                      batchController.text,
-                      percentage)
-                  .then((value) {
-                Navigator.pushReplacementNamed(
-                    context, RouteName.addStudentPage,
-                    arguments: {
-                      'subject': subjectController.text,
-                      'classId': classId.toString(),
-                    });
-                subjectController.clear();
-                departmentController.clear();
-                batchController.clear();
-                percentageController.clear();
-                setState(() {
-                  loading = false;
-                });
-              }).onError((error, stackTrace) {
-                Utils.toastMessage(error.toString());
-                setState(() {
-                  loading = false;
-                });
+            ClassInputController()
+                .addClass(
+                    classId,
+                    subjectController.text,
+                    departmentController.text,
+                    batchController.text,
+                    percentage)
+                .then((value) {
+              Navigator.pushReplacementNamed(
+                  context, RouteName.addStudentPage,
+                  arguments: {
+                    'subject': subjectController.text,
+                    'classId': classId.toString(),
+                  });
+              subjectController.clear();
+              departmentController.clear();
+              batchController.clear();
+              percentageController.clear();
+              setState(() {
+                loading = false;
               });
-            }));
+            }).onError((error, stackTrace) {
+              Utils.toastMessage(error.toString());
+              setState(() {
+                loading = false;
+              });
+            });
+          })
+
+    );
   }
 }
+// bottomSheet: CustomRoundButton(
+// height: getProportionalHeight(55),
+// loading: loading,
+// width: double.infinity,
+// borderRaduis: 0,
+// title: 'Next',
+// textStyle: AppStyles().defaultStyle(20, Colors.white, FontWeight.w500),
+// onPress: () async {
+// ClassInputModel classInputModel = ClassInputModel(
+// subjectName: subjectController.text,
+// departmentName: departmentController.text,
+// batchName: batchController.text,
+// percentage: int.tryParse(percentageController.text),
+// );
+// await ClassController().createNewClass(classInputModel);
+// },
+// ),
