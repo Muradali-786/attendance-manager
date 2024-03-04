@@ -7,23 +7,19 @@ import '../../utils/utils.dart';
 
 final String TEACHER = 'Teachers';
 
-class SignUpController with ChangeNotifier{
-
+class SignUpController with ChangeNotifier {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
+  bool _loading = false;
+  get loading => _loading;
 
-  bool _loading =false;
-  get loading =>_loading;
-
-  setLoading(bool value){
-
-    _loading=value;
+  setLoading(bool value) {
+    _loading = value;
     notifyListeners();
-
   }
 
-  Future<void> registerTeacher(SignUpModel signUpModel,String password) async {
+  Future<void> registerTeacher(SignUpModel signUpModel, String password) async {
     setLoading(true);
     try {
       await auth
@@ -46,10 +42,9 @@ class SignUpController with ChangeNotifier{
 
   Future<void> saveTeacherData(SignUpModel signUpModel) async {
     try {
-
       await fireStore
           .collection(TEACHER)
-          .doc()
+          .doc(signUpModel.teacherId)
           .set(signUpModel.toMap())
           .then((value) {
         print('successfully save data of teacher');

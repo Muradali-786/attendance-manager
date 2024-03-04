@@ -2,7 +2,11 @@ import 'package:attendance_manager/model/class_model.dart';
 import 'package:attendance_manager/utils/utils.dart';
 import 'package:attendance_manager/view_model/sign_up/sign_up_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../../utils/routes/route_name.dart';
+import '../services/navigation_services.dart';
 
 class ClassInputController with ChangeNotifier {
   final fireStore = FirebaseFirestore.instance.collection('Class');
@@ -59,32 +63,64 @@ class ClassInputController with ChangeNotifier {
 
 final String CLASS = 'Classes';
 
-class ClassController {
+class ClassController with ChangeNotifier {
   final fireStore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final NavigationService _navigationService = NavigationService();
+
+  bool _loading = false;
+  get loading => _loading;
+
+  setLoading(bool value) {
+    _loading = value;
+    notifyListeners();
+  }
 
   Future<void> createNewClass(ClassInputModel classInputModel) async {
+    setLoading(true);
     try {
       await fireStore
           .collection(CLASS)
           .add(classInputModel.toMap())
           .then((doc) {
-        Utils.toastMessage('Success');
+        _navigationService.removeAndNavigateToRoute(RouteName.addStudentPage);
+        setLoading(false);
+        updateTeacherSubjectIds(
+          _auth.currentUser!.uid.toString(),
+          doc.id.toString(),
+        );
+        Utils.toastMessage('Class created successfully');
       });
     } catch (e) {
-      print('error during creating class');
+      setLoading(false);
+      Utils.toastMessage('Error creating class');
     }
   }
 
   Future<void> updateTeacherSubjectIds(
       String teacherId, String subjectId) async {
-    String tid = "VOk6MgJ95BNzk8XcpO7g";
+    setLoading(true);
     try {
-      await fireStore.collection(TEACHER).doc(tid).update({
+      await fireStore.collection(TEACHER).doc(teacherId).update({
         'subjectIds': FieldValue.arrayUnion([subjectId])
+      }).then((value) {
+        setLoading(false);
       });
-      print('subject register to teacher');
     } catch (e) {
-      print('error during updating teacher subject IDs: $e');
+      setLoading(false);
+      Utils.toastMessage('Something Went Wrong');
+    }
+  }
+
+  Future<void> deleteClass(String classId) async {
+    setLoading(true);
+    try {
+      await fireStore.doc(classId).delete();
+      setLoading(false);
+      Utils.toastMessage('Class deleted successfully');
+    } catch (e) {
+      setLoading(false);
+      Utils.toastMessage('Error deleting class: ${e.toString()}');
     }
   }
 }

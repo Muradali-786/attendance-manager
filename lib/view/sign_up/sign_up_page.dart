@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:attendance_manager/constant/app_style/app_colors.dart';
 import 'package:attendance_manager/constant/constant_size.dart';
 import 'package:attendance_manager/model/sign_up_model.dart';
@@ -64,7 +66,16 @@ class _SignUpPageState extends State<SignUpPage> {
                             Utils.onFocusChange(context, nameFocus, emailFocus);
                           },
                           labelText: 'Name',
-                          onValidator: (val) {
+                          onValidator: (value) {
+                            if (value.isEmpty) {
+                              return 'Please enter your name';
+                            } else if (value.length < 3) {
+                              return 'Name must be at least 3 characters long';
+                            } else if (!RegExp(r'^[a-zA-Z]+$')
+                                .hasMatch(value)) {
+                              return 'Name cannot contain numbers or special characters';
+                            }
+
                             return null;
                           },
                           keyBoardType: TextInputType.text,
@@ -77,7 +88,15 @@ class _SignUpPageState extends State<SignUpPage> {
                                   context, emailFocus, passFocus);
                             },
                             labelText: 'Email',
-                            onValidator: (val) {
+                            onValidator: (value) {
+                              final RegExp emailRegExp =
+                                  RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                              if (value.isEmpty) {
+                                return 'Please enter your email';
+                              } else if (!emailRegExp.hasMatch(value)) {
+                                return 'Please enter a valid email address';
+                              }
+
                               return null;
                             },
                             keyBoardType: TextInputType.emailAddress),
@@ -89,7 +108,13 @@ class _SignUpPageState extends State<SignUpPage> {
                                   context, passFocus, confirmPassFocus);
                             },
                             labelText: 'Password',
-                            onValidator: (val) {
+                            onValidator: (value) {
+                              if (value.isEmpty) {
+                                return 'Please enter your password';
+                              } else if (value.length < 6) {
+                                return 'Password must be at least 6 characters long';
+                              }
+
                               return null;
                             },
                             keyBoardType: TextInputType.visiblePassword),
@@ -98,7 +123,14 @@ class _SignUpPageState extends State<SignUpPage> {
                             focusNode: confirmPassFocus,
                             onFieldSubmittedValue: (val) {},
                             labelText: 'Confirm Password',
-                            onValidator: (val) {
+                            onValidator: (value) {
+                              if (value.isEmpty) {
+                                return 'Please confirm your password';
+                              } else if (value !=
+                                  confirmPassController.value.text) {
+                                return 'Please enter same Password';
+                              }
+
                               return null;
                             },
                             keyBoardType: TextInputType.visiblePassword),
@@ -114,15 +146,24 @@ class _SignUpPageState extends State<SignUpPage> {
                         title: 'Sign Up',
                         loading: provider.loading,
                         onPress: () async {
-                          SignUpModel signUpModel = SignUpModel(
-                            name: nameController.text,
-                            email: emailController.text,
-                          );
+                          if (_signUpFormKey.currentState!.validate()) {
+                            SignUpModel signUpModel = SignUpModel(
+                              name: nameController.text,
+                              email: emailController.text,
+                            );
 
-                         await provider.registerTeacher(
-                            signUpModel,
-                            pasController.text,
-                          );
+                            await provider
+                                .registerTeacher(
+                              signUpModel,
+                              pasController.text,
+                            )
+                                .then((value) {
+                              nameController.clear();
+                              emailController.clear();
+                              pasController.clear();
+                              confirmPassController.clear();
+                            });
+                          }
                         },
                         buttonColor: AppColor.kPrimaryColor,
                       );

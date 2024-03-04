@@ -1,14 +1,19 @@
 import 'package:attendance_manager/utils/utils.dart';
+import 'package:attendance_manager/view_model/services/navigation_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
+import '../../utils/routes/route_name.dart';
 
 class LoginController with ChangeNotifier {
-  FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final NavigationService _navigationService = NavigationService();
+
 
   bool _loading = false;
-  get loading => _loading;
+  bool get loading => _loading;
 
-  setLoading(bool value) {
+  void setLoading(bool value) {
     _loading = value;
     notifyListeners();
   }
@@ -16,16 +21,17 @@ class LoginController with ChangeNotifier {
   Future<void> loginAsTeacher(String email, String password) async {
     setLoading(true);
     try {
-      await auth
+      await _auth
           .signInWithEmailAndPassword(
         email: email.toString(),
         password: password.toString(),
-      ).then((e) {
-        setLoading(false);
-        Utils.toastMessage('Login Successful');
-      }).onError((error, stackTrace) {
+      )
+          .then((value) {
+        _navigationService.removeAndNavigateToRoute(RouteName.homePage);
         setLoading(false);
       });
+
+      Utils.toastMessage('Login Successful');
     } catch (e) {
       setLoading(false);
       Utils.toastMessage('Error While Using Login');

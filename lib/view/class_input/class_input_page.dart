@@ -8,8 +8,10 @@ import 'package:attendance_manager/utils/component/input_text_filed/custom_input
 import 'package:attendance_manager/utils/utils.dart';
 import 'package:attendance_manager/view_model/class_input/class_input_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../model/class_model.dart';
+import '../../utils/routes/route_name.dart';
 
 class ClassInputPage extends StatefulWidget {
   const ClassInputPage({super.key});
@@ -72,6 +74,14 @@ class _ClassInputPageState extends State<ClassInputPage> {
                         },
                         labelText: 'Subject',
                         onValidator: (val) {
+                          if (val.isEmpty) {
+                            return 'Please enter a subject';
+                          } else if (val.length < 3) {
+                            return 'Subject cannot contain special characters';
+                          } else if (!RegExp(r'^[a-zA-Z0-9 ]+$')
+                              .hasMatch(val)) {
+                            return 'Subject cannot contain special characters';
+                          }
                           return null;
                         },
                         keyBoardType: TextInputType.text,
@@ -85,6 +95,14 @@ class _ClassInputPageState extends State<ClassInputPage> {
                           },
                           labelText: 'Department',
                           onValidator: (val) {
+                            if (val.isEmpty) {
+                              return 'Please enter a department';
+                            } else if (val.length < 2) {
+                              return 'Subject must be at least 2 characters long';
+                            } else if (!RegExp(r'^[a-zA-Z0-9 ]+$')
+                                .hasMatch(val)) {
+                              return 'Department cannot contain special characters';
+                            }
                             return null;
                           },
                           keyBoardType: TextInputType.emailAddress),
@@ -97,6 +115,15 @@ class _ClassInputPageState extends State<ClassInputPage> {
                           },
                           labelText: 'Semester/Batch',
                           onValidator: (val) {
+                            if (val.isEmpty) {
+                              return 'Please enter a Semester/Batch';
+                            } else if (val.length < 4) {
+                              return 'Semester/Batch must be at least 4 characters long';
+                            } else if (!RegExp(r'^[a-zA-Z0-9 ]+$')
+                                .hasMatch(val)) {
+                              return 'Semester/Batch cannot contain special characters';
+                            }
+
                             return null;
                           },
                           keyBoardType: TextInputType.streetAddress),
@@ -106,6 +133,14 @@ class _ClassInputPageState extends State<ClassInputPage> {
                           onFieldSubmittedValue: (val) {},
                           labelText: 'Attendance Requirement (%)',
                           onValidator: (val) {
+                            if (val == null || val.isEmpty) {
+                              return 'Please enter attendance percentage.';
+                            } else if (double.tryParse(val) == null) {
+                              return 'Please enter a valid number.';
+                            } else if (double.parse(val) >= 100 ||
+                                double.parse(val) < 10) {
+                              return 'Enter attendance (10% - 100%)';
+                            }
                             return null;
                           },
                           keyBoardType: TextInputType.number),
@@ -117,66 +152,81 @@ class _ClassInputPageState extends State<ClassInputPage> {
           ),
         ),
       ),
-      // bottomSheet: CustomRoundButton(
-      //     height: getProportionalHeight(55),
-      //     loading: loading,
-      //     width: double.infinity,
-      //     borderRaduis: 0,
-      //     title: 'Next',
-      //     textStyle:
-      //         AppStyles().defaultStyle(20, Colors.white, FontWeight.w500),
-      //     onPress: () {
-      //       setState(() {
-      //         loading = true;
-      //       });
-      //       int percentage = int.parse(percentageController.text);
-      //       String classId = DateTime.now().millisecondsSinceEpoch.toString();
-      //
-      //       ClassInputController()
-      //           .addClass(
-      //               classId,
-      //               subjectController.text,
-      //               departmentController.text,
-      //               batchController.text,
-      //               percentage)
-      //           .then((value) {
-      //         Navigator.pushReplacementNamed(
-      //             context, RouteName.addStudentPage,
-      //             arguments: {
-      //               'subject': subjectController.text,
-      //               'classId': classId.toString(),
-      //             });
-      //         subjectController.clear();
-      //         departmentController.clear();
-      //         batchController.clear();
-      //         percentageController.clear();
-      //         setState(() {
-      //           loading = false;
-      //         });
-      //       }).onError((error, stackTrace) {
-      //         Utils.toastMessage(error.toString());
-      //         setState(() {
-      //           loading = false;
-      //         });
-      //       });
-      //     })
+      // bottomSheet: Consumer<ClassController>(
+      //   builder: (context, provider, child) {
+      //     return CustomRoundButton2(
+      //       height: getProportionalHeight(55),
+      //       loading: provider.loading,
+      //       width: double.infinity,
+      //       buttonColor: AppColor.kPrimaryColor,
+      //       title: 'Next',
+      //       onPress: () async {
+      //         if (_formKey.currentState!.validate()) {
+      //           ClassInputModel classInputModel = ClassInputModel(
+      //             subjectName: subjectController.text,
+      //             departmentName: departmentController.text,
+      //             batchName: batchController.text,
+      //             percentage: int.tryParse(percentageController.text),
+      //           );
+      //           // calling the funtion using provider
+      //           provider.createNewClass(classInputModel).then(
+      //             (value) {
+      //               subjectController.clear();
+      //               batchController.clear();
+      //               departmentController.clear();
+      //               batchController.clear();
+      //             },
+      //           );
+      //         }
+      //       },
+      //     );
+      //   },
+      // ),
       bottomSheet: CustomRoundButton(
-        height: getProportionalHeight(55),
-        loading: loading,
-        width: double.infinity,
-        borderRaduis: 0,
-        title: 'Next',
-        textStyle: AppStyles().defaultStyle(20, Colors.white, FontWeight.w500),
-        onPress: () async {
-          ClassInputModel classInputModel = ClassInputModel(
-            subjectName: subjectController.text,
-            departmentName: departmentController.text,
-            batchName: batchController.text,
-            percentage: int.tryParse(percentageController.text),
-          );
-          await ClassController().createNewClass(classInputModel);
-        },
-      ),
+    height: getProportionalHeight(55),
+    loading: loading,
+    width: double.infinity,
+    borderRaduis: 0,
+    title: 'Next',
+    textStyle:
+        AppStyles().defaultStyle(20, Colors.white, FontWeight.w500),
+    onPress: () {
+      setState(() {
+        loading = true;
+      });
+      int percentage = int.parse(percentageController.text);
+      String classId = DateTime.now().millisecondsSinceEpoch.toString();
+
+      ClassInputController()
+          .addClass(
+              classId,
+              subjectController.text,
+              departmentController.text,
+              batchController.text,
+              percentage)
+          .then((value) {
+        Navigator.pushReplacementNamed(
+            context, RouteName.addStudentPage,
+            arguments: {
+              'subject': subjectController.text,
+              'classId': classId.toString(),
+            });
+        subjectController.clear();
+        departmentController.clear();
+        batchController.clear();
+        percentageController.clear();
+        setState(() {
+          loading = false;
+        });
+      }).onError((error, stackTrace) {
+        Utils.toastMessage(error.toString());
+        setState(() {
+          loading = false;
+        });
+      });
+    })
     );
   }
 }
+
+

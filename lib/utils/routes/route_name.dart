@@ -1,6 +1,4 @@
 class RouteName {
-
-  
   static const String splash = 'splash';
   static const String signUp = 'sign_up_page';
   static const String login = 'login_page';
@@ -13,8 +11,8 @@ class RouteName {
   static const String attendanceTab = 'attendance_tab';
   static const String studentProfile = 'Student_profile';
   static const String studentAttendancePage = 'Student_attendance_page';
-  static const String studentAttendanceHistoryPage = 'student_attendance_history_page';
+  static const String studentAttendanceHistoryPage =
+      'student_attendance_history_page';
   static const String updateAttendance = 'update_attendance';
-
-
 }
+

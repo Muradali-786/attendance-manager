@@ -4,9 +4,13 @@ import 'package:attendance_manager/utils/component/custom_list_tile.dart';
 import 'package:attendance_manager/utils/component/dialoge_boxes/import_dialog_box.dart';
 import 'package:attendance_manager/utils/routes/route_name.dart';
 import 'package:attendance_manager/view/class_input/class_update/update_class_dialog.dart';
+import 'package:attendance_manager/view_model/app/app_controller.dart';
 import 'package:attendance_manager/view_model/class_input/class_input_controller.dart';
+import 'package:attendance_manager/view_model/login/login_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../utils/component/custom_shimmer_effect.dart';
 
@@ -20,9 +24,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final fireStoreRef =
       FirebaseFirestore.instance.collection('Class').snapshots();
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
-    int activeStep = 2;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.kAppBackgroundColor,
@@ -35,6 +41,14 @@ class _HomePageState extends State<HomePage> {
             FontWeight.w600,
           ),
         ),
+        actions: [
+          IconButton(onPressed: ()async{
+            await _auth.signOut().then((value){
+              Navigator.pushNamed(context, RouteName.login);
+            });
+
+          }, icon:Icon(Icons.logout))
+        ],
       ),
       body: SafeArea(
           child: Column(
@@ -157,5 +171,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-

@@ -16,17 +16,15 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _loginFormKey = GlobalKey<FormState>();
+
   TextEditingController emailController = TextEditingController();
   FocusNode emailFocus = FocusNode();
-
-  FocusNode nameFocus = FocusNode();
   TextEditingController pasController = TextEditingController();
   FocusNode passFocus = FocusNode();
 
   @override
   void dispose() {
     emailController.dispose();
-    nameFocus.dispose();
     pasController.dispose();
     passFocus.dispose();
 
@@ -90,23 +88,29 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(
                   height: 20,
                 ),
-                Consumer<LoginController>(builder: (context, provider, child) {
-                  return CustomRoundButton2(
-                    title: 'Login',
-                    loading: provider.loading,
-                    onPress: () async {
-                      if (_loginFormKey.currentState!.validate()) {
-                        await provider.loginAsTeacher(
-                          emailController.text,
-                          pasController.text,
-                        );
-                        emailController.clear();
-                        pasController.clear();
-                      }
-                    },
-                    buttonColor: AppColor.kPrimaryColor,
-                  );
-                })
+                Consumer<LoginController>(
+                  builder: (context, provider, child) {
+                    return CustomRoundButton2(
+                      title: 'Login',
+                      loading: provider.loading,
+                      onPress: () async {
+                        if (_loginFormKey.currentState!.validate()) {
+                          await provider.loginAsTeacher(
+                            emailController.text,
+                            pasController.text,
+                          ).then((value) {
+                            emailController.clear();
+                            pasController.clear();
+
+                          });
+
+
+                        }
+                      },
+                      buttonColor: AppColor.kPrimaryColor,
+                    );
+                  },
+                ),
               ],
             ),
           ),

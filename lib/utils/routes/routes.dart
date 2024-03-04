@@ -14,7 +14,9 @@ import 'package:attendance_manager/view/myTabBar/student/students_tab.dart';
 import 'package:attendance_manager/view/sign_up/sign_up_page.dart';
 import 'package:attendance_manager/view/splash/splash.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
+//
 class Routes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final arguments = settings.arguments;
@@ -30,25 +32,31 @@ class Routes {
       case RouteName.classInputPage:
         return MaterialPageRoute(builder: (_) => const ClassInputPage());
       case RouteName.addStudentPage:
-        return MaterialPageRoute(builder: (_) => AddStudentPage(data:settings.arguments as Map));
+        return MaterialPageRoute(
+            builder: (_) => AddStudentPage(data: settings.arguments as Map));
       case RouteName.myTabBar:
-        return MaterialPageRoute(builder: (_) =>  MyTabBar(data:settings.arguments as Map));
+        return MaterialPageRoute(
+            builder: (_) => MyTabBar(data: settings.arguments as Map));
       case RouteName.attendanceTab:
-        return MaterialPageRoute(builder: (_) =>  const AttendanceTab());
+        return MaterialPageRoute(builder: (_) => const AttendanceTab());
       case RouteName.studentTab:
-        return MaterialPageRoute(builder: (_) =>  StudentTab());
+        return MaterialPageRoute(builder: (_) => StudentTab());
       case RouteName.historyTab:
         return MaterialPageRoute(builder: (_) => HistoryTab());
       case RouteName.studentProfile:
-        return MaterialPageRoute(builder: (_) =>  StudentProfile(data:settings.arguments as Map));
+        return MaterialPageRoute(
+            builder: (_) => StudentProfile(data: settings.arguments as Map));
       case RouteName.studentAttendancePage:
-        return MaterialPageRoute(builder: (_) =>  StudentAttendancePage(data:settings.arguments as Map));
+        return MaterialPageRoute(
+            builder: (_) =>
+                StudentAttendancePage(data: settings.arguments as Map));
       case RouteName.studentAttendanceHistoryPage:
-        return MaterialPageRoute(builder: (_) =>  StudentAttendanceHistory(data:settings.arguments as Map));
+        return MaterialPageRoute(
+            builder: (_) =>
+                StudentAttendanceHistory(data: settings.arguments as Map));
       case RouteName.updateAttendance:
-        return MaterialPageRoute(builder: (_) =>  UpdateAttendance(data:settings.arguments as Map));
-
-
+        return MaterialPageRoute(
+            builder: (_) => UpdateAttendance(data: settings.arguments as Map));
 
       default:
         return MaterialPageRoute(builder: (_) {
