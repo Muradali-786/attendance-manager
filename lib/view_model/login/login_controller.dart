@@ -1,4 +1,5 @@
 import 'package:attendance_manager/utils/utils.dart';
+import 'package:attendance_manager/view_model/exception/exception_controller.dart';
 import 'package:attendance_manager/view_model/services/navigation_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,6 @@ import '../../utils/routes/route_name.dart';
 class LoginController with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final NavigationService _navigationService = NavigationService();
-
 
   bool _loading = false;
   bool get loading => _loading;
@@ -34,7 +34,20 @@ class LoginController with ChangeNotifier {
       Utils.toastMessage('Login Successful');
     } catch (e) {
       setLoading(false);
-      Utils.toastMessage('Error While Using Login');
+      Utils.toastMessage('Login failed. Please try again');
+    }
+  }
+
+  Future<void> logOutAsTeacher() async {
+    try {
+      await _auth.signOut().then((value) {
+        _navigationService.removeAndNavigateToRoute(RouteName.login);
+      });
+
+      Utils.toastMessage('Log out Successful');
+    } catch (e) {
+      setLoading(false);
+      Utils.toastMessage('Error While Using Log out');
     }
   }
 }

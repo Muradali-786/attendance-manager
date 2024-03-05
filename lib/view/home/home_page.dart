@@ -25,10 +25,16 @@ class _HomePageState extends State<HomePage> {
   final fireStoreRef =
       FirebaseFirestore.instance.collection('Class').snapshots();
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final fireStoreRef2 =
+  FirebaseFirestore.instance;
+
+  final _auth = FirebaseAuth.instance;
+  final LoginController _loginController = LoginController();
+  final ClassController _classController=ClassController();
+
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.kAppBackgroundColor,
@@ -42,18 +48,50 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         actions: [
-          IconButton(onPressed: ()async{
-            await _auth.signOut().then((value){
-              Navigator.pushNamed(context, RouteName.login);
-            });
-
-          }, icon:Icon(Icons.logout))
+          IconButton(
+            onPressed: () async {
+              await _loginController.logOutAsTeacher();
+            },
+            icon: const Icon(Icons.logout),
+          )
         ],
       ),
       body: SafeArea(
           child: Column(
         children: [
           StreamBuilder<QuerySnapshot>(
+          stream: _classController.getSubjectData(_auth.currentUser!.uid.toString()),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          var documents = snapshot.data!.docs;
+          return Expanded(
+            child: ListView.builder(
+              itemCount: documents.length,
+              itemBuilder: (context, index) {
+                var document = documents[index].data();
+                Map<String,dynamic> data=document as Map<String,dynamic>;
+
+                print('dekh ke hoya khan');
+                print(data);
+                print(document.toString());
+                // Use document data to display your content
+                return ListTile(
+                  title: Text('khan{$index}'),
+                  subtitle: Text('king'),
+                );
+              },
+            ),
+          );
+        },
+      ),
+
+
+      StreamBuilder<QuerySnapshot>(
             stream: fireStoreRef,
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {

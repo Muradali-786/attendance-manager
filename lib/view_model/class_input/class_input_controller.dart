@@ -97,6 +97,29 @@ class ClassController with ChangeNotifier {
     }
   }
 
+  Future<DocumentSnapshot> getTeacherData(String teacherId) async {
+    return fireStore.collection(TEACHER).doc(teacherId).get();
+  }
+
+  Future<List<String>> getTeacherSubjectIds(String teacherId) async {
+    final teacherData = await getTeacherData(teacherId);
+    List<String> subjectIds = [];
+    if (teacherData.exists) {
+      Map<String, dynamic> data = teacherData.data() as Map<String, dynamic>;
+      List<dynamic> subjectAllIds = data['subjectIds'] ?? [];
+      subjectIds = subjectAllIds.map((id) => id.toString()).toList();
+    }
+    return subjectIds;
+  }
+
+  Stream<QuerySnapshot> getSubjectData(String teacherId) async* {
+    List<String> ids = await getTeacherSubjectIds(teacherId);
+    yield* FirebaseFirestore.instance
+        .collection(CLASS)
+        .where(FieldPath.documentId, whereIn: ids)
+        .snapshots();
+  }
+
   Future<void> updateTeacherSubjectIds(
       String teacherId, String subjectId) async {
     setLoading(true);

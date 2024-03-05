@@ -56,6 +56,7 @@ class MyApp extends StatelessWidget {
         title: 'Attendance Manager',
         initialRoute: RouteName.splash,
         onGenerateRoute: Routes.generateRoute,
+
       ),
     );
   }
