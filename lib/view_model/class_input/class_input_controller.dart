@@ -85,10 +85,7 @@ class ClassController with ChangeNotifier {
           .then((doc) {
         _navigationService.removeAndNavigateToRoute(RouteName.addStudentPage);
         setLoading(false);
-        updateTeacherSubjectIds(
-          _auth.currentUser!.uid.toString(),
-          doc.id.toString(),
-        );
+
         Utils.toastMessage('Class created successfully');
       });
     } catch (e) {
@@ -97,43 +94,16 @@ class ClassController with ChangeNotifier {
     }
   }
 
-  Future<DocumentSnapshot> getTeacherData(String teacherId) async {
-    return fireStore.collection(TEACHER).doc(teacherId).get();
-  }
-
-  Future<List<String>> getTeacherSubjectIds(String teacherId) async {
-    final teacherData = await getTeacherData(teacherId);
-    List<String> subjectIds = [];
-    if (teacherData.exists) {
-      Map<String, dynamic> data = teacherData.data() as Map<String, dynamic>;
-      List<dynamic> subjectAllIds = data['subjectIds'] ?? [];
-      subjectIds = subjectAllIds.map((id) => id.toString()).toList();
-    }
-    return subjectIds;
-  }
-
-  Stream<QuerySnapshot> getSubjectData(String teacherId) async* {
-    List<String> ids = await getTeacherSubjectIds(teacherId);
-    yield* FirebaseFirestore.instance
+  Stream<QuerySnapshot> getSubjectData() {
+    String teacherId=_auth.currentUser!.uid;
+    return fireStore
         .collection(CLASS)
-        .where(FieldPath.documentId, whereIn: ids)
+        .where('teacherId', isEqualTo: teacherId)
         .snapshots();
   }
 
-  Future<void> updateTeacherSubjectIds(
-      String teacherId, String subjectId) async {
-    setLoading(true);
-    try {
-      await fireStore.collection(TEACHER).doc(teacherId).update({
-        'subjectIds': FieldValue.arrayUnion([subjectId])
-      }).then((value) {
-        setLoading(false);
-      });
-    } catch (e) {
-      setLoading(false);
-      Utils.toastMessage('Something Went Wrong');
-    }
-  }
+
+
 
   Future<void> deleteClass(String classId) async {
     setLoading(true);

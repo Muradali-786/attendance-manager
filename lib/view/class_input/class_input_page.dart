@@ -7,6 +7,7 @@ import 'package:attendance_manager/utils/component/custom_stepper.dart';
 import 'package:attendance_manager/utils/component/input_text_filed/custom_input_text_filed.dart';
 import 'package:attendance_manager/utils/utils.dart';
 import 'package:attendance_manager/view_model/class_input/class_input_controller.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,6 +32,7 @@ class _ClassInputPageState extends State<ClassInputPage> {
   TextEditingController percentageController = TextEditingController();
   FocusNode percentageFocus = FocusNode();
 
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   void dispose() {
     subjectController.dispose();
@@ -49,6 +51,7 @@ class _ClassInputPageState extends State<ClassInputPage> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    String teacherId = _auth.currentUser!.uid.toString();
 
     return Scaffold(
       backgroundColor: AppColor.kWhite,
@@ -152,81 +155,80 @@ class _ClassInputPageState extends State<ClassInputPage> {
           ),
         ),
       ),
-      // bottomSheet: Consumer<ClassController>(
-      //   builder: (context, provider, child) {
-      //     return CustomRoundButton2(
-      //       height: getProportionalHeight(55),
-      //       loading: provider.loading,
-      //       width: double.infinity,
-      //       buttonColor: AppColor.kPrimaryColor,
-      //       title: 'Next',
-      //       onPress: () async {
-      //         if (_formKey.currentState!.validate()) {
-      //           ClassInputModel classInputModel = ClassInputModel(
-      //             subjectName: subjectController.text,
-      //             departmentName: departmentController.text,
-      //             batchName: batchController.text,
-      //             percentage: int.tryParse(percentageController.text),
-      //           );
-      //           // calling the funtion using provider
-      //           provider.createNewClass(classInputModel).then(
-      //             (value) {
-      //               subjectController.clear();
-      //               batchController.clear();
-      //               departmentController.clear();
-      //               batchController.clear();
-      //             },
-      //           );
-      //         }
-      //       },
-      //     );
-      //   },
-      // ),
-      bottomSheet: CustomRoundButton(
-    height: getProportionalHeight(55),
-    loading: loading,
-    width: double.infinity,
-    borderRaduis: 0,
-    title: 'Next',
-    textStyle:
-        AppStyles().defaultStyle(20, Colors.white, FontWeight.w500),
-    onPress: () {
-      setState(() {
-        loading = true;
-      });
-      int percentage = int.parse(percentageController.text);
-      String classId = DateTime.now().millisecondsSinceEpoch.toString();
-
-      ClassInputController()
-          .addClass(
-              classId,
-              subjectController.text,
-              departmentController.text,
-              batchController.text,
-              percentage)
-          .then((value) {
-        Navigator.pushReplacementNamed(
-            context, RouteName.addStudentPage,
-            arguments: {
-              'subject': subjectController.text,
-              'classId': classId.toString(),
-            });
-        subjectController.clear();
-        departmentController.clear();
-        batchController.clear();
-        percentageController.clear();
-        setState(() {
-          loading = false;
-        });
-      }).onError((error, stackTrace) {
-        Utils.toastMessage(error.toString());
-        setState(() {
-          loading = false;
-        });
-      });
-    })
+      bottomSheet: Consumer<ClassController>(
+        builder: (context, provider, child) {
+          return CustomRoundButton2(
+            height: getProportionalHeight(55),
+            loading: provider.loading,
+            width: double.infinity,
+            buttonColor: AppColor.kPrimaryColor,
+            title: 'Next',
+            onPress: () async {
+              if (_formKey.currentState!.validate()) {
+                ClassInputModel classInputModel = ClassInputModel(
+                  subjectName: subjectController.text,
+                  departmentName: departmentController.text,
+                  teacherId: teacherId,
+                  batchName: batchController.text,
+                  percentage: int.tryParse(percentageController.text),
+                );
+                // calling the funtion using provider
+                provider.createNewClass(classInputModel).then(
+                  (value) {
+                    subjectController.clear();
+                    batchController.clear();
+                    departmentController.clear();
+                    batchController.clear();
+                  },
+                );
+              }
+            },
+          );
+        },
+      ),
+      //   bottomSheet: CustomRoundButton(
+      // height: getProportionalHeight(55),
+      // loading: loading,
+      // width: double.infinity,
+      // borderRaduis: 0,
+      // title: 'Next',
+      // textStyle:
+      //     AppStyles().defaultStyle(20, Colors.white, FontWeight.w500),
+      // onPress: () {
+      //   setState(() {
+      //     loading = true;
+      //   });
+      //   int percentage = int.parse(percentageController.text);
+      //   String classId = DateTime.now().millisecondsSinceEpoch.toString();
+      //
+      //   ClassInputController()
+      //       .addClass(
+      //           classId,
+      //           subjectController.text,
+      //           departmentController.text,
+      //           batchController.text,
+      //           percentage)
+      //       .then((value) {
+      //     Navigator.pushReplacementNamed(
+      //         context, RouteName.addStudentPage,
+      //         arguments: {
+      //           'subject': subjectController.text,
+      //           'classId': classId.toString(),
+      //         });
+      //     subjectController.clear();
+      //     departmentController.clear();
+      //     batchController.clear();
+      //     percentageController.clear();
+      //     setState(() {
+      //       loading = false;
+      //     });
+      //   }).onError((error, stackTrace) {
+      //     Utils.toastMessage(error.toString());
+      //     setState(() {
+      //       loading = false;
+      //     });
+      //   });
+      // })
     );
   }
 }
-
-
