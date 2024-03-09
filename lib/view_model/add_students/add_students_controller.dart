@@ -86,9 +86,20 @@ class StudentController {
           .collection(CLASS)
           .doc(classId)
           .collection(STUDENT)
-          .add(studentModel.toMap());
+          .add(studentModel.toMap())
+          .then((value) {
+        Utils.toastMessage('Student Added');
+      });
     } catch (e) {
-      print('Error adding student: $e');
+      Utils.toastMessage('Error during Student Added');
     }
+  }
+
+  Stream<QuerySnapshot> getStudentData(String classId) {
+    return _fireStore
+        .collection(CLASS)
+        .doc(classId)
+        .collection(STUDENT)
+        .snapshots();
   }
 }

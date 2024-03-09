@@ -119,7 +119,7 @@ import 'package:flutter/material.dart';
 // }
 
 class MyTabBar extends StatefulWidget {
-  Map data;
+  final Map data;
   MyTabBar({Key? key, required this.data}) : super(key: key);
 
   @override
@@ -198,8 +198,7 @@ class _MyTabBarState extends State<MyTabBar>
                   controller: _tabController,
                   children: [
                     AttendanceTab(),
-
-                    StudentTab(),
+                    StudentTab(subjectId: subId,),
                     Text('CLASS2'),
                   ],
                 ),

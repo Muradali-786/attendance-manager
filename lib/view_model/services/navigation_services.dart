@@ -4,6 +4,7 @@ class NavigationService {
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   void removeAndNavigateToRoute(String route, {String? id}) {
+    navigatorKey.currentState?.popAndPushNamed(route);
     if (id != null) {
       navigatorKey.currentState
           ?.popAndPushNamed(route, arguments: {'classId': id.toString()});

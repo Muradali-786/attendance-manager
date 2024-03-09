@@ -88,12 +88,15 @@ class _AddStudentPageState extends State<AddStudentPage> {
               ),
             ),
             Positioned(
-                bottom: SizeConfig.screenHeight! * 0.03,
-                right: 0,
-                left: 0,
-                child: AddStudentButton(onPress: () {
-                  addStudentDialog100(context, classId);
-                }))
+              bottom: SizeConfig.screenHeight! * 0.03,
+              right: 0,
+              left: 0,
+              child: AddStudentButton(
+                onTap: () async {
+                  await addStudentDialog(context, classId);
+                },
+              ),
+            )
           ],
         ),
       ),
@@ -109,14 +112,13 @@ class _AddStudentPageState extends State<AddStudentPage> {
 }
 
 class AddStudentButton extends StatelessWidget {
-  final VoidCallback onPress;
-
-  const AddStudentButton({super.key, required this.onPress});
+  final VoidCallback onTap;
+  const AddStudentButton({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onPress,
+    return GestureDetector(
+      onTap: onTap,
       child: Container(
         height: getProportionalHeight(60),
         width: getProportionalHeight(60),

@@ -1,191 +1,176 @@
 import 'package:attendance_manager/constant/app_style/app_colors.dart';
 import 'package:attendance_manager/constant/app_style/app_styles.dart';
 import 'package:attendance_manager/constant/constant_size.dart';
+import 'package:attendance_manager/model/class_model.dart';
+import 'package:attendance_manager/size_config.dart';
 import 'package:attendance_manager/utils/component/custom_round_botton.dart';
 import 'package:attendance_manager/utils/component/input_text_filed/dialog_text_field.dart';
 import 'package:attendance_manager/utils/utils.dart';
 import 'package:attendance_manager/view_model/class_input/class_input_controller.dart';
 import 'package:flutter/material.dart';
 
-Future<void> updateClassValueDialog(BuildContext context, String classId,String subject, String department,String batch, int percentage) async {
+Future<void> updateClassValueDialog(BuildContext context, Map data) async {
 
-  TextEditingController subjectController = TextEditingController(text: subject);
+  TextEditingController subjectController =
+      TextEditingController(text: data['subjectName']);
   FocusNode subjectFocus = FocusNode();
-  TextEditingController departmentController = TextEditingController(text: department);
+  TextEditingController departmentController =
+      TextEditingController(text: data['departmentName']);
   FocusNode departmentFocus = FocusNode();
-  TextEditingController batchController = TextEditingController(text: batch);
+  TextEditingController batchController =
+      TextEditingController(text: data['batchName']);
   FocusNode batchFocus = FocusNode();
-  TextEditingController attendanceController = TextEditingController(text: percentage.toString());
+  TextEditingController attendancePercentageController =
+      TextEditingController(text: data['percentage'].toString());
   FocusNode attendanceFocus = FocusNode();
-
-
-
-
-
+  String teacherId = data['teacherId'];
+  String subjectId = data['subjectId'];
+  SizeConfig().init(context);
   await showDialog(
     context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-    return OrientationBuilder(builder: (BuildContext context,Orientation orientation){
-      if (orientation == Orientation.landscape) {
-        Navigator.pop(context); // Close the dialog on landscape orientation
-        return const SizedBox.shrink(); // Return an empty widget
-      }
-
+    builder: (context) {
       return Dialog(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(kBorderRadius15),
+          borderRadius: BorderRadius.circular(15),
         ),
-        child: SizedBox(
-          width: 320,
-          height: MediaQuery.of(context).size.height*0.51,
-          child: Column(
-            children: [
-              Container(
-                width: double.infinity,
-                height: 50,
-                decoration: const BoxDecoration(
-                    color: AppColors.kThemePinkColor,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(kBorderRadius15),
-                      topRight: Radius.circular(kBorderRadius15),
-                    )),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 50, right: kPadding4),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Edits Class',
-                        style: AppStyles().defaultStyle(24,
-                            AppColors.kTextWhiteColor, FontWeight.w400),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Icon(
-                          Icons.cancel,
-                          color: AppColors.kWhite,
-                          size: 30,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 12,right: 12, bottom: kPadding16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: double.infinity,
+              height: getProportionalHeight(50),
+              decoration: const BoxDecoration(
+                  color: AppColor.kSecondaryColor,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(kBorderRadius15),
+                    topRight: Radius.circular(kBorderRadius15),
+                  )),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 50, right: kPadding4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                   DialogInputTextField(
-                     labelText: 'Subject',
-                       myController: subjectController,
-                       focusNode: subjectFocus,
-                       onFieldSubmittedValue: (val){
-                         Utils.onFocusChange(context,  subjectFocus,departmentFocus);
-                       }
-                       ,
-                       hint: 'Subject',
-                       onValidator: (val){
-                         return null;
-                       },
-                       keyBoardType: TextInputType.text
-
-                   ),
-                    DialogInputTextField(
-                        labelText: 'Department',
-                        myController: departmentController,
-                        focusNode: departmentFocus,
-                        onFieldSubmittedValue: (val){
-                          Utils.onFocusChange(context,  departmentFocus,batchFocus);
-                        }
-                        ,
-                        hint: 'Department',
-                        onValidator: (val){
-                          return null;
-                        },
-                        keyBoardType: TextInputType.text
-
+                    const Spacer(),
+                    Text(
+                      'Edit Class',
+                      style: AppStyles().defaultStyle(
+                          24, AppColor.kTextWhiteColor, FontWeight.w400),
                     ),
-                    DialogInputTextField(
-                        labelText: 'Standard/Batch',
-                        myController: batchController,
-                        focusNode: batchFocus,
-                        onFieldSubmittedValue: (val){}
-                        ,
-                        hint: 'Standard/Batch',
-                        onValidator: (val){
-                          Utils.onFocusChange(context,  batchFocus,attendanceFocus);
-                          return null;
-                        },
-                        keyBoardType: TextInputType.text
-
+                    const Spacer(),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(
+                        Icons.cancel,
+                        color: AppColor.kWhite,
+                        size: 30,
+                      ),
                     ),
-                    DialogInputTextField(
-                        labelText: 'Attendance Requirement(%)',
-                        myController: attendanceController,
-                        focusNode: attendanceFocus,
-                        onFieldSubmittedValue: (val){}
-                        ,
-                        hint: 'Attendance Requirement(%)',
-                        onValidator: (val){
-                          return null;
-                        },
-                        keyBoardType: TextInputType.number
-
-                    ),
-
                   ],
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CustomRoundButton(
-                      title: 'CLOSE',
-                      height: 40,
-                      textStyle: AppStyles().defaultStyle(14,
-                          AppColors.kTextWhiteColor, FontWeight.bold),
-                      borderRaduis: 6,
-                      width: MediaQuery.of(context).size.width * 0.35,
-                      gradient: false,
-                      color: AppColors.kThemePinkColor,
-                      onPress: () {
-
-                       Navigator.pop(context);
-                      }),
-                  CustomRoundButton(
-                      title: 'UPDATE',
-                      height: 40,
-                      textStyle: AppStyles().defaultStyle(14,
-                          AppColors.kTextWhiteColor, FontWeight.bold),
-                      borderRaduis: 6,
-                      width: MediaQuery.of(context).size.width * 0.35,
-                      gradient: false,
-                      color: AppColors.kThemePinkColor,
-                      onPress: () {
-
-                      ClassInputController().updateClass(classId,
-                          subjectController.text,
-                          departmentController.text,
-                          batchController.text,
-                         int.parse(attendanceController.text)
-                      ).then((value) => {
-                        Navigator.pop(context)
-                      });
-
-                      })
+                  DialogInputTextField(
+                      labelText: 'Subject',
+                      myController: subjectController,
+                      focusNode: subjectFocus,
+                      onFieldSubmittedValue: (val) {
+                        Utils.onFocusChange(
+                            context, subjectFocus, departmentFocus);
+                      },
+                      hint: 'Subject',
+                      onValidator: (val) {
+                        return null;
+                      },
+                      keyBoardType: TextInputType.text),
+                  DialogInputTextField(
+                      labelText: 'Department',
+                      myController: departmentController,
+                      focusNode: departmentFocus,
+                      onFieldSubmittedValue: (val) {
+                        Utils.onFocusChange(
+                            context, departmentFocus, batchFocus);
+                      },
+                      hint: 'Department',
+                      onValidator: (val) {
+                        return null;
+                      },
+                      keyBoardType: TextInputType.text),
+                  DialogInputTextField(
+                      labelText: 'Standard/Batch',
+                      myController: batchController,
+                      focusNode: batchFocus,
+                      onFieldSubmittedValue: (val) {},
+                      hint: 'Standard/Batch',
+                      onValidator: (val) {
+                        Utils.onFocusChange(
+                            context, batchFocus, attendanceFocus);
+                        return null;
+                      },
+                      keyBoardType: TextInputType.text),
+                  DialogInputTextField(
+                      labelText: 'Attendance Requirement(%)',
+                      myController: attendancePercentageController,
+                      focusNode: attendanceFocus,
+                      onFieldSubmittedValue: (val) {},
+                      hint: 'Attendance Requirement(%)',
+                      onValidator: (val) {
+                        return null;
+                      },
+                      keyBoardType: TextInputType.number),
                 ],
               ),
-            ],
-          ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 22, 20, 12),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Expanded(
+                    child: CustomRoundButton2(
+                        height: 38,
+                        title: 'CLOSE',
+                        onPress: () {
+                          Navigator.pop(context);
+                        },
+                        buttonColor: AppColor.kSecondaryColor),
+                  ),
+                  const SizedBox(width: 5),
+                  Expanded(
+                    child: CustomRoundButton2(
+                        height: 38,
+                        title: 'UPDATE',
+                        onPress: () async {
+                          Navigator.pop(context);
+                          ClassInputModel classInputModel = ClassInputModel(
+                            subjectName: subjectController.text,
+                            teacherId: teacherId,
+                            subjectId: subjectId,
+                            departmentName: departmentController.text,
+                            batchName: batchController.text,
+                            percentage: int.tryParse(
+                                attendancePercentageController.text),
+                          );
+
+                          await ClassController()
+                              .updateClassData(classInputModel);
+                        },
+                        buttonColor: AppColor.kSecondaryColor),
+                  )
+                ],
+              ),
+            ),
+          ],
         ),
       );
-    });
     },
   );
 }

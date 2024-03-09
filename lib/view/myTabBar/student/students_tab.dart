@@ -1,6 +1,7 @@
 import 'package:attendance_manager/constant/app_style/app_colors.dart';
 import 'package:attendance_manager/constant/app_style/app_styles.dart';
 import 'package:attendance_manager/constant/constant_size.dart';
+import 'package:attendance_manager/model/student_model.dart';
 import 'package:attendance_manager/size_config.dart';
 import 'package:attendance_manager/utils/component/custom_list_tile.dart';
 import 'package:attendance_manager/utils/component/custom_round_botton.dart';
@@ -15,6 +16,7 @@ import 'package:flutter/material.dart';
 
 import '../../../utils/component/custom_shimmer_effect.dart';
 import '../../../utils/component/input_text_filed/custom_input_text_filed.dart';
+import '../../home/home_page.dart';
 
 // class StudentTab extends StatefulWidget {
 //   String classId, subject;
@@ -182,13 +184,15 @@ import '../../../utils/component/input_text_filed/custom_input_text_filed.dart';
 // }
 
 class StudentTab extends StatefulWidget {
-  const StudentTab({super.key});
+  final String subjectId;
+  const StudentTab({super.key, this.subjectId = ''});
 
   @override
   State<StudentTab> createState() => _StudentTabState();
 }
 
 class _StudentTabState extends State<StudentTab> {
+  final StudentController _studentController = StudentController();
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -198,7 +202,49 @@ class _StudentTabState extends State<StudentTab> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [],
+        children: [
+          StreamBuilder<QuerySnapshot>(
+            stream: _studentController.getStudentData(widget.subjectId),
+            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Expanded(
+                  child: ShimmerLoadingEffect(),
+                );
+              } else if (snapshot.hasError) {
+                return const ErrorClass();
+              } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                return const Center(
+                  child: Text('No student has been added in the class.'),
+                );
+              } else {
+                List<StudentModel> snap = snapshot.data!.docs.map((doc) {
+                  Map<String, dynamic> data =
+                      doc.data() as Map<String, dynamic>;
+                  return StudentModel.fromMap(data);
+                }).toList();
+
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: snap.length,
+                    itemBuilder: (context, index) {
+                      return CustomListTile(
+                        title: snap[index].studentName.toString(),
+                        subtitle: snap[index].studentRollNo.toString(),
+                        trailingFirstText:
+                            "${snap[index].attendancePercentage.toString()}%",
+                        trailingSecondText: 'Attendance',
+                        onPress: () {
+                          Navigator.pushNamed(context, RouteName.studentProfile);
+                        },
+                        onLongPress: () {},
+                      );
+                    },
+                  ),
+                );
+              }
+            },
+          ),
+        ],
       ),
       bottomNavigationBar: Padding(
           padding:
@@ -207,7 +253,7 @@ class _StudentTabState extends State<StudentTab> {
             height: getProportionalHeight(38),
             title: 'ADD STUDENT',
             onPress: () {
-
+              addStudentDialog(context, widget.subjectId);
             },
             buttonColor: AppColor.kSecondaryColor,
           )),
