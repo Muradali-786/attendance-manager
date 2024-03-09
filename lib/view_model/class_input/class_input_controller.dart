@@ -83,7 +83,10 @@ class ClassController with ChangeNotifier {
           .collection(CLASS)
           .add(classInputModel.toMap())
           .then((doc) {
-        _navigationService.removeAndNavigateToRoute(RouteName.addStudentPage);
+        _navigationService.removeAndNavigateToRoute(RouteName.addStudentPage,
+            id: doc.id);
+
+        updateClassId(doc.id);
         setLoading(false);
 
         Utils.toastMessage('Class created successfully');
@@ -94,16 +97,27 @@ class ClassController with ChangeNotifier {
     }
   }
 
+  Future<void> updateClassId(String subjectId) async {
+    setLoading(true);
+    try {
+      await fireStore
+          .collection(CLASS)
+          .doc(subjectId)
+          .update({'subjectId': subjectId});
+
+      Utils.toastMessage('Id Updated');
+    } catch (e) {
+      Utils.toastMessage('Error While Updating  Id');
+    }
+  }
+
   Stream<QuerySnapshot> getSubjectData() {
-    String teacherId=_auth.currentUser!.uid;
+    String teacherId = _auth.currentUser!.uid;
     return fireStore
         .collection(CLASS)
         .where('teacherId', isEqualTo: teacherId)
         .snapshots();
   }
-
-
-
 
   Future<void> deleteClass(String classId) async {
     setLoading(true);

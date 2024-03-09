@@ -41,32 +41,22 @@ class DialogInputTextField extends StatelessWidget {
       enabled: enable,
       onTapOutside: (event) => FocusScope.of(context).unfocus(),
       style: AppStyles()
-          .defaultStyle(
-          18, AppColors.kTextSkyColor, FontWeight.normal)
-          .copyWith(height: 0, fontSize: 19),
+          .defaultStyle(18, AppColor.kPrimaryTextColor, FontWeight.w400),
       decoration: InputDecoration(
         hintText: hint,
         contentPadding: const EdgeInsets.all(kPadding16),
         hintStyle: AppStyles().defaultStyle(
           20,
-          AppColors.kTextBlackColor.withOpacity(0.5),
+          AppColor.kTextGreyColor,
           FontWeight.w400,
         ),
         focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(
-              color: AppColors
-                  .kFocusBorderPinkColor), // This sets the border color when focused
+          borderSide: BorderSide(color: AppColor.kFocusBorderColor),
         ),
         labelText: labelText,
-        labelStyle: focusNode.hasFocus
-            ? AppStyles().defaultStyle(
+        labelStyle: AppStyles().defaultStyle(
           14,
-          AppColors.kThemePinkColor,
-          FontWeight.normal,
-        )
-            : AppStyles().defaultStyle(
-          14,
-          AppColors.kTextBlackColor.withOpacity(0.7), // Default color
+          AppColor.kSecondaryTextColor,
           FontWeight.normal,
         ),
       ),

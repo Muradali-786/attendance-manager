@@ -13,7 +13,7 @@ class ShimmerLoadingEffect extends StatelessWidget {
       direction: ShimmerDirection.ltr,
       period: const Duration(milliseconds: 1500),
       child: ListView.builder(
-        itemCount: 6, // Number of shimmer items you want to show
+        itemCount: 4, // Number of shimmer items you want to show
         itemBuilder: (_, __) => Padding(
           padding: const EdgeInsets.all(8.0),
           child: Container(

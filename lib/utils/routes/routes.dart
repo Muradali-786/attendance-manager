@@ -1,5 +1,6 @@
+import 'package:attendance_manager/model/class_model.dart';
 import 'package:attendance_manager/utils/routes/route_name.dart';
-import 'package:attendance_manager/view/add_students/add_students.dart';
+import 'package:attendance_manager/view/add_students/add_students_page.dart';
 import 'package:attendance_manager/view/class_input/class_input_page.dart';
 import 'package:attendance_manager/view/home/home_page.dart';
 import 'package:attendance_manager/view/login/login_page.dart';

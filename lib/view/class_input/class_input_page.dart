@@ -172,7 +172,6 @@ class _ClassInputPageState extends State<ClassInputPage> {
                   batchName: batchController.text,
                   percentage: int.tryParse(percentageController.text),
                 );
-                // calling the funtion using provider
                 provider.createNewClass(classInputModel).then(
                   (value) {
                     subjectController.clear();

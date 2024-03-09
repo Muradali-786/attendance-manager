@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
           "Attendance Manager",
           style: AppStyles().defaultStyle(
             20,
-            AppColors.kTextWhiteColor,
+            AppColor.kTextWhiteColor,
             FontWeight.w600,
           ),
         ),
@@ -73,7 +73,6 @@ class _HomePageState extends State<HomePage> {
                   child: ListView.builder(
                     itemCount: snap.length,
                     itemBuilder: (context, index) {
-                      final data = snap[index];
                       return CustomListTile(
                         title: snap[index].subjectName.toString(),
                         subtitle:
@@ -81,7 +80,10 @@ class _HomePageState extends State<HomePage> {
                         trailingFirstText: snap[index].percentage.toString(),
                         trailingSecondText: 'Classes',
                         onPress: () {
-
+                          Navigator.pushNamed(context, RouteName.myTabBar,
+                              arguments: {
+                                'data': snap[index].toMap(),
+                              });
                         },
                         onLongPress: () {},
                       );
@@ -228,7 +230,7 @@ class ErrorClass extends StatelessWidget {
           Text(
             'Oops..!',
             style: AppStyles()
-                .defaultStyle(23, AppColors.kTextBlackColor, FontWeight.w600),
+                .defaultStyle(23, AppColor.kTextBlackColor, FontWeight.w600),
           ),
           const SizedBox(
             height: 8,
@@ -236,7 +238,7 @@ class ErrorClass extends StatelessWidget {
           Text(
             'Sorry, Something went wrong',
             style: AppStyles()
-                .defaultStyle(16, AppColors.kTextBlackColor, FontWeight.w400),
+                .defaultStyle(16, AppColor.kTextBlackColor, FontWeight.w400),
           )
         ],
       ),

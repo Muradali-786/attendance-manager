@@ -88,3 +88,87 @@ class CustomInputTextField extends StatelessWidget {
     );
   }
 }
+
+
+class CustomInputTextField2 extends StatelessWidget {
+  final TextEditingController myController;
+  final FocusNode focusNode;
+  final FormFieldSetter onFieldSubmittedValue;
+
+  final FormFieldValidator onValidator;
+  final TextInputType keyBoardType;
+  final bool obsecureText;
+  final String labelText;
+  final Color cursorColor;
+  final bool enable, autoFocus;
+  const CustomInputTextField2({
+    Key? key,
+    this.cursorColor = AppColor.kSecondaryColor,
+    required this.myController,
+    required this.focusNode,
+    required this.onFieldSubmittedValue,
+    required this.labelText,
+    required this.onValidator,
+    required this.keyBoardType,
+    this.obsecureText = false,
+    this.enable = true,
+    this.autoFocus = true,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: myController,
+      focusNode: focusNode,
+      onFieldSubmitted: onFieldSubmittedValue,
+      validator: onValidator,
+      keyboardType: keyBoardType,
+      cursorColor: cursorColor,
+      enabled: enable,
+      onTapOutside: (event) => FocusScope.of(context).unfocus(),
+      style: AppStyles().defaultStyle(
+        16,
+        AppColor.kPrimaryTextColor,
+        FontWeight.w400,
+      ),
+      decoration: InputDecoration(
+        labelText: labelText,
+        filled: true,
+        fillColor: AppColor.kWhite,
+        labelStyle: AppStyles().defaultStyle(
+          18,
+          focusNode.hasFocus
+              ? AppColor.kSecondaryTextColor
+              : AppColor.kTextGreyColor,
+          FontWeight.w400,
+        ),
+
+        border: UnderlineInputBorder(
+          borderSide: const BorderSide(
+            color: AppColor.kBorderColor,
+          ),
+          borderRadius: BorderRadius.circular(4.0),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: const BorderSide(
+            color: AppColor.kFocusBorderColor,
+            width: 2,
+          ),
+          borderRadius: BorderRadius.circular(4.0),
+        ),
+        errorBorder: UnderlineInputBorder(
+          borderSide: const BorderSide(
+            color: AppColor.kAlertColor,
+          ),
+          borderRadius: BorderRadius.circular(4.0),
+        ),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: const BorderSide(
+            color: AppColor.kBorderColor,
+          ),
+          borderRadius: BorderRadius.circular(4.0),
+        ),
+      ),
+    );
+  }
+}

@@ -85,7 +85,7 @@ class CustomRoundButton2 extends StatelessWidget {
         width: width,
         decoration: BoxDecoration(
           color: buttonColor,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(4),
         ),
         child: loading
             ? const Center(
