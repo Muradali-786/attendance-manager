@@ -3,7 +3,7 @@ import 'package:attendance_manager/constant/app_style/app_styles.dart';
 import 'package:attendance_manager/constant/constant_size.dart';
 import 'package:attendance_manager/utils/component/custom_round_botton.dart';
 import 'package:attendance_manager/utils/component/time_picker.dart';
-import 'package:attendance_manager/view_model/std_attendance/student_attendance_controller.dart';
+import 'package:attendance_manager/view_model/std_attendance/std_attendance_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -252,7 +252,7 @@ class _UpdateAttendanceState extends State<UpdateAttendance> {
           borderRaduis: kBorderRadius5,
           color: AppColors.kThemePinkColor,
           onPress: () {
-            StudentAttendanceController().updateAttendanceRecord(
+            StdAttendanceController().updateAttendanceRecord(
                 widget.data['classId'],
                 widget.data['attendanceRecordId'],
                 currentTime,

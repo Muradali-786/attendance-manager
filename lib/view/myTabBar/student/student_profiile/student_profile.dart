@@ -1,186 +1,180 @@
 import 'package:attendance_manager/constant/app_style/app_colors.dart';
 import 'package:attendance_manager/constant/app_style/app_styles.dart';
-import 'package:attendance_manager/constant/constant_size.dart';
-import 'package:attendance_manager/utils/component/dialoge_boxes/update_std_dialog.dart';
+import 'package:attendance_manager/model/student_model.dart';
+import 'package:attendance_manager/size_config.dart';
+
+import 'package:attendance_manager/view/home/home_page.dart';
+import 'package:attendance_manager/view_model/add_students/add_students_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
+import '../../../../utils/component/dialoge_boxes/update_std_dialog.dart';
 
 class StudentProfile extends StatefulWidget {
-  dynamic data;
-
- StudentProfile({super.key,required this.data});
+  Map data;
+  StudentProfile({super.key, required this.data});
 
   @override
   State<StudentProfile> createState() => _StudentProfileState();
 }
 
 class _StudentProfileState extends State<StudentProfile> {
+  final StudentController _studentController = StudentController();
+  @override
+  Widget build(BuildContext context) {
+    String studentId = widget.data['data']['studentId'];
+    String subjectId = widget.data['subjectId'];
 
+    return Scaffold(
+      backgroundColor: AppColors.kAppBackgroundColor,
+      body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            StreamBuilder<DocumentSnapshot>(
+              stream: _studentController.getSingleStudentData(
+                subjectId,
+                studentId,
+              ),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return const ErrorClass();
+                } else {
+                  dynamic data = snapshot.data!.data() as Map<String, dynamic>;
+
+                  StudentModel stdInfo = StudentModel.fromMap(data);
+                  return Stack(
+                    children: [
+                      SizedBox(
+                        height: SizeConfig.screenHeight! * 0.26,
+                        child: Stack(
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              height: SizeConfig.screenHeight! * 0.26 -
+                                  SizeConfig.screenHeight! * 0.06,
+                              decoration: const BoxDecoration(
+                                color: AppColor.kPrimaryColor,
+                              ),
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                      height: SizeConfig.screenHeight! * 0.013),
+                                  _text(stdInfo.studentName, 32),
+                                  _text(stdInfo.studentRollNo, 28),
+                                ],
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: SizeConfig.screenWidth! * 0.06),
+                                child: Container(
+                                  height: SizeConfig.screenHeight! * 0.120,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: AppColor.kBlack.withOpacity(0.3),
+                                        spreadRadius: 0,
+                                        blurRadius: 1.5,
+                                        offset: const Offset(0, 1),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      ReUsableText(
+                                          title: 'Present',
+                                          value:
+                                              stdInfo.totalPresent.toString()),
+                                      ReUsableText(
+                                          title: 'Absent',
+                                          value:
+                                              stdInfo.totalAbsent.toString()),
+                                      ReUsableText(
+                                          title: 'Leaves',
+                                          value:
+                                              stdInfo.totalLeaves.toString()),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Positioned(
+                        top: SizeConfig.screenHeight! * 0.01,
+                        right: SizeConfig.screenWidth! * 0.025,
+                        child: IconButton(
+                          onPressed: () async {
+                            await updateStudentDialog(
+                              context,
+                              subjectId,
+                              stdInfo.toMap(),
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.edit,
+                            color: AppColor.kWhite,
+                            size: 32,
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _text(String title, double size) {
+    return Text(title,
+        style: AppStyles().defaultStyleWithHt(
+          getProportionalHeight(size),
+          AppColor.kTextWhiteColor,
+          FontWeight.bold,
+          1.5,
+        ));
+  }
+}
+
+class ReUsableText extends StatelessWidget {
+  final String title, value;
+  const ReUsableText({super.key, required this.title, required this.value});
 
   @override
   Widget build(BuildContext context) {
-
-
-    double h = MediaQuery.sizeOf(context).height;
-    double w = MediaQuery.sizeOf(context).width;
-    return Scaffold(
-      backgroundColor: AppColors.kAppBackgroundColor,
-      body: Container(
-        height: h,
-        width: w,
-        decoration:
-        const BoxDecoration(gradient: AppColors.kPrimaryLinearGradient),
-        child: SafeArea(
-          child: Container(
-            decoration: const BoxDecoration(color: AppColors.kWhite),
-            child: Stack(
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(top: kPadding16),
-                  height: h * 0.22,
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                      gradient: AppColors.kPrimaryLinearGradient),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        widget.data['studentName'].toUpperCase(),
-                        style: AppStyles().defaultStyle(32,
-                            AppColors.kTextWhiteColor, FontWeight.bold),
-                      ),
-                      Text(
-                        widget.data['studentRollNumber'],
-                        style: AppStyles().defaultStyleWithHt(
-                            32,
-                            AppColors.kTextWhiteColor,
-                            FontWeight.bold,
-                            1.5),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      top: 120, left: kPadding16, right: kPadding16),
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: Container(
-                      padding: const EdgeInsets.only(top: kPadding16),
-                      height: h * 0.120,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.kBlack.withOpacity(0.3),
-                            spreadRadius: 0,
-                            blurRadius: 1.5,
-                            offset: const Offset(
-                                0, 1), // controls the shadow position
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Column(
-                            children: [
-                              Text(
-                                '0',
-                                style: AppStyles().defaultStyle(
-                                    32,
-                                    AppColors.kTextSkyColor,
-                                    FontWeight.bold),
-                              ),
-                              Text(
-                                'Present',
-                                style: AppStyles().defaultStyle(
-                                    18,
-                                    AppColors.kTextBlackColor
-                                        .withOpacity(0.6),
-                                    FontWeight.normal),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                '0',
-                                style: AppStyles().defaultStyle(
-                                    32,
-                                    AppColors.kTextSkyColor,
-                                    FontWeight.bold),
-                              ),
-                              Text(
-                                'Absent',
-                                style: AppStyles().defaultStyle(
-                                    18,
-                                    AppColors.kTextBlackColor
-                                        .withOpacity(0.6),
-                                    FontWeight.normal),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                '0',
-                                style: AppStyles().defaultStyle(
-                                    32,
-                                    AppColors.kTextSkyColor,
-                                    FontWeight.bold),
-                              ),
-                              Text(
-                                'Leaves',
-                                style: AppStyles().defaultStyle(
-                                    18,
-                                    AppColors.kTextBlackColor
-                                        .withOpacity(0.6),
-                                    FontWeight.normal),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: GestureDetector(
-                      onTap: () {
-                        String titleVal = 'Edit Student';
-                        String firstButton = 'SAVE';
-                        String secondButton = 'CLOSE';
-                        updateStudentDialog(
-                            context,
-                            widget.data['studentId'].toString(),
-                            widget.data['studentName'],
-                            widget.data['studentRollNumber'].toString(),
-                            widget.data['classId'],
-                            widget.data['subject'],
-                            titleVal,
-                            firstButton,
-                            secondButton
-
-                        );
-                      },
-                      child: const Padding(
-                        padding:
-                        EdgeInsets.only(top: kPadding20, right: kPadding20),
-                        child: Icon(
-                          Icons.edit,
-                          color: AppColors.kWhite,
-                          size: 32,
-                        ),
-                      )),
-                )
-              ],
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          value,
+          style: AppStyles().defaultStyle(
+            32,
+            AppColor.kPrimaryTextColor,
+            FontWeight.bold,
           ),
         ),
-      ),
+        Text(
+          title,
+          style: AppStyles().defaultStyleWithHt(
+              18, AppColor.kTextGreyColor, FontWeight.w400, 1.5),
+        ),
+      ],
     );
   }
 }

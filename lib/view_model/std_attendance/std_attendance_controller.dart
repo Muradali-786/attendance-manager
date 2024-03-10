@@ -1,7 +1,7 @@
 import 'package:attendance_manager/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class StudentAttendanceController {
+class StdAttendanceController {
   Future<void> recordAttendance(
       String classId,
       String subject,

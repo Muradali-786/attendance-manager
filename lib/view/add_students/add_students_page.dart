@@ -80,7 +80,7 @@ class _AddStudentPageState extends State<AddStudentPage> {
                         child: _text('PREVIOUS')),
                     TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, RouteName.homePage);
+                          Navigator.pushReplacementNamed(context, RouteName.homePage);
                         },
                         child: _text('FINISH')),
                   ],

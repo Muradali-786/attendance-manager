@@ -197,7 +197,7 @@ class _MyTabBarState extends State<MyTabBar>
                 child: TabBarView(
                   controller: _tabController,
                   children: [
-                    AttendanceTab(),
+                    const AttendanceTab(),
                     StudentTab(subjectId: subId,),
                     Text('CLASS2'),
                   ],

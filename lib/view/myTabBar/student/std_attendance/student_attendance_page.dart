@@ -4,7 +4,7 @@ import 'package:attendance_manager/constant/constant_size.dart';
 import 'package:attendance_manager/utils/component/custom_round_botton.dart';
 import 'package:attendance_manager/utils/component/time_picker.dart';
 import 'package:attendance_manager/utils/utils.dart';
-import 'package:attendance_manager/view_model/std_attendance/student_attendance_controller.dart';
+import 'package:attendance_manager/view_model/std_attendance/std_attendance_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -289,7 +289,7 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
             onPress: () {
               String selectedDate=widget.data['selectedDate'].substring(0,10).toString();
 
-              StudentAttendanceController().recordAttendance(widget.data['classId'],widget.data['subject'], selectedDate,
+              StdAttendanceController().recordAttendance(widget.data['classId'],widget.data['subject'], selectedDate,
                   currentTime,
                   studentIdList,
                   studentNamesList,

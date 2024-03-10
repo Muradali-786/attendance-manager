@@ -10,7 +10,6 @@ import 'package:attendance_manager/view_model/class_input/class_input_controller
 import 'package:flutter/material.dart';
 
 Future<void> updateClassValueDialog(BuildContext context, Map data) async {
-
   TextEditingController subjectController =
       TextEditingController(text: data['subjectName']);
   FocusNode subjectFocus = FocusNode();
@@ -45,31 +44,28 @@ Future<void> updateClassValueDialog(BuildContext context, Map data) async {
                     topLeft: Radius.circular(kBorderRadius15),
                     topRight: Radius.circular(kBorderRadius15),
                   )),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 50, right: kPadding4),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Spacer(),
-                    Text(
-                      'Edit Class',
-                      style: AppStyles().defaultStyle(
-                          24, AppColor.kTextWhiteColor, FontWeight.w400),
+              child: Row(
+                children: [
+                  const Spacer(
+                    flex: 2,
+                  ),
+                  Text(
+                    'Edit Class',
+                    style: AppStyles().defaultStyle(
+                        24, AppColor.kTextWhiteColor, FontWeight.w400),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(
+                      Icons.cancel,
+                      color: AppColor.kWhite,
+                      size: 30,
                     ),
-                    const Spacer(),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(
-                        Icons.cancel,
-                        color: AppColor.kWhite,
-                        size: 30,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
             Padding(
@@ -146,24 +142,25 @@ Future<void> updateClassValueDialog(BuildContext context, Map data) async {
                   const SizedBox(width: 5),
                   Expanded(
                     child: CustomRoundButton2(
-                        height: 38,
-                        title: 'UPDATE',
-                        onPress: () async {
-                          Navigator.pop(context);
-                          ClassInputModel classInputModel = ClassInputModel(
-                            subjectName: subjectController.text,
-                            teacherId: teacherId,
-                            subjectId: subjectId,
-                            departmentName: departmentController.text,
-                            batchName: batchController.text,
-                            percentage: int.tryParse(
-                                attendancePercentageController.text),
-                          );
+                      height: 38,
+                      title: 'UPDATE',
+                      onPress: () async {
+                        Navigator.pop(context);
+                        ClassInputModel classInputModel = ClassInputModel(
+                          subjectName: subjectController.text,
+                          teacherId: teacherId,
+                          subjectId: subjectId,
+                          departmentName: departmentController.text,
+                          batchName: batchController.text,
+                          percentage:
+                              int.tryParse(attendancePercentageController.text),
+                        );
 
-                          await ClassController()
-                              .updateClassData(classInputModel);
-                        },
-                        buttonColor: AppColor.kSecondaryColor),
+                        await ClassController()
+                            .updateClassData(classInputModel);
+                      },
+                      buttonColor: AppColor.kSecondaryColor,
+                    ),
                   )
                 ],
               ),

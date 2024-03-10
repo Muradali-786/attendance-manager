@@ -35,7 +35,7 @@ class _CustomStepperState extends State<CustomStepper> {
           activeStepBackgroundColor: AppColor.kTransparentColor,
           activeStepBorderColor: AppColor.kSubmarine,
           finishedStepBorderColor:
-              activeStep == 1 ? AppColor.kPrimaryColor : AppColor.kSubmarine,
+          activeStep == 1 ? AppColor.kPrimaryColor : AppColor.kSubmarine,
           finishedStepBackgroundColor: activeStep == 1
               ? AppColor.kPrimaryColor
               : AppColor.kTransparentColor,
@@ -59,18 +59,18 @@ class _CustomStepperState extends State<CustomStepper> {
             opacity: activeStep >= 0 ? 1 : 0.3,
             child: activeStep == 0 || activeStep == 2
                 ? Container(
-                    height: 8,
-                    width: 8,
-                    decoration: const BoxDecoration(
-                      color: AppColor.kPrimaryColor,
-                      shape: BoxShape.circle,
-                    ),
-                  )
+              height: 8,
+              width: 8,
+              decoration: const BoxDecoration(
+                color: AppColor.kPrimaryColor,
+                shape: BoxShape.circle,
+              ),
+            )
                 : const Icon(
-                    Icons.check,
-                    size: 18,
-                    color: AppColor.kWhite,
-                  ),
+              Icons.check,
+              size: 18,
+              color: AppColor.kWhite,
+            ),
           ),
         ),
         customTitle: _stepperTitle(title: 'Class'));
@@ -82,13 +82,13 @@ class _CustomStepperState extends State<CustomStepper> {
           borderRadius: BorderRadius.circular(15),
           child: activeStep == 1
               ? Container(
-                  height: 8,
-                  width: 8,
-                  decoration: const BoxDecoration(
-                    color: AppColor.kPrimaryColor,
-                    shape: BoxShape.circle,
-                  ),
-                )
+            height: 8,
+            width: 8,
+            decoration: const BoxDecoration(
+              color: AppColor.kPrimaryColor,
+              shape: BoxShape.circle,
+            ),
+          )
               : null,
         ),
         customTitle: _stepperTitle(title: 'Students'));

@@ -51,7 +51,10 @@ class DialogInputTextField extends StatelessWidget {
           FontWeight.w400,
         ),
         focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColor.kFocusBorderColor),
+          borderSide: BorderSide(color: AppColor.kFocusBorderColor, width: 1.5),
+        ),
+        errorBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColor.kAlertColor),
         ),
         labelText: labelText,
         labelStyle: AppStyles().defaultStyle(
