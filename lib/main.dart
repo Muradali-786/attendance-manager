@@ -1,6 +1,6 @@
 import 'package:attendance_manager/constant/app_style/app_colors.dart';
-import 'package:attendance_manager/view/add_students/add_students_page.dart';
 import 'package:attendance_manager/view_model/app/app_controller.dart';
+import 'package:attendance_manager/view_model/attendance/attendance_controller.dart';
 import 'package:attendance_manager/view_model/class_input/class_input_controller.dart';
 import 'package:attendance_manager/view_model/login/login_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -42,6 +42,8 @@ class MyApp extends StatelessWidget {
             create: (_) => AppController()),
         ChangeNotifierProvider<ClassController>(
             create: (_) => ClassController()),
+        ChangeNotifierProvider<AttendanceProvider>(
+            create: (_) => AttendanceProvider()),
 
       ],
       child: MaterialApp(

@@ -3,7 +3,7 @@ import 'package:attendance_manager/constant/app_style/app_styles.dart';
 import 'package:flutter/material.dart';
 
 class CustomRoundButton extends StatelessWidget {
-  final title;
+  final String title;
   final VoidCallback onPress;
   final Color color, textColor;
   final bool loading, gradient;

@@ -1,5 +1,9 @@
+import 'package:attendance_manager/model/attendance_model.dart';
 import 'package:attendance_manager/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+
+import '../../constant/app_style/app_colors.dart';
 
 class StdAttendanceController {
   Future<void> recordAttendance(
@@ -43,21 +47,21 @@ class StdAttendanceController {
       Utils.toastMessage('Error recording attendance: ${e.toString()}');
     }
   }
+
   Future<void> updateAttendanceRecord(
-      String classId,
-      String recordId,
-      String newTime,
-      List<String> studentIds,
-      List<String> newStatuses,
-      ) async {
+    String classId,
+    String recordId,
+    String newTime,
+    List<String> studentIds,
+    List<String> newStatuses,
+  ) async {
     try {
       final classReference =
-      FirebaseFirestore.instance.collection('Class').doc(classId);
+          FirebaseFirestore.instance.collection('Class').doc(classId);
 
       // Reference to the specific attendance record
-      final attendanceRecordRef = classReference
-          .collection('AttendanceRecords')
-          .doc(recordId);
+      final attendanceRecordRef =
+          classReference.collection('AttendanceRecords').doc(recordId);
 
       final attendanceSnapshot = await attendanceRecordRef.get();
 
@@ -68,7 +72,7 @@ class StdAttendanceController {
         // Update attendance data for each student in the subcollection
         for (int i = 0; i < studentIds.length; i++) {
           final studentAttendanceRef =
-          attendanceRecordRef.collection('Attendance').doc(studentIds[i]);
+              attendanceRecordRef.collection('Attendance').doc(studentIds[i]);
 
           // Check if the student's attendance document exists
           final studentAttendanceSnapshot = await studentAttendanceRef.get();
@@ -88,20 +92,17 @@ class StdAttendanceController {
     }
   }
 
-
-
   Future<void> deleteAttendanceRecordById(
-      String classId,
-      String recordId,
-      ) async {
+    String classId,
+    String recordId,
+  ) async {
     try {
       final classReference =
-      FirebaseFirestore.instance.collection('Class').doc(classId);
+          FirebaseFirestore.instance.collection('Class').doc(classId);
 
       // Reference to the specific attendance record
-      final attendanceRecordRef = classReference
-          .collection('AttendanceRecords')
-          .doc(recordId);
+      final attendanceRecordRef =
+          classReference.collection('AttendanceRecords').doc(recordId);
 
       final attendanceSnapshot = await attendanceRecordRef.get();
 
@@ -125,5 +126,58 @@ class StdAttendanceController {
       Utils.toastMessage('Error deleting attendance record: ${e.toString()}');
     }
   }
+}
 
+const String ATTENDANCE = 'Attendance';
+const String CLASS = 'Classes';
+
+class AttendanceProvider extends ChangeNotifier {
+  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+
+  List<String> _attendanceStatus = [];
+
+  attendanceStatusProvider(int length) {
+    _attendanceStatus = List.generate(length, (index) => "P");
+  }
+
+  List<String> get attendanceStatus => _attendanceStatus;
+
+  Future<void> saveAllStudentAttendance(
+      AttendanceModel model, String classId) async {
+    try {
+      await _fireStore
+          .collection(CLASS)
+          .doc(classId)
+          .collection(ATTENDANCE)
+          .doc()
+          .set(model.toMap())
+          .then((value) {
+        Utils.toastMessage('Attendance Taken');
+      });
+    } catch (e) {
+      Utils.toastMessage('Error recording attendance: ${e.toString()}');
+    }
+  }
+
+  void updateStatus(int index) {
+    if (_attendanceStatus[index] == 'P') {
+      _attendanceStatus[index] = 'A';
+    } else if (_attendanceStatus[index] == 'A') {
+      _attendanceStatus[index] = 'L';
+    }else{
+      _attendanceStatus[index] = 'P';
+    }
+    notifyListeners();
+  }
+
+  Color getStatusColor(String status) {
+    switch (status) {
+      case 'A':
+        return AppColor.kSecondaryColor;
+      case 'L':
+        return AppColor.kSecondary54Color;
+      default:
+        return AppColor.kPrimaryTextColor;
+    }
+  }
 }

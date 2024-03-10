@@ -3,7 +3,7 @@ import 'package:attendance_manager/constant/app_style/app_styles.dart';
 import 'package:attendance_manager/constant/constant_size.dart';
 import 'package:attendance_manager/utils/component/custom_round_botton.dart';
 import 'package:attendance_manager/utils/component/time_picker.dart';
-import 'package:attendance_manager/view_model/std_attendance/std_attendance_controller.dart';
+import 'package:attendance_manager/view_model/attendance/attendance_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -37,20 +37,16 @@ class _UpdateAttendanceState extends State<UpdateAttendance> {
         attendanceRecordRef.collection('Attendance').snapshots();
 
     fireStoreSubCollectRef.listen((QuerySnapshot querySnapshot) {
-
-
-      if (studentIdList.isEmpty ) {
+      if (studentIdList.isEmpty) {
         // Populate rollNumbers and studentNames from the query result
-        studentIdList = querySnapshot.docs.map((doc) => doc.id.toString()).toList();
+        studentIdList =
+            querySnapshot.docs.map((doc) => doc.id.toString()).toList();
       }
 
       setState(() {
         // Your other setState logic
       });
-    }
-    );
-
-
+    });
   }
 
   TimeOfDay? selectedTime;
@@ -88,16 +84,20 @@ class _UpdateAttendanceState extends State<UpdateAttendance> {
                   child: Text(
                     currentTime,
                     style: AppStyles().defaultStyle(
-                        43, AppColors.kTextGreenColor.withOpacity(0.8), FontWeight.w500),
+                        43,
+                        AppColors.kTextGreenColor.withOpacity(0.8),
+                        FontWeight.w500),
                   ),
                 ),
               ),
             ),
             StreamBuilder<QuerySnapshot>(
               stream: fireStoreSubCollectRef,
-              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Expanded(child: ShimmerLoadingEffect(height: 45));
+                  return const Expanded(
+                      child: ShimmerLoadingEffect(height: 45));
                 } else if (snapshot.hasError) {
                   return Center(
                     child: Column(
@@ -183,7 +183,8 @@ class _UpdateAttendanceState extends State<UpdateAttendance> {
                                     data['rollNumber'].toString(),
                                     style: TextStyle(
                                       fontSize: 17,
-                                      color: AppColors.kTextBlackColor.withOpacity(0.5),
+                                      color: AppColors.kTextBlackColor
+                                          .withOpacity(0.5),
                                       fontWeight: FontWeight.normal,
                                       height: 1.5,
                                     ),
@@ -197,7 +198,8 @@ class _UpdateAttendanceState extends State<UpdateAttendance> {
                                     onTap: () {
                                       if (studentStatusList[index] == 'L') {
                                         studentStatusList[index] = 'P';
-                                      } else if (studentStatusList[index] == 'P') {
+                                      } else if (studentStatusList[index] ==
+                                          'P') {
                                         studentStatusList[index] = 'A';
                                       } else {
                                         studentStatusList[index] = 'L';
@@ -208,7 +210,8 @@ class _UpdateAttendanceState extends State<UpdateAttendance> {
                                       height: 53,
                                       width: 65,
                                       decoration: BoxDecoration(
-                                        color: getStatusColor(studentStatusList[index]),
+                                        color: getStatusColor(
+                                            studentStatusList[index]),
                                         borderRadius: BorderRadius.circular(3),
                                       ),
                                       child: Center(
@@ -232,7 +235,8 @@ class _UpdateAttendanceState extends State<UpdateAttendance> {
                     ),
                   );
                 } else {
-                  return const Center(child: Text('Click on the button to add student '));
+                  return const Center(
+                      child: Text('Click on the button to add student '));
                 }
               },
             ),
@@ -241,7 +245,7 @@ class _UpdateAttendanceState extends State<UpdateAttendance> {
       ),
       bottomNavigationBar: Padding(
         padding:
-        const EdgeInsets.only(left: 100, right: 100, bottom: kPadding16),
+            const EdgeInsets.only(left: 100, right: 100, bottom: kPadding16),
         child: CustomRoundButton(
           title: 'UPDATE ATTENDANCE',
           gradient: false,
@@ -252,21 +256,20 @@ class _UpdateAttendanceState extends State<UpdateAttendance> {
           borderRaduis: kBorderRadius5,
           color: AppColors.kThemePinkColor,
           onPress: () {
-            StdAttendanceController().updateAttendanceRecord(
-                widget.data['classId'],
-                widget.data['attendanceRecordId'],
-                currentTime,
-                studentIdList,
-                studentStatusList
-            ).then((value) {
-             Navigator.pop(context);
+            StdAttendanceController()
+                .updateAttendanceRecord(
+                    widget.data['classId'],
+                    widget.data['attendanceRecordId'],
+                    currentTime,
+                    studentIdList,
+                    studentStatusList)
+                .then((value) {
+              Navigator.pop(context);
             });
-
           },
         ),
       ),
     );
-
   }
 
   Color getStatusColor(String status) {
@@ -282,5 +285,4 @@ class _UpdateAttendanceState extends State<UpdateAttendance> {
         return Colors.grey; // Fallback color
     }
   }
-
 }

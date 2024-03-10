@@ -3,7 +3,7 @@ import 'package:attendance_manager/constant/app_style/app_styles.dart';
 import 'package:attendance_manager/constant/constant_size.dart';
 import 'package:attendance_manager/size_config.dart';
 import 'package:attendance_manager/utils/routes/route_name.dart';
-import 'package:attendance_manager/view_model/std_attendance/std_attendance_controller.dart';
+import 'package:attendance_manager/view_model/attendance/attendance_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -260,7 +260,8 @@ import '../../../utils/component/custom_shimmer_effect.dart';
 // }
 
 class AttendanceTab extends StatefulWidget {
-  const AttendanceTab({Key? key}) : super(key: key);
+  final String subjectId;
+  const AttendanceTab({Key? key, this.subjectId = ''}) : super(key: key);
 
   @override
   State<AttendanceTab> createState() => _AttendanceTabState();
@@ -272,6 +273,7 @@ class _AttendanceTabState extends State<AttendanceTab> {
   DateTime? _selectedDay;
 
   DateTime? _selectedDate;
+
 
   @override
   Widget build(BuildContext context) {
@@ -338,7 +340,10 @@ class _AttendanceTabState extends State<AttendanceTab> {
           child: CustomRoundButton2(
             height: getProportionalHeight(38),
             title: 'TAKE ATTENDANCE',
-            onPress: () {},
+            onPress: () {
+              Navigator.pushNamed(context, RouteName.studentAttendancePage,
+                  arguments: {'data': widget.subjectId});
+            },
             buttonColor: AppColor.kSecondaryColor,
           )),
     );
