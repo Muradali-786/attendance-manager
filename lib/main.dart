@@ -5,6 +5,7 @@ import 'package:attendance_manager/view_model/class_input/class_input_controller
 import 'package:attendance_manager/view_model/login/login_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'utils/routes/route_name.dart';
 import 'utils/routes/routes.dart';
@@ -21,10 +22,16 @@ void main() async {
       projectId: "attendance-manager-4e159",
     ),
   );
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 
-  runApp(
-    const MyApp(),
-  );
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: AppColor.kPrimaryColor,
+  ));
+
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -38,13 +45,11 @@ class MyApp extends StatelessWidget {
             create: (_) => SignUpController()),
         ChangeNotifierProvider<LoginController>(
             create: (_) => LoginController()),
-        ChangeNotifierProvider<AppController>(
-            create: (_) => AppController()),
+        ChangeNotifierProvider<AppController>(create: (_) => AppController()),
         ChangeNotifierProvider<ClassController>(
             create: (_) => ClassController()),
         ChangeNotifierProvider<AttendanceProvider>(
             create: (_) => AttendanceProvider()),
-
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -59,10 +64,6 @@ class MyApp extends StatelessWidget {
         title: 'Attendance Manager',
         initialRoute: RouteName.splash,
         onGenerateRoute: Routes.generateRoute,
-
-
-
-
       ),
     );
   }
