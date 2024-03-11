@@ -1,33 +1,28 @@
 class AttendanceModel {
   final String classId;
-  final DateTime selectedDate;
-  final DateTime currentTime;
-  final List<String> studentIdList;
-  final List<String> statusList;
+  final String selectedDate;
+  final String currentTime;
+  final Map<String, String> attendanceList;
 
   AttendanceModel({
     required this.classId,
     required this.selectedDate,
     required this.currentTime,
-    required this.studentIdList,
-
-    required this.statusList,
+    required this.attendanceList,
   });
 
-  AttendanceModel.fromMap(Map<String, dynamic> map)
-      : classId = map['classId'],
-        selectedDate = DateTime.parse(map['selectedDate']),
-        currentTime = DateTime.parse(map['currentTime']),
-        studentIdList = List<String>.from(map['studentIdList']),
-        statusList = List<String>.from(map['statusList']);
+  AttendanceModel.fromMap(Map<String, dynamic> res)
+      : classId = res['classId'],
+        selectedDate = res['selectedDate'],
+        currentTime = res['currentTime'],
+        attendanceList = Map<String, String>.from(res['attendanceList']);
 
   Map<String, dynamic> toMap() {
     return {
       'classId': classId,
-      'selectedDate': selectedDate.toIso8601String(),
-      'currentTime': currentTime.toIso8601String(),
-      'studentIdList': studentIdList,
-      'statusList': statusList,
+      'selectedDate': selectedDate,
+      'currentTime': currentTime,
+      'attendanceList': attendanceList,
     };
   }
 }

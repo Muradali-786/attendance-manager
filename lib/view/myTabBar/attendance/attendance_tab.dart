@@ -341,8 +341,16 @@ class _AttendanceTabState extends State<AttendanceTab> {
             height: getProportionalHeight(38),
             title: 'TAKE ATTENDANCE',
             onPress: () {
-              Navigator.pushNamed(context, RouteName.studentAttendancePage,
-                  arguments: {'data': widget.subjectId});
+              _selectedDate ??=
+                today; //if selected day is null then assign it today
+
+
+            Navigator.pushNamed(context, RouteName.studentAttendancePage,
+                arguments: {
+                  'classId': widget.subjectId,
+                  'selectedDate': _selectedDate.toString(),
+                });
+
             },
             buttonColor: AppColor.kSecondaryColor,
           )),

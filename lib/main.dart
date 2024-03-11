@@ -31,7 +31,9 @@ void main() async {
     statusBarColor: AppColor.kPrimaryColor,
   ));
 
-  runApp(const MyApp());
+  runApp(
+    const MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -48,8 +50,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<AppController>(create: (_) => AppController()),
         ChangeNotifierProvider<ClassController>(
             create: (_) => ClassController()),
-        ChangeNotifierProvider<AttendanceProvider>(
-            create: (_) => AttendanceProvider()),
+        ChangeNotifierProvider<AttendanceController>(
+            create: (_) => AttendanceController()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

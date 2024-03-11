@@ -1,9 +1,10 @@
 import 'package:attendance_manager/constant/app_style/app_colors.dart';
 import 'package:attendance_manager/constant/app_style/app_styles.dart';
-import 'package:attendance_manager/constant/constant_size.dart';
+import 'package:attendance_manager/model/attendance_model.dart';
 import 'package:attendance_manager/size_config.dart';
 import 'package:attendance_manager/utils/component/custom_round_botton.dart';
 import 'package:attendance_manager/utils/component/time_picker.dart';
+import 'package:attendance_manager/utils/routes/route_name.dart';
 import 'package:attendance_manager/view_model/add_students/add_students_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -35,12 +36,14 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
   }
 
   final StudentController _studentController = StudentController();
+  List<String> stdIdList = [];
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     String currentTime = selectedTime.format(context).toString();
-    String subjectId = widget.data['data'].toString();
+    String subjectId = widget.data['classId'].toString();
+    String selectedDate = widget.data['selectedDate'].substring(0, 10);
 
     return Scaffold(
       backgroundColor: AppColor.kBgColor,
@@ -82,7 +85,7 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
                     return StudentModel.fromMap(data);
                   }).toList();
 
-                  return Consumer<AttendanceProvider>(
+                  return Consumer<AttendanceController>(
                       builder: (context, provider, child) {
                     if (provider.attendanceStatus.isEmpty) {
                       provider.attendanceStatusProvider(snap.length);
@@ -93,6 +96,10 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
                         physics: const BouncingScrollPhysics(),
                         itemCount: snap.length,
                         itemBuilder: (context, index) {
+                          if (stdIdList.length != snap.length) {
+                            stdIdList.add(snap[index].studentId!);
+                          }
+
                           return Padding(
                             padding: const EdgeInsets.fromLTRB(12, 14, 12, 0),
                             child: Container(
@@ -187,16 +194,35 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding:
-            const EdgeInsets.only(left: 100, right: 100, bottom: kPadding16),
-        child: CustomRoundButton2(
-          height: getProportionalHeight(38),
-          title: 'SAVE ATTENDANCE',
-          onPress: () {},
-          buttonColor: AppColor.kSecondaryColor,
-        ),
-      ),
+      bottomNavigationBar:
+          Consumer<AttendanceController>(builder: (context, provider, child) {
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(100, 0, 100, 16),
+          child: CustomRoundButton2(
+            height: getProportionalHeight(38),
+            title: 'SAVE ATTENDANCE',
+            loading: provider.loading,
+            onPress: () async {
+              AttendanceModel attendanceModel = AttendanceModel(
+                classId: subjectId,
+                selectedDate: selectedDate,
+                currentTime: currentTime,
+                attendanceList: Map.fromIterables(
+                  stdIdList,
+                  provider.attendanceStatus,
+                ),
+              );
+
+              await provider
+                  .saveAllStudentAttendance(attendanceModel)
+                  .then((value) {
+                Navigator.pop(context);
+              });
+            },
+            buttonColor: AppColor.kSecondaryColor,
+          ),
+        );
+      }),
     );
   }
 }

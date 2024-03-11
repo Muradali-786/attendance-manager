@@ -131,8 +131,11 @@ class StdAttendanceController {
 const String ATTENDANCE = 'Attendance';
 const String CLASS = 'Classes';
 
-class AttendanceProvider extends ChangeNotifier {
+class AttendanceController extends ChangeNotifier {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+
+  bool _loading = false;
+  bool get loading => _loading;
 
   List<String> _attendanceStatus = [];
 
@@ -142,21 +145,37 @@ class AttendanceProvider extends ChangeNotifier {
 
   List<String> get attendanceStatus => _attendanceStatus;
 
-  Future<void> saveAllStudentAttendance(
-      AttendanceModel model, String classId) async {
+  void setLoading(bool value) {
+    _loading = value;
+    notifyListeners();
+  }
+
+  Future<void> saveAllStudentAttendance(AttendanceModel model) async {
+    setLoading(true);
     try {
       await _fireStore
           .collection(CLASS)
-          .doc(classId)
+          .doc(model.classId)
           .collection(ATTENDANCE)
           .doc()
           .set(model.toMap())
           .then((value) {
+        setLoading(false);
         Utils.toastMessage('Attendance Taken');
       });
+      setLoading(false);
     } catch (e) {
+      setLoading(false);
       Utils.toastMessage('Error recording attendance: ${e.toString()}');
     }
+  }
+
+  Stream<QuerySnapshot> getAllStudentAttendance(String subjectId) {
+    return _fireStore
+        .collection(CLASS)
+        .doc(subjectId)
+        .collection(ATTENDANCE)
+        .snapshots();
   }
 
   void updateStatus(int index) {
@@ -164,7 +183,7 @@ class AttendanceProvider extends ChangeNotifier {
       _attendanceStatus[index] = 'A';
     } else if (_attendanceStatus[index] == 'A') {
       _attendanceStatus[index] = 'L';
-    }else{
+    } else {
       _attendanceStatus[index] = 'P';
     }
     notifyListeners();

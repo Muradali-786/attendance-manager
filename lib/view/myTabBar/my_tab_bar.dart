@@ -199,7 +199,7 @@ class _MyTabBarState extends State<MyTabBar>
                   children: [
                     AttendanceTab(subjectId: subId),
                     StudentTab(subjectId: subId),
-                    Text('CLASS2'),
+                    HistoryTab(subjectId: subId),
                   ],
                 ),
               ),
