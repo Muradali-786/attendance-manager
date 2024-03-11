@@ -15,7 +15,6 @@ import 'package:attendance_manager/view/myTabBar/student/students_tab.dart';
 import 'package:attendance_manager/view/sign_up/sign_up_page.dart';
 import 'package:attendance_manager/view/splash/splash.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 //
 class Routes {

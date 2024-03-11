@@ -87,7 +87,7 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
 
                   return Consumer<AttendanceController>(
                       builder: (context, provider, child) {
-                    if (provider.attendanceStatus.isEmpty) {
+                    if (provider.attendanceStatus.length!=snap.length) {
                       provider.attendanceStatusProvider(snap.length);
                     }
 
@@ -96,9 +96,13 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
                         physics: const BouncingScrollPhysics(),
                         itemCount: snap.length,
                         itemBuilder: (context, index) {
+
                           if (stdIdList.length != snap.length) {
                             stdIdList.add(snap[index].studentId!);
                           }
+                          print('check this one');
+                          print(stdIdList.length);
+                          print(provider.attendanceStatus.length);
 
                           return Padding(
                             padding: const EdgeInsets.fromLTRB(12, 14, 12, 0),

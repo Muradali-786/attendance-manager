@@ -170,11 +170,26 @@ class AttendanceController extends ChangeNotifier {
     }
   }
 
+  Future<int> getAttendanceLength(String classId) async {
+    final querySnapshot = await _fireStore
+        .collection(CLASS)
+        .doc(classId)
+        .collection(ATTENDANCE)
+        .get();
+    if (querySnapshot.docs.isNotEmpty) {
+      int length = querySnapshot.docs.length;
+      return length;
+    } else {
+      return 0;
+    }
+  }
+
   Stream<QuerySnapshot> getAllStudentAttendance(String subjectId) {
     return _fireStore
         .collection(CLASS)
         .doc(subjectId)
         .collection(ATTENDANCE)
+        .orderBy('currentTime', descending: true)
         .snapshots();
   }
 

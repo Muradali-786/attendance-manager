@@ -58,9 +58,9 @@ class _HistoryTabState extends State<HistoryTab> {
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, RouteName.studentAttendanceHistoryPage,arguments: {
-                            'data':'data'
-                          });
+                          Navigator.pushNamed(
+                              context, RouteName.studentAttendanceHistoryPage,
+                              arguments: {'data': snap[index].toMap()});
                         },
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(10, 14, 10, 0),
