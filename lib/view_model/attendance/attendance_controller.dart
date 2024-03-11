@@ -157,9 +157,11 @@ class AttendanceController extends ChangeNotifier {
           .collection(CLASS)
           .doc(model.classId)
           .collection(ATTENDANCE)
-          .doc()
-          .set(model.toMap())
+          .add(model.toMap())
           .then((value) {
+        updateAttendanceId(model.classId, value.id).then((value) {
+          setLoading(false);
+        });
         setLoading(false);
         Utils.toastMessage('Attendance Taken');
       });
@@ -170,17 +172,34 @@ class AttendanceController extends ChangeNotifier {
     }
   }
 
-  Future<int> getAttendanceLength(String classId) async {
-    final querySnapshot = await _fireStore
-        .collection(CLASS)
-        .doc(classId)
-        .collection(ATTENDANCE)
-        .get();
-    if (querySnapshot.docs.isNotEmpty) {
-      int length = querySnapshot.docs.length;
-      return length;
-    } else {
-      return 0;
+  Future<void> updateAttendanceId(String classId, String docId) async {
+    try {
+      await _fireStore
+          .collection(CLASS)
+          .doc(classId)
+          .collection(ATTENDANCE)
+          .doc(docId)
+          .update({'attendanceId': docId}).then((value) {
+        Utils.toastMessage('Id');
+      });
+    } catch (e) {
+      Utils.toastMessage('Error updating attendance id: ${e.toString()}');
+    }
+  }
+
+  Future<void> deleteAttendanceRecord(String subjectId, String attnId) async {
+    try {
+      await _fireStore
+          .collection(CLASS)
+          .doc(subjectId)
+          .collection(ATTENDANCE)
+          .doc(attnId)
+          .delete()
+          .then((value) {
+        Utils.toastMessage('Attendance deleted');
+      });
+    } catch (e) {
+      Utils.toastMessage('Error deleting attendance: ${e.toString()}');
     }
   }
 
@@ -204,14 +223,5 @@ class AttendanceController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Color getStatusColor(String status) {
-    switch (status) {
-      case 'A':
-        return AppColor.kSecondaryColor;
-      case 'L':
-        return AppColor.kSecondary54Color;
-      default:
-        return AppColor.kPrimaryTextColor;
-    }
-  }
+
 }

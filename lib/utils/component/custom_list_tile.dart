@@ -1,5 +1,6 @@
 import 'package:attendance_manager/constant/app_style/app_colors.dart';
 import 'package:attendance_manager/constant/app_style/app_styles.dart';
+import 'package:attendance_manager/size_config.dart';
 import 'package:flutter/material.dart';
 
 class CustomListTile extends StatelessWidget {
@@ -23,7 +24,7 @@ class CustomListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 12, right: 12, left: 12),
+      padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
       child: GestureDetector(
         onLongPress: onLongPress,
         onTap: onPress,
@@ -56,7 +57,7 @@ class CustomListTile extends StatelessWidget {
                   Text(
                     title,
                     style: AppStyles().defaultStyle(
-                        22, AppColors.kTextBlackColor, FontWeight.w400),
+                        22, AppColor.kTextBlackColor, FontWeight.w400),
                   ),
                   Text(
                     subtitle,
@@ -75,6 +76,7 @@ class CustomListTile extends StatelessWidget {
                 children: [
                   Text(
                     trailingFirstText,
+
                     style: AppStyles().defaultStyle(
                       28,
                       AppColor.kPrimaryTextColor,
@@ -93,5 +95,110 @@ class CustomListTile extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class CustomAttendanceList extends StatelessWidget {
+  final String stdName, stdRollNo, attendanceStatus;
+  final VoidCallback onTap;
+
+  const CustomAttendanceList({
+    super.key,
+    required this.stdName,
+    required this.stdRollNo,
+    required this.attendanceStatus,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 14, 12, 0),
+      child: Container(
+        padding: const EdgeInsets.only(left: 15, right: 20),
+        width: double.infinity,
+        height: getProportionalHeight(88),
+        decoration: BoxDecoration(
+          color: AppColor.kWhite,
+          borderRadius: BorderRadius.circular(2),
+          boxShadow: [
+            BoxShadow(
+              color: AppColor.kBlack.withOpacity(0.3),
+              spreadRadius: 0,
+              blurRadius: 1.5,
+              offset: const Offset(0, 1),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  stdName,
+                  style: AppStyles().defaultStyle(
+                    22,
+                    AppColor.kTextBlackColor,
+                    FontWeight.w400,
+                  ),
+                ),
+                Text(
+                  stdRollNo,
+                  style: AppStyles().defaultStyleWithHt(
+                    17,
+                    AppColor.kTextGreyColor,
+                    FontWeight.normal,
+                    1.5,
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                GestureDetector(
+                  onTap: onTap,
+                  child: Container(
+                    height: 53,
+                    width: 65,
+                    decoration: BoxDecoration(
+                      color: getStatusColor(attendanceStatus),
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                    child: Center(
+                      child: Text(
+                        attendanceStatus,
+                        style: AppStyles().defaultStyle(
+                          32,
+                          AppColor.kTextWhiteColor,
+                          FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Color getStatusColor(String status) {
+    switch (status) {
+      case 'A':
+        return AppColor.kSecondaryColor;
+      case 'L':
+        return AppColor.kSecondary54Color;
+      default:
+        return AppColor.kPrimaryTextColor;
+    }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:attendance_manager/constant/app_style/app_colors.dart';
 import 'package:attendance_manager/constant/app_style/app_styles.dart';
 import 'package:attendance_manager/size_config.dart';
+import 'package:attendance_manager/utils/component/custom_list_tile.dart';
 import 'package:attendance_manager/view_model/add_students/add_students_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -73,85 +74,12 @@ class _StudentAttendanceHistoryState extends State<StudentAttendanceHistory> {
                       itemBuilder: (context, index) {
                         if (attendanceStatus
                             .containsKey(snap[index].studentId)) {
-                          return Padding(
-                            padding: const EdgeInsets.fromLTRB(12, 14, 12, 0),
-                            child: Container(
-                              padding:
-                                  const EdgeInsets.only(left: 15, right: 20),
-                              width: double.infinity,
-                              height: getProportionalHeight(88),
-                              decoration: BoxDecoration(
-                                color: AppColor.kWhite,
-                                borderRadius: BorderRadius.circular(2),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: AppColor.kBlack.withOpacity(0.3),
-                                    spreadRadius: 0,
-                                    blurRadius: 1.5,
-                                    offset: const Offset(0, 1),
-                                  ),
-                                ],
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        snap[index].studentName,
-                                        style: AppStyles().defaultStyle(
-                                          22,
-                                          AppColor.kTextBlackColor,
-                                          FontWeight.w400,
-                                        ),
-                                      ),
-                                      Text(
-                                        snap[index].studentRollNo,
-                                        style: AppStyles().defaultStyleWithHt(
-                                          17,
-                                          AppColor.kTextGreyColor,
-                                          FontWeight.normal,
-                                          1.5,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Container(
-                                        height: 53,
-                                        width: 65,
-                                        decoration: BoxDecoration(
-                                          color: getStatusColor(
-                                              attendanceStatus[
-                                                  snap[index].studentId]),
-                                          borderRadius:
-                                              BorderRadius.circular(3),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            attendanceStatus[
-                                                snap[index].studentId],
-                                            style: AppStyles().defaultStyle(
-                                              32,
-                                              AppColor.kTextWhiteColor,
-                                              FontWeight.w500,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
+                          return CustomAttendanceList(
+                            stdName: snap[index].studentName,
+                            stdRollNo: snap[index].studentRollNo,
+                            attendanceStatus:
+                                attendanceStatus[snap[index].studentId],
+                            onTap: () {},
                           );
                         } else {
                           return Container();
