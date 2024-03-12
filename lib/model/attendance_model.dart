@@ -3,7 +3,7 @@ class AttendanceModel {
    final String? attendanceId;
   final String selectedDate;
   final String currentTime;
-  final Map<String, String> attendanceList;
+  final Map<dynamic, dynamic> attendanceList;
 
   AttendanceModel({
     required this.classId,

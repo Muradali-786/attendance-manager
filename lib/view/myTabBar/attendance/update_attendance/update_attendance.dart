@@ -1,11 +1,15 @@
 import 'package:attendance_manager/constant/app_style/app_colors.dart';
 import 'package:attendance_manager/constant/app_style/app_styles.dart';
+import 'package:attendance_manager/model/attendance_model.dart';
 import 'package:attendance_manager/size_config.dart';
 import 'package:attendance_manager/utils/component/custom_round_botton.dart';
 import 'package:attendance_manager/utils/component/time_picker.dart';
+import 'package:attendance_manager/utils/utils.dart';
 import 'package:attendance_manager/view_model/add_students/add_students_controller.dart';
+import 'package:attendance_manager/view_model/attendance/attendance_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../model/student_model.dart';
 import '../../../../utils/component/custom_list_tile.dart';
@@ -23,7 +27,7 @@ class UpdateAttendance extends StatefulWidget {
 class _UpdateAttendanceState extends State<UpdateAttendance> {
   List<String> studentStatusList = [];
   List<String> studentIdList = [];
-
+  bool isChange = false;
   TimeOfDay? selectedTime;
 
   Future<void> _selectTime(BuildContext context) async {
@@ -36,16 +40,20 @@ class _UpdateAttendanceState extends State<UpdateAttendance> {
     }
   }
 
+  List<String> stdIdsList = [];
   final StudentController _studentController = StudentController();
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     String date = widget.data['data']['selectedDate'];
     String time = widget.data['data']['currentTime'];
     String classId = widget.data['data']['classId'];
+    String attendanceId = widget.data['data']['attendanceId'];
     Map attendanceStatus = widget.data['data']['attendanceList'];
     String currentTime =
         selectedTime != null ? selectedTime!.format(context) : time;
+
     return Scaffold(
       backgroundColor: AppColor.kBgColor,
       body: SafeArea(
@@ -88,42 +96,74 @@ class _UpdateAttendanceState extends State<UpdateAttendance> {
                         doc.data() as Map<String, dynamic>;
                     return StudentModel.fromMap(data);
                   }).toList();
-                  return Expanded(
-                    child: ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: snap.length,
-                      itemBuilder: (context, index) {
-                        if (attendanceStatus
-                            .containsKey(snap[index].studentId)) {
-                          return CustomAttendanceList(
-                            stdName: snap[index].studentName,
-                            stdRollNo: snap[index].studentRollNo,
-                            attendanceStatus:
-                                attendanceStatus[snap[index].studentId],
-                            onTap: () {
 
-                            },
-                          );
-                        } else {
-                          return Container();
-                        }
-                      },
-                    ),
-                  );
+                  return Consumer<AttendanceController>(
+                      builder: (context, value, child) {
+                    return Expanded(
+                      child: ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: snap.length,
+                        itemBuilder: (context, index) {
+                          if (attendanceStatus
+                              .containsKey(snap[index].studentId)) {
+                            return CustomAttendanceList(
+                              stdName: snap[index].studentName,
+                              stdRollNo: snap[index].studentRollNo,
+                              attendanceStatus:
+                                  attendanceStatus[snap[index].studentId],
+                              onTap: () {
+                                if (!isChange) {
+                                  value.setStatusMap(attendanceStatus);
+                                  isChange = true;
+                                }
+
+                                value.updateStatusListBasedOnKey(
+                                  snap[index].studentId!,
+                                );
+                              },
+                            );
+                          } else {
+                            return Container();
+                          }
+                        },
+                      ),
+                    );
+                  });
                 }
               },
             ),
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(90, 0, 90, 16),
-        child: CustomRoundButton2(
-          height: getProportionalHeight(38),
-          title: 'UPDATE ATTENDANCE',
-          onPress: () async {},
-          buttonColor: AppColor.kSecondaryColor,
-        ),
+      bottomNavigationBar: Consumer<AttendanceController>(
+        builder: (context, provider, child) {
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(90, 0, 90, 16),
+            child: CustomRoundButton2(
+              height: getProportionalHeight(38),
+              loading: provider.loading,
+              title: 'UPDATE ATTENDANCE',
+              onPress: () async {
+                if (isChange) {
+                  AttendanceModel model = AttendanceModel(
+                    classId: classId,
+                    attendanceId: attendanceId,
+                    selectedDate: date,
+                    currentTime: currentTime,
+                    attendanceList: provider.updatedStatusMap!,
+                  );
+
+                  await provider.updateStudentAttendance(model).then((value) {
+                    Navigator.pop(context);
+                  });
+                } else {
+                  Utils.toastMessage('you did not Update any thing');
+                }
+              },
+              buttonColor: AppColor.kSecondaryColor,
+            ),
+          );
+        },
       ),
     );
   }

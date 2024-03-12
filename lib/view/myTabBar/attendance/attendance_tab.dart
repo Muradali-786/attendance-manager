@@ -93,7 +93,7 @@ class _AttendanceTabState extends State<AttendanceTab> {
                 return const Padding(
                   padding: EdgeInsets.only(top: 50),
                   child: Center(
-                    child: Text('No student has been taken of the class.'),
+                    child: Text('No attendance taken on selected Date.'),
                   ),
                 );
               } else {

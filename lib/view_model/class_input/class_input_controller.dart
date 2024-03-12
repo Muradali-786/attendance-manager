@@ -85,7 +85,7 @@ class ClassController with ChangeNotifier {
       Utils.toastMessage('Class deleted successfully');
     } catch (e) {
       Utils.toastMessage('Error deleting class: ${e.toString()}');
-      print(e.toString());
+
     }
   }
 }

@@ -60,6 +60,7 @@ class _StudentTabState extends State<StudentTab> {
                 return Expanded(
                   child: ListView.builder(
                     itemCount: snap.length,
+                    physics: const BouncingScrollPhysics(),
                     itemBuilder: (context, index) {
                       return CustomListTile(
                         title: snap[index].studentName.toString(),

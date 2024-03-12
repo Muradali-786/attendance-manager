@@ -106,7 +106,7 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
                               attendanceStatus:
                                   provider.attendanceStatus[index],
                               onTap: () {
-                                provider.updateStatus(index);
+                                provider.updateStatusList(index);
                               });
                         },
                       ),
