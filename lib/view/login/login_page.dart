@@ -90,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 Consumer<LoginController>(
                   builder: (context, provider, child) {
-                    return CustomRoundButton2(
+                    return CustomRoundButton(
                       title: 'Login',
                       loading: provider.loading,
                       onPress: () async {

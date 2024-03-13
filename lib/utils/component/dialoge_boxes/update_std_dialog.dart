@@ -102,7 +102,7 @@ Future<void> updateStudentDialog(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Expanded(
-                    child: CustomRoundButton2(
+                    child: CustomRoundButton(
                         title: 'CLOSE',
                         height: 35,
                         onPress: () {
@@ -112,7 +112,7 @@ Future<void> updateStudentDialog(
                   ),
                   const SizedBox(width: 5),
                   Expanded(
-                    child: CustomRoundButton2(
+                    child: CustomRoundButton(
                       title: 'SAVE',
                       height: 35,
                       onPress: () async {

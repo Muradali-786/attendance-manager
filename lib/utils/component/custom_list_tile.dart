@@ -34,11 +34,11 @@ class CustomListTile extends StatelessWidget {
           alignment: Alignment.center,
           padding: const EdgeInsets.only(left: 11, right: 21),
           decoration: BoxDecoration(
-            color: AppColors.kWhite,
+            color: AppColor.kWhite,
             borderRadius: BorderRadius.circular(2),
             boxShadow: [
               BoxShadow(
-                color: AppColors.kBlack.withOpacity(0.3),
+                color: AppColor.kBlack.withOpacity(0.3),
                 spreadRadius: 0,
                 blurRadius: 1.5,
                 offset: const Offset(0, 1),

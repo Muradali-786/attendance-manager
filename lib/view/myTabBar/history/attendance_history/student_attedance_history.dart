@@ -59,7 +59,10 @@ class _StudentAttendanceHistoryState extends State<StudentAttendanceHistory> {
                   return const ErrorClass();
                 } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                   return const Center(
-                    child: Text('No student has been added in the class.'),
+                    child: Text(
+                      'No student has been added in the class.',
+                      style: TextStyle(color: AppColor.kTextGreyColor),
+                    ),
                   );
                 } else {
                   List<StudentModel> snap = snapshot.data!.docs.map((doc) {

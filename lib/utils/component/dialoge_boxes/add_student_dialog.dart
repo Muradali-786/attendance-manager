@@ -96,7 +96,7 @@ Future<void> addStudentDialog(BuildContext context, String classId) async {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Expanded(
-                    child: CustomRoundButton2(
+                    child: CustomRoundButton(
                         title: 'SAVE & CLOSE',
                         height: 35,
                         onPress: () {
@@ -112,7 +112,7 @@ Future<void> addStudentDialog(BuildContext context, String classId) async {
                   ),
                   const SizedBox(width: 5),
                   Expanded(
-                    child: CustomRoundButton2(
+                    child: CustomRoundButton(
                         title: 'ADD ANOTHER',
                         height: 35,
                         onPress: () {

@@ -88,7 +88,7 @@ class _UpdateAttendanceState extends State<UpdateAttendance> {
                   return const ErrorClass();
                 } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                   return const Center(
-                    child: Text('No student has been added in the class.'),
+                    child: Text('Nothing to update.',  style: TextStyle(color: AppColor.kTextGreyColor),),
                   );
                 } else {
                   List<StudentModel> snap = snapshot.data!.docs.map((doc) {
@@ -139,7 +139,7 @@ class _UpdateAttendanceState extends State<UpdateAttendance> {
         builder: (context, provider, child) {
           return Padding(
             padding: const EdgeInsets.fromLTRB(90, 0, 90, 16),
-            child: CustomRoundButton2(
+            child: CustomRoundButton(
               height: getProportionalHeight(38),
               loading: provider.loading,
               title: 'UPDATE ATTENDANCE',

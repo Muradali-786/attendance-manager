@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: AppColors.kAppBackgroundColor,
+      backgroundColor: AppColor.kBgColor,
       appBar: AppBar(
         title: Text(
           "Attendance Manager",
@@ -60,7 +60,10 @@ class _HomePageState extends State<HomePage> {
                 return const ErrorClass();
               } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                 return const Center(
-                  child: Text('Click on the + button to add new Class'),
+                  child: Text(
+                    'Click on the + button to add new Class',
+                    style: TextStyle(color: AppColor.kTextGreyColor),
+                  ),
                 );
               } else {
                 List<ClassInputModel> snap = snapshot.data!.docs.map((doc) {
@@ -77,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                         title: snap[index].subjectName.toString(),
                         subtitle:
                             "${snap[index].departmentName} - ${snap[index].batchName}",
-                        trailingFirstText: snap[index].percentage.toString(),
+                        trailingFirstText: snap[index].totalClasses.toString(),
                         trailingSecondText: 'Classes',
                         onPress: () {
                           Navigator.pushNamed(context, RouteName.myTabBar,
@@ -124,7 +127,7 @@ class ErrorClass extends StatelessWidget {
         children: [
           const Icon(
             Icons.error_outline,
-            color: AppColors.kAlertColor,
+            color: AppColor.kAlertColor,
             size: 45,
           ),
           Text(

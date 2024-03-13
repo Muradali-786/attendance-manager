@@ -2,40 +2,34 @@ import 'package:attendance_manager/model/student_model.dart';
 import 'package:attendance_manager/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-const String STUDENT = 'Students';
-const String CLASS = 'Classes';
+import '../../constant/app_style/app_styles.dart';
+
+
 
 class StudentController {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
   Future<void> addNewStudent(StudentModel studentModel, String classId) async {
     try {
+      String docId = _fireStore
+          .collection(CLASS)
+          .doc(classId)
+          .collection(STUDENT)
+          .doc()
+          .id;
+      studentModel.studentId = docId;
+
       await _fireStore
           .collection(CLASS)
           .doc(classId)
           .collection(STUDENT)
-          .add(studentModel.toMap())
+          .doc(docId)
+          .set(studentModel.toMap())
           .then((value) {
-        updateStudentId(classId, value.id);
         Utils.toastMessage('Student Added');
       });
     } catch (e) {
       Utils.toastMessage('Error during Student Added');
-    }
-  }
-
-  Future<void> updateStudentId(String classId, String studentId) async {
-    try {
-      await _fireStore
-          .collection(CLASS)
-          .doc(classId)
-          .collection(STUDENT)
-          .doc(studentId)
-          .update({'studentId': studentId}).then((value) {
-        Utils.toastMessage('Student id Updated');
-      });
-    } catch (e) {
-      Utils.toastMessage('Error during Student id updation');
     }
   }
 

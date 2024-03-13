@@ -27,7 +27,7 @@ class _HistoryTabState extends State<HistoryTab> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      backgroundColor: AppColors.kAppBackgroundColor,
+      backgroundColor: AppColor.kBgColor,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -43,7 +43,10 @@ class _HistoryTabState extends State<HistoryTab> {
                 return const ErrorClass();
               } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                 return const Center(
-                  child: Text('No student has been taken of the class.'),
+                  child: Text(
+                    'No attendance has been taken of this class.',
+                    style: TextStyle(color: AppColor.kTextGreyColor),
+                  ),
                 );
               } else {
                 List<AttendanceModel> snap = snapshot.data!.docs.map((doc) {
@@ -119,7 +122,7 @@ class _HistoryTabState extends State<HistoryTab> {
           Consumer<AttendanceController>(builder: (context, provider, child) {
         return Padding(
           padding: const EdgeInsets.fromLTRB(95, 0, 95, 16),
-          child: CustomRoundButton2(
+          child: CustomRoundButton(
             height: getProportionalHeight(38),
             title: 'EXPORT ATTENDANCE',
             loading: provider.loading,

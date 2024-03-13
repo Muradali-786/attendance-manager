@@ -7,7 +7,6 @@ import 'package:attendance_manager/view_model/attendance/attendance_controller.d
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-
 import '../../../model/attendance_model.dart';
 import '../../../utils/component/custom_round_botton.dart';
 import '../../../utils/component/custom_shimmer_effect.dart';
@@ -93,7 +92,10 @@ class _AttendanceTabState extends State<AttendanceTab> {
                 return const Padding(
                   padding: EdgeInsets.only(top: 50),
                   child: Center(
-                    child: Text('No attendance taken on selected Date.'),
+                    child: Text(
+                      'No attendance taken on selected Date.',
+                      style: TextStyle(color: AppColor.kTextGreyColor),
+                    ),
                   ),
                 );
               } else {
@@ -157,11 +159,13 @@ class _AttendanceTabState extends State<AttendanceTab> {
                                 ),
                                 const Spacer(),
                                 IconButton(
-                                  onPressed: () async{
+                                  onPressed: () async {
                                     await _controller.deleteAttendanceRecord(
                                       widget.subjectId,
                                       snap[index].attendanceId!,
                                     );
+                                    _controller.updateAttendanceCount(
+                                        widget.subjectId);
                                   },
                                   icon: const Icon(
                                     Icons.delete,
@@ -184,7 +188,7 @@ class _AttendanceTabState extends State<AttendanceTab> {
       bottomNavigationBar: Padding(
         padding:
             const EdgeInsets.only(left: 100, right: 100, bottom: kPadding16),
-        child: CustomRoundButton2(
+        child: CustomRoundButton(
           height: getProportionalHeight(38),
           title: 'TAKE ATTENDANCE',
           onPress: () => Navigator.pushNamed(

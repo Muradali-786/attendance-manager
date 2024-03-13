@@ -16,7 +16,7 @@ class DialogInputTextField extends StatelessWidget {
   final bool enable, autoFocus;
   const DialogInputTextField({
     Key? key,
-    this.cursorColor = AppColors.kBlack,
+    this.cursorColor = AppColor.kSecondaryColor,
     required this.myController,
     required this.focusNode,
     required this.onFieldSubmittedValue,

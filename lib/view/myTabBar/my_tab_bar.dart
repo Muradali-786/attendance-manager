@@ -52,7 +52,7 @@ class _MyTabBarState extends State<MyTabBar>
                     child: Text(
                       "$subName ($batch-$depName)",
                       style: AppStyles().defaultStyle(
-                          20, AppColors.kTextWhiteColor, FontWeight.bold),
+                          20, AppColor.kTextWhiteColor, FontWeight.bold),
                     ),
                   ),
                   SizedBox(
@@ -67,7 +67,7 @@ class _MyTabBarState extends State<MyTabBar>
                       labelStyle: AppStyles().defaultStyle(
                           13, AppColor.kTextWhiteColor, FontWeight.bold),
                       unselectedLabelColor:
-                          AppColors.kTextWhiteColor.withOpacity(0.8),
+                          AppColor.kTextWhiteColor.withOpacity(0.8),
                       tabs: const [
                         Tab(
                           child: Text('ATTENDANCE'),

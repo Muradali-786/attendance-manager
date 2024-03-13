@@ -27,8 +27,8 @@ class _SplashState extends State<Splash> {
         width: w,
         height: h,
         decoration:  BoxDecoration(
-          // gradient: AppColors.kPrimaryLinearGradient,
-          color: AppColors.kWhite.withOpacity(0.5)
+
+          color: AppColor.kWhite.withOpacity(0.5)
         ),
         child: Center(
           child: Text('Splash Screen',style: TextStyle(color: AppColor.kBlack,fontSize: 24),),

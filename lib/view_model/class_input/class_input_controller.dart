@@ -3,10 +3,11 @@ import 'package:attendance_manager/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../../constant/app_style/app_styles.dart';
 import '../../utils/routes/route_name.dart';
 import '../services/navigation_services.dart';
 
-const String CLASS = 'Classes';
+
 
 class ClassController with ChangeNotifier {
   final fireStore = FirebaseFirestore.instance;
@@ -24,37 +25,32 @@ class ClassController with ChangeNotifier {
   Future<void> createNewClass(ClassInputModel classInputModel) async {
     setLoading(true);
     try {
+      String docId = fireStore.collection(CLASS).doc().id;
+      classInputModel.subjectId = docId;
+
       await fireStore
           .collection(CLASS)
-          .add(classInputModel.toMap())
-          .then((doc) {
-        _navigationService.removeAndNavigateToRoute(RouteName.addStudentPage,
-            id: doc.id);
+          .doc(docId)
+          .set(classInputModel.toMap())
+          .then(
+        (value) {
+          setLoading(false);
+          _navigationService.removeAndNavigateToRoute(RouteName.addStudentPage,
+              id: docId);
+        },
+      );
 
-        updateClassId(doc.id);
-        setLoading(false);
+      setLoading(false);
 
-        Utils.toastMessage('Class created successfully');
-      });
+      Utils.toastMessage('Class created successfully');
     } catch (e) {
       setLoading(false);
       Utils.toastMessage('Error creating class');
+    } finally {
+      setLoading(false);
     }
   }
 
-  Future<void> updateClassId(String subjectId) async {
-    setLoading(true);
-    try {
-      await fireStore
-          .collection(CLASS)
-          .doc(subjectId)
-          .update({'subjectId': subjectId});
-
-      Utils.toastMessage('Id Updated');
-    } catch (e) {
-      Utils.toastMessage('Error While Updating  Id');
-    }
-  }
 
   Future<void> updateClassData(ClassInputModel classInputModel) async {
     setLoading(true);
@@ -85,7 +81,6 @@ class ClassController with ChangeNotifier {
       Utils.toastMessage('Class deleted successfully');
     } catch (e) {
       Utils.toastMessage('Error deleting class: ${e.toString()}');
-
     }
   }
 }

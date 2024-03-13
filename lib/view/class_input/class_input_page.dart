@@ -1,5 +1,4 @@
 import 'package:attendance_manager/constant/app_style/app_colors.dart';
-import 'package:attendance_manager/constant/app_style/app_styles.dart';
 import 'package:attendance_manager/constant/constant_size.dart';
 import 'package:attendance_manager/size_config.dart';
 import 'package:attendance_manager/utils/component/custom_round_botton.dart';
@@ -12,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/class_model.dart';
-import '../../utils/routes/route_name.dart';
 
 class ClassInputPage extends StatefulWidget {
   const ClassInputPage({super.key});
@@ -157,7 +155,7 @@ class _ClassInputPageState extends State<ClassInputPage> {
       ),
       bottomSheet: Consumer<ClassController>(
         builder: (context, provider, child) {
-          return CustomRoundButton2(
+          return CustomRoundButton(
             height: getProportionalHeight(55),
             loading: provider.loading,
             width: double.infinity,
@@ -185,49 +183,6 @@ class _ClassInputPageState extends State<ClassInputPage> {
           );
         },
       ),
-      //   bottomSheet: CustomRoundButton(
-      // height: getProportionalHeight(55),
-      // loading: loading,
-      // width: double.infinity,
-      // borderRaduis: 0,
-      // title: 'Next',
-      // textStyle:
-      //     AppStyles().defaultStyle(20, Colors.white, FontWeight.w500),
-      // onPress: () {
-      //   setState(() {
-      //     loading = true;
-      //   });
-      //   int percentage = int.parse(percentageController.text);
-      //   String classId = DateTime.now().millisecondsSinceEpoch.toString();
-      //
-      //   ClassInputController()
-      //       .addClass(
-      //           classId,
-      //           subjectController.text,
-      //           departmentController.text,
-      //           batchController.text,
-      //           percentage)
-      //       .then((value) {
-      //     Navigator.pushReplacementNamed(
-      //         context, RouteName.addStudentPage,
-      //         arguments: {
-      //           'subject': subjectController.text,
-      //           'classId': classId.toString(),
-      //         });
-      //     subjectController.clear();
-      //     departmentController.clear();
-      //     batchController.clear();
-      //     percentageController.clear();
-      //     setState(() {
-      //       loading = false;
-      //     });
-      //   }).onError((error, stackTrace) {
-      //     Utils.toastMessage(error.toString());
-      //     setState(() {
-      //       loading = false;
-      //     });
-      //   });
-      // })
     );
   }
 }

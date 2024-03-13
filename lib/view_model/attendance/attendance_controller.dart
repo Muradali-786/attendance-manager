@@ -3,8 +3,7 @@ import 'package:attendance_manager/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-const String ATTENDANCE = 'Attendance';
-const String CLASS = 'Classes';
+import '../../constant/app_style/app_styles.dart';
 
 class AttendanceController extends ChangeNotifier {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
@@ -14,8 +13,6 @@ class AttendanceController extends ChangeNotifier {
 
   List<String> _attendanceStatus = [];
   List<String> get attendanceStatus => _attendanceStatus;
-
-
 
   Map<dynamic, dynamic>? _updatedStatusMap;
   Map<dynamic, dynamic>? get updatedStatusMap => _updatedStatusMap;
@@ -37,22 +34,33 @@ class AttendanceController extends ChangeNotifier {
   Future<void> saveAllStudentAttendance(AttendanceModel model) async {
     setLoading(true);
     try {
+      String docId = _fireStore
+          .collection(CLASS)
+          .doc(model.classId)
+          .collection(ATTENDANCE)
+          .doc()
+          .id;
+      model.attendanceId = docId;
+
       await _fireStore
           .collection(CLASS)
           .doc(model.classId)
           .collection(ATTENDANCE)
-          .add(model.toMap())
+          .doc(docId)
+          .set(model.toMap())
           .then((value) {
-        updateAttendanceId(model.classId, value.id).then((value) {
+        updateAttendanceCount(model.classId).then((value) {
           setLoading(false);
         });
-        setLoading(false);
-        Utils.toastMessage('Attendance Taken');
       });
+
       setLoading(false);
+      Utils.toastMessage('Attendance Taken');
     } catch (e) {
       setLoading(false);
       Utils.toastMessage('Error recording attendance: ${e.toString()}');
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -73,21 +81,6 @@ class AttendanceController extends ChangeNotifier {
     } catch (e) {
       setLoading(false);
       Utils.toastMessage('Error updating attendance: ${e.toString()}');
-    }
-  }
-
-  Future<void> updateAttendanceId(String classId, String docId) async {
-    try {
-      await _fireStore
-          .collection(CLASS)
-          .doc(classId)
-          .collection(ATTENDANCE)
-          .doc(docId)
-          .update({'attendanceId': docId}).then((value) {
-        Utils.toastMessage('Id');
-      });
-    } catch (e) {
-      Utils.toastMessage('Error updating attendance id: ${e.toString()}');
     }
   }
 
@@ -116,6 +109,28 @@ class AttendanceController extends ChangeNotifier {
         .snapshots();
   }
 
+  Future<int> getAttendanceCount(String classId) async {
+    final attendanceCollection =
+        _fireStore.collection(CLASS).doc(classId).collection(ATTENDANCE);
+    final querySnapshot = await attendanceCollection.get();
+
+    return querySnapshot.docs.length;
+  }
+
+  Future<void> updateAttendanceCount(String classId) async {
+    setLoading(true);
+    try {
+      final classDoc = _fireStore.collection(CLASS).doc(classId);
+      final count = await getAttendanceCount(classId);
+      await classDoc.update({'totalClasses': count}).then((value) {
+        setLoading(false);
+      });
+      setLoading(false);
+    } catch (e) {
+      setLoading(false);
+    }
+  }
+
   void updateStatusList(int index) {
     if (_attendanceStatus[index] == 'P') {
       _attendanceStatus[index] = 'A';
@@ -137,10 +152,7 @@ class AttendanceController extends ChangeNotifier {
     }
     notifyListeners();
   }
-
-
 }
-
 
 // Future<void> recordAttendance(
 //     String classId,

@@ -21,7 +21,13 @@ class AppStyles{
         fontWeight: fw,
         height: ht);
   }
-
-
 }
 
+
+
+// firebase COLLECTION NAMES
+ const String TEACHER = 'Teachers';
+const String CLASS = 'Classes';
+//Subs collections of CLASS
+const String STUDENT = 'Students';
+const String ATTENDANCE = 'Attendance';

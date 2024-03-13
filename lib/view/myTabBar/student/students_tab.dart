@@ -15,8 +15,6 @@ import '../../../utils/component/custom_shimmer_effect.dart';
 
 import '../../home/home_page.dart';
 
-
-
 class StudentTab extends StatefulWidget {
   final String subjectId;
   const StudentTab({super.key, this.subjectId = ''});
@@ -48,7 +46,7 @@ class _StudentTabState extends State<StudentTab> {
                 return const ErrorClass();
               } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                 return const Center(
-                  child: Text('No student has been added in the class.'),
+                  child: Text('No student has been added in the class.',  style: TextStyle(color: AppColor.kTextGreyColor),),
                 );
               } else {
                 List<StudentModel> snap = snapshot.data!.docs.map((doc) {
@@ -72,7 +70,7 @@ class _StudentTabState extends State<StudentTab> {
                           Navigator.pushNamed(context, RouteName.studentProfile,
                               arguments: {
                                 'data': snap[index].toMap(),
-                                'subjectId':widget.subjectId,
+                                'subjectId': widget.subjectId,
                               });
                         },
                         onLongPress: () async {
@@ -92,16 +90,17 @@ class _StudentTabState extends State<StudentTab> {
         ],
       ),
       bottomNavigationBar: Padding(
-          padding:
-              const EdgeInsets.only(left: 120, right: 120, bottom: kPadding16),
-          child: CustomRoundButton2(
-            height: getProportionalHeight(38),
-            title: 'ADD STUDENT',
-            onPress: () {
-              addStudentDialog(context, widget.subjectId);
-            },
-            buttonColor: AppColor.kSecondaryColor,
-          )),
+        padding:
+            const EdgeInsets.only(left: 120, right: 120, bottom: kPadding16),
+        child: CustomRoundButton(
+          height: getProportionalHeight(38),
+          title: 'ADD STUDENT',
+          onPress: () {
+            addStudentDialog(context, widget.subjectId);
+          },
+          buttonColor: AppColor.kSecondaryColor,
+        ),
+      ),
     );
   }
 }

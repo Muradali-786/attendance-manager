@@ -3,9 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../constant/app_style/app_styles.dart';
 import '../../utils/utils.dart';
 
-final String TEACHER = 'Teachers';
+
 
 class SignUpController with ChangeNotifier {
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -24,14 +25,13 @@ class SignUpController with ChangeNotifier {
     try {
       await auth
           .createUserWithEmailAndPassword(
-        email: signUpModel.email,
-        password: password,
-      )
+              email: signUpModel.email, password: password)
           .then((e) {
-        setLoading(false);
         signUpModel.teacherId = e.user!.uid;
-        saveTeacherData(signUpModel);
-
+        saveTeacherData(signUpModel).then((value) {
+          setLoading(false);
+        });
+        setLoading(false);
         Utils.toastMessage('register Successful');
       });
     } catch (e) {
@@ -53,5 +53,4 @@ class SignUpController with ChangeNotifier {
       print('error while storing  teacher data ');
     }
   }
-
 }

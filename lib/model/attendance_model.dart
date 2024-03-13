@@ -1,6 +1,6 @@
 class AttendanceModel {
    final String classId;
-   final String? attendanceId;
+   String? attendanceId;
   final String selectedDate;
   final String currentTime;
   final Map<dynamic, dynamic> attendanceList;

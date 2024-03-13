@@ -142,7 +142,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   Consumer<SignUpController>(
                     builder: (context, provider, child) {
-                      return CustomRoundButton2(
+                      return CustomRoundButton(
                         title: 'Sign Up',
                         loading: provider.loading,
                         onPress: () async {

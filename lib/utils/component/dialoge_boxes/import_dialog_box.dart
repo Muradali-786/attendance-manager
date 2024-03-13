@@ -4,14 +4,14 @@ import 'package:attendance_manager/constant/constant_size.dart';
 import 'package:attendance_manager/utils/component/custom_round_botton.dart';
 import 'package:flutter/material.dart';
 
-
 Future<void> showImportDialog(
-    BuildContext context,
-    String title,
-    String firstText,
-    String secondText,
-    VoidCallback firstOnTap, // First onTap function
-    VoidCallback secondOnTap) async {
+  BuildContext context,
+  String title,
+  String firstText,
+  String secondText,
+  VoidCallback firstOnTap,
+  VoidCallback secondOnTap,
+) async {
   await showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -28,7 +28,7 @@ Future<void> showImportDialog(
                 width: double.infinity,
                 height: 50,
                 decoration: const BoxDecoration(
-                    color: AppColors.kThemePinkColor,
+                    color: AppColor.kSecondaryColor,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(kBorderRadius15),
                       topRight: Radius.circular(kBorderRadius15),
@@ -40,8 +40,8 @@ Future<void> showImportDialog(
                     children: [
                       Text(
                         title,
-                        style: AppStyles().defaultStyle(24,
-                            AppColors.kTextWhiteColor, FontWeight.w400),
+                        style: AppStyles().defaultStyle(
+                            24, AppColor.kTextWhiteColor, FontWeight.w400),
                       ),
                       InkWell(
                         onTap: () {
@@ -49,7 +49,7 @@ Future<void> showImportDialog(
                         },
                         child: const Icon(
                           Icons.cancel,
-                          color: AppColors.kWhite,
+                          color: AppColor.kWhite,
                           size: 30,
                         ),
                       )
@@ -63,33 +63,15 @@ Future<void> showImportDialog(
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  CustomRoundButton(
-                      title: firstText,
-                      borderRaduis: 4,
 
-                      height: 40,
-                      width: MediaQuery.of(context).size.width * 0.58,
-                      gradient: false,
-                      color: AppColors.kThemePinkColor,
-                      onPress: firstOnTap),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.62,
                     child: const Divider(
-                      color: AppColors.kThemePinkColor,
+                      color: AppColor.kSecondaryColor,
                       thickness: 1,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 0),
-                    child: CustomRoundButton(
-                        title: secondText,
-                        height: 40,
-                        borderRaduis: 4,
-                        width: MediaQuery.of(context).size.width * 0.58,
-                        gradient: false,
-                        color: AppColors.kThemePinkColor,
-                        onPress: secondOnTap),
-                  )
+
                 ],
               ),
             ],

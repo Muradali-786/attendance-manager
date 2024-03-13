@@ -59,7 +59,7 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
                   currentTime.toString(),
                   style: AppStyles().defaultStyle(
                     SizeConfig.screenHeight! * 0.059,
-                    AppColors.kGreenColor,
+                    AppColor.kPrimaryColor,
                     FontWeight.w400,
                   ),
                 ),
@@ -76,7 +76,10 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
                   return const Text('Error');
                 } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                   return const Center(
-                    child: Text('No student has been added in the class.'),
+                    child: Text(
+                      'No student has been added in the class.',
+                      style: TextStyle(color: AppColor.kTextGreyColor),
+                    ),
                   );
                 } else {
                   List<StudentModel> snap = snapshot.data!.docs.map((doc) {
@@ -122,7 +125,7 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
           Consumer<AttendanceController>(builder: (context, provider, child) {
         return Padding(
           padding: const EdgeInsets.fromLTRB(100, 0, 100, 16),
-          child: CustomRoundButton2(
+          child: CustomRoundButton(
             height: getProportionalHeight(38),
             title: 'SAVE ATTENDANCE',
             loading: provider.loading,

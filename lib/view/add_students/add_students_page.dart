@@ -40,7 +40,7 @@ class _AddStudentPageState extends State<AddStudentPage> {
               right: 0,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 100.0),
-                child: CustomRoundButton2(
+                child: CustomRoundButton(
                     title: 'IMPORT STUDENTS',
                     height: getProportionalHeight(40),
                     onPress: () {},

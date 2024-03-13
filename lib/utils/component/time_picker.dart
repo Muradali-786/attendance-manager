@@ -9,10 +9,10 @@ Future<TimeOfDay> showTimePickerDialog(BuildContext context) async {
     backgroundColor: AppColor.kBgColor,
     dayPeriodColor: MaterialStateColor.resolveWith(
       (states) => states.contains(MaterialState.selected)
-          ? AppColors.kThemePinkColor.withOpacity(0.8)
-          : AppColors.kThemePinkColor,
+          ? AppColor.kSecondary54Color
+          : AppColor.kSecondaryColor,
     ),
-    dayPeriodTextColor: AppColors.kTextWhiteColor,
+    dayPeriodTextColor: AppColor.kTextWhiteColor,
     hourMinuteColor: MaterialStateColor.resolveWith(
       (states) => states.contains(MaterialState.selected)
           ? AppColor.kSecondary54Color
