@@ -1,7 +1,7 @@
 import 'package:attendance_manager/constant/app_style/app_colors.dart';
 import 'package:attendance_manager/constant/app_style/app_styles.dart';
 import 'package:attendance_manager/size_config.dart';
-import 'package:attendance_manager/view_model/add_students/add_students_controller.dart';
+import 'package:attendance_manager/view_model/add_students/students_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../../../model/student_model.dart';
@@ -38,14 +38,14 @@ class _StudentAttendanceHistoryState extends State<StudentAttendanceHistory> {
             Center(
               child: Text(
                 date,
-                style: AppStyles().defaultStyleWithHt(getProportionalHeight(45),
+                style: AppStyles().defaultStyleWithHt(getProportionalHeight(40),
                     AppColor.kPrimaryTextColor, FontWeight.w400, 1.6),
               ),
             ),
             Center(
               child: Text(
                 time,
-                style: AppStyles().defaultStyleWithHt(getProportionalHeight(42),
+                style: AppStyles().defaultStyleWithHt(getProportionalHeight(38),
                     AppColor.kPrimaryTextColor, FontWeight.w400, 1.2),
               ),
             ),

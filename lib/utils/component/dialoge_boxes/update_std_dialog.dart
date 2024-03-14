@@ -4,21 +4,21 @@ import 'package:attendance_manager/model/student_model.dart';
 import 'package:attendance_manager/utils/component/custom_round_botton.dart';
 import 'package:attendance_manager/utils/component/input_text_filed/dialog_text_field.dart';
 import 'package:attendance_manager/utils/utils.dart';
-import 'package:attendance_manager/view_model/add_students/add_students_controller.dart';
+import 'package:attendance_manager/view_model/add_students/students_controller.dart';
 import 'package:flutter/material.dart';
 
 Future<void> updateStudentDialog(
   BuildContext context,
   String classId,
-  Map data,
+  StudentModel model,
 ) async {
   TextEditingController stdNameController =
-      TextEditingController(text: data['studentName']);
+      TextEditingController(text:model.studentName);
   FocusNode stdNameFocus = FocusNode();
   TextEditingController rollNController =
-      TextEditingController(text: data['studentRollNo']);
+      TextEditingController(text: model.studentRollNo);
   FocusNode rollNoFocus = FocusNode();
-  String stdId = data['studentId'];
+
   await showDialog(
     context: context,
     builder: (context) {
@@ -132,7 +132,7 @@ Future<void> updateStudentDialog(
                       onPress: () async {
                         Navigator.pop(context);
                         StudentModel studentModel = StudentModel(
-                          studentId: stdId,
+                          studentId: model.studentId,
                           studentName: stdNameController.text,
                           studentRollNo: rollNController.text,
                         );

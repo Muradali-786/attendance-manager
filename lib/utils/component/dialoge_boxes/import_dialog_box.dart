@@ -1,17 +1,14 @@
 import 'package:attendance_manager/constant/app_style/app_colors.dart';
 import 'package:attendance_manager/constant/app_style/app_styles.dart';
 import 'package:attendance_manager/constant/constant_size.dart';
+import 'package:attendance_manager/size_config.dart';
 import 'package:attendance_manager/utils/component/custom_round_botton.dart';
 import 'package:flutter/material.dart';
 
 Future<void> showImportDialog(
   BuildContext context,
-  String title,
-  String firstText,
-  String secondText,
-  VoidCallback firstOnTap,
-  VoidCallback secondOnTap,
 ) async {
+  SizeConfig().init(context);
   await showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -19,63 +16,78 @@ Future<void> showImportDialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(kBorderRadius15),
         ),
-        child: SizedBox(
-          width: 300,
-          height: 173,
-          child: Column(
-            children: [
-              Container(
-                width: double.infinity,
-                height: 50,
-                decoration: const BoxDecoration(
-                    color: AppColor.kSecondaryColor,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(kBorderRadius15),
-                      topRight: Radius.circular(kBorderRadius15),
-                    )),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 50, right: kPadding4),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        title,
-                        style: AppStyles().defaultStyle(
-                            24, AppColor.kTextWhiteColor, FontWeight.w400),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Icon(
-                          Icons.cancel,
-                          color: AppColor.kWhite,
-                          size: 30,
-                        ),
-                      )
-                    ],
-                  ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: double.infinity,
+              height: 45,
+              decoration: const BoxDecoration(
+                color: AppColor.kSecondaryColor,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(kBorderRadius15),
+                  topRight: Radius.circular(kBorderRadius15),
                 ),
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.020,
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.62,
-                    child: const Divider(
-                      color: AppColor.kSecondaryColor,
-                      thickness: 1,
-                    ),
+                  const Spacer(
+                    flex: 2,
                   ),
-
+                  Text(
+                    'Import Students',
+                    style: AppStyles().defaultStyle(
+                        23, AppColor.kTextWhiteColor, FontWeight.w400),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(
+                        Icons.cancel,
+                        color: AppColor.kWhite,
+                        size: 30,
+                      ))
                 ],
               ),
-            ],
-          ),
+            ),
+            SizedBox(
+              height: SizeConfig.screenHeight! * 0.020,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Padding(
+                  padding:  EdgeInsets.symmetric(horizontal:SizeConfig.screenWidth! * 0.14),
+                  child: CustomRoundButton(
+                      height: 35,
+                      title: 'IMPORT FROM EXCEL',
+                      onPress: () {},
+                      buttonColor: AppColor.kSecondaryColor),
+                ),
+                SizedBox(
+                  width: SizeConfig.screenWidth! * 0.58,
+                  child: const Divider(
+                    color: AppColor.kSecondaryColor,
+                    thickness: 1.3,
+                  ),
+                ),
+                Padding(
+                  padding:  EdgeInsets.symmetric(horizontal:SizeConfig.screenWidth! * 0.14),
+                  child: CustomRoundButton(
+                      height: 35,
+                      title: 'IMPORT FROM CLASS',
+                      onPress: () {},
+                      buttonColor: AppColor.kSecondaryColor),
+                ),
+                SizedBox(
+                  height: SizeConfig.screenHeight! * 0.020,
+                ),
+              ],
+            ),
+          ],
         ),
       );
     },

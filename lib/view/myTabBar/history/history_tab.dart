@@ -61,7 +61,7 @@ class _HistoryTabState extends State<HistoryTab> {
                     itemBuilder: (context, index) {
                       return CustomAttendanceList2(
                         title:
-                            "${snap[index].selectedDate}\t\t${snap[index].currentTime}",
+                            "${snap[index].selectedDate}\t\t${snap[index].currentTime} ",
                         onTap: () {
                           Navigator.pushNamed(
                             context,

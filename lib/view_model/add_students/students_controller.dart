@@ -1,15 +1,27 @@
 import 'package:attendance_manager/model/student_model.dart';
 import 'package:attendance_manager/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../constant/app_style/app_styles.dart';
 
 
 
-class StudentController {
+class StudentController with ChangeNotifier {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
+  bool _loading = false;
+  get loading => _loading;
+
+  setLoading(bool value) {
+    _loading = value;
+    notifyListeners();
+  }
+
   Future<void> addNewStudent(StudentModel studentModel, String classId) async {
+    setLoading(true);
+
+
     try {
       String docId = _fireStore
           .collection(CLASS)
@@ -28,8 +40,12 @@ class StudentController {
           .then((value) {
         Utils.toastMessage('Student Added');
       });
+      setLoading(false);
     } catch (e) {
       Utils.toastMessage('Error during Student Added');
+      setLoading(false);
+    }finally{
+      setLoading(false);
     }
   }
 

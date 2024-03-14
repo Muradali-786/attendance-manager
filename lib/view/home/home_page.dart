@@ -2,9 +2,10 @@ import 'package:attendance_manager/constant/app_style/app_colors.dart';
 import 'package:attendance_manager/constant/app_style/app_styles.dart';
 import 'package:attendance_manager/model/class_model.dart';
 import 'package:attendance_manager/utils/component/custom_list_tile.dart';
+import 'package:attendance_manager/utils/component/dialoge_boxes/import_dialog_box.dart';
 import 'package:attendance_manager/utils/routes/route_name.dart';
 import 'package:attendance_manager/view/class_input/class_update/update_class_dialog.dart';
-import 'package:attendance_manager/view_model/class_input/class_input_controller.dart';
+import 'package:attendance_manager/view_model/class_input/class_controller.dart';
 import 'package:attendance_manager/view_model/login/login_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -76,6 +77,9 @@ class _HomePageState extends State<HomePage> {
                 return Expanded(
                   child: ListView.builder(
                     itemCount: snap.length,
+                    physics: const BouncingScrollPhysics(),
+
+
                     itemBuilder: (context, index) {
                       return CustomListTile(
                         title: snap[index].subjectName.toString(),
@@ -90,7 +94,7 @@ class _HomePageState extends State<HomePage> {
                               });
                         },
                         onLongPress: () {
-                          updateClassValueDialog(context, snap[index].toMap());
+                          updateClassValueDialog(context, snap[index]);
                         },
                       );
                     },
@@ -115,5 +119,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-

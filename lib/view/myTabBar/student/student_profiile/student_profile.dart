@@ -1,7 +1,7 @@
 import 'package:attendance_manager/constant/app_style/app_colors.dart';
 import 'package:attendance_manager/model/student_model.dart';
 import 'package:attendance_manager/size_config.dart';
-import 'package:attendance_manager/view_model/add_students/add_students_controller.dart';
+import 'package:attendance_manager/view_model/add_students/students_controller.dart';
 import 'package:attendance_manager/view_model/attendance/attendance_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +61,7 @@ class _StudentProfileState extends State<StudentProfile> {
                         await updateStudentDialog(
                           context,
                           subjectId,
-                          stdInfo.toMap(),
+                            stdInfo,
                         );
                       },
                     ),

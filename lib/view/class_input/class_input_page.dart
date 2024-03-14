@@ -5,7 +5,7 @@ import 'package:attendance_manager/utils/component/custom_round_botton.dart';
 import 'package:attendance_manager/utils/component/custom_stepper.dart';
 import 'package:attendance_manager/utils/component/input_text_filed/custom_input_text_filed.dart';
 import 'package:attendance_manager/utils/utils.dart';
-import 'package:attendance_manager/view_model/class_input/class_input_controller.dart';
+import 'package:attendance_manager/view_model/class_input/class_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

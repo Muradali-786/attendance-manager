@@ -5,8 +5,9 @@ import 'package:attendance_manager/model/student_model.dart';
 import 'package:attendance_manager/utils/component/custom_round_botton.dart';
 import 'package:attendance_manager/utils/component/input_text_filed/dialog_text_field.dart';
 import 'package:attendance_manager/utils/utils.dart';
-import 'package:attendance_manager/view_model/add_students/add_students_controller.dart';
+import 'package:attendance_manager/view_model/add_students/students_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 Future<void> addStudentDialog(BuildContext context, String classId) async {
   final _formKey = GlobalKey<FormState>();
@@ -133,28 +134,29 @@ Future<void> addStudentDialog(BuildContext context, String classId) async {
                         buttonColor: AppColor.kSecondaryColor),
                   ),
                   const SizedBox(width: 5),
-                  Expanded(
-                    child: CustomRoundButton(
-                        title: 'ADD ANOTHER',
-                        height: 35,
-                        onPress: () {
-                          if(_formKey.currentState!.validate()){
-                            StudentModel studentModel = StudentModel(
-                                studentName: stdNameController.text,
-                                studentRollNo: rollNController.text.toString());
+                Consumer<StudentController>(builder: (context,provider,_){return   Expanded(
+                  child: CustomRoundButton(
+                      title: 'ADD ANOTHER',
+                      loading: provider.loading,
+                      height: 35,
+                      onPress: () {
+                        if(_formKey.currentState!.validate()){
+                          StudentModel studentModel = StudentModel(
+                              studentName: stdNameController.text,
+                              studentRollNo: rollNController.text.toString());
 
-                            StudentController()
-                                .addNewStudent(studentModel, classId)
-                                .then((value) {
-                              stdNameController.clear();
-                              rollNController.clear();
-                            });
-                          }
+                          provider
+                              .addNewStudent(studentModel, classId)
+                              .then((value) {
+                            stdNameController.clear();
+                            rollNController.clear();
+                          });
+                        }
 
 
-                        },
-                        buttonColor: AppColor.kSecondaryColor),
-                  )
+                      },
+                      buttonColor: AppColor.kSecondaryColor),
+                );})
                 ],
               ),
             ),

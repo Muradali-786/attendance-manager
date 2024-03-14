@@ -59,9 +59,11 @@ class ClassController with ChangeNotifier {
           .collection(CLASS)
           .doc(classInputModel.subjectId)
           .update(classInputModel.toMap());
+      setLoading(false);
 
       Utils.toastMessage('Class Updated');
     } catch (e) {
+      setLoading(false);
       Utils.toastMessage('Error While Updating updating class data');
     }
   }

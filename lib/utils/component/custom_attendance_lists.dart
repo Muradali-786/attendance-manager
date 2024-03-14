@@ -160,7 +160,8 @@ class CustomAttendanceList2 extends StatelessWidget {
               SizedBox(width: SizeConfig.screenWidth! * 0.05),
               Text(
                 title,
-                style: AppStyles().defaultStyle(getProportionalWidth(24),
+
+                style: AppStyles().defaultStyle(getProportionalWidth(20),
                     AppColor.kTextBlackColor, FontWeight.w400),
               ),
               const Spacer(),
@@ -216,7 +217,7 @@ class CustomAttendanceList3 extends StatelessWidget {
             Text(
               dateTime,
               style: AppStyles()
-                  .defaultStyle(12, AppColor.kTextGreyColor, FontWeight.w400),
+                  .defaultStyle(12, AppColor.kTextGrey54Color, FontWeight.w400),
             ),
             Text(
               getStatusValue(attendanceStatus),

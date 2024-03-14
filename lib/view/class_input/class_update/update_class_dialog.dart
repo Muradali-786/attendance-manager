@@ -6,25 +6,23 @@ import 'package:attendance_manager/size_config.dart';
 import 'package:attendance_manager/utils/component/custom_round_botton.dart';
 import 'package:attendance_manager/utils/component/input_text_filed/dialog_text_field.dart';
 import 'package:attendance_manager/utils/utils.dart';
-import 'package:attendance_manager/view_model/class_input/class_input_controller.dart';
+import 'package:attendance_manager/view_model/class_input/class_controller.dart';
 import 'package:flutter/material.dart';
 
-Future<void> updateClassValueDialog(BuildContext context, Map data) async {
+Future<void> updateClassValueDialog(BuildContext context,ClassInputModel model) async {
   final formKey = GlobalKey<FormState>();
   TextEditingController subjectController =
-      TextEditingController(text: data['subjectName']);
+      TextEditingController(text: model.subjectName);
   FocusNode subjectFocus = FocusNode();
   TextEditingController departmentController =
-      TextEditingController(text: data['departmentName']);
+      TextEditingController(text: model.departmentName);
   FocusNode departmentFocus = FocusNode();
   TextEditingController batchController =
-      TextEditingController(text: data['batchName']);
+      TextEditingController(text: model.batchName);
   FocusNode batchFocus = FocusNode();
   TextEditingController attendancePercentageController =
-      TextEditingController(text: data['percentage'].toString());
+      TextEditingController(text: model.percentage.toString());
   FocusNode attendanceFocus = FocusNode();
-  String teacherId = data['teacherId'];
-  String subjectId = data['subjectId'];
   SizeConfig().init(context);
   await showDialog(
     context: context,
@@ -186,8 +184,9 @@ Future<void> updateClassValueDialog(BuildContext context, Map data) async {
                           Navigator.pop(context);
                           ClassInputModel classInputModel = ClassInputModel(
                             subjectName: subjectController.text,
-                            teacherId: teacherId,
-                            subjectId: subjectId,
+                            teacherId: model.teacherId,
+                            subjectId: model.subjectId,
+                            totalClasses: model.totalClasses,
                             departmentName: departmentController.text,
                             batchName: batchController.text,
                             percentage:

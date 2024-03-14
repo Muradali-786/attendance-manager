@@ -7,14 +7,13 @@ import 'package:attendance_manager/utils/component/custom_round_botton.dart';
 import 'package:attendance_manager/utils/component/dialoge_boxes/add_student_dialog.dart';
 import 'package:attendance_manager/utils/component/dialoge_boxes/update_std_dialog.dart';
 import 'package:attendance_manager/utils/routes/route_name.dart';
-import 'package:attendance_manager/view_model/add_students/add_students_controller.dart';
+import 'package:attendance_manager/view_model/add_students/students_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/component/common.dart';
 import '../../../utils/component/custom_shimmer_effect.dart';
 
-import '../../home/home_page.dart';
 
 class StudentTab extends StatefulWidget {
   final String subjectId;
@@ -31,7 +30,7 @@ class _StudentTabState extends State<StudentTab> {
     SizeConfig().init(context);
 
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -83,7 +82,7 @@ class _StudentTabState extends State<StudentTab> {
                           await updateStudentDialog(
                             context,
                             widget.subjectId,
-                            snap[index].toMap(),
+                              snap[index],
                           );
                         },
                       );

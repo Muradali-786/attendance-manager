@@ -71,7 +71,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               return 'Please enter your name';
                             } else if (value.length < 3) {
                               return 'Name must be at least 3 characters long';
-                            } else if (!RegExp(r'^[a-zA-Z]+$')
+                            } else if (!RegExp(r'^[a-zA-Z ]+$')
                                 .hasMatch(value)) {
                               return 'Name cannot contain numbers or special characters';
                             }

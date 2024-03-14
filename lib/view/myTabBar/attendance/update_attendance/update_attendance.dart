@@ -5,7 +5,7 @@ import 'package:attendance_manager/size_config.dart';
 import 'package:attendance_manager/utils/component/custom_round_botton.dart';
 import 'package:attendance_manager/utils/component/time_picker.dart';
 import 'package:attendance_manager/utils/utils.dart';
-import 'package:attendance_manager/view_model/add_students/add_students_controller.dart';
+import 'package:attendance_manager/view_model/add_students/students_controller.dart';
 import 'package:attendance_manager/view_model/attendance/attendance_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +15,6 @@ import '../../../../model/student_model.dart';
 import '../../../../utils/component/common.dart';
 import '../../../../utils/component/custom_attendance_lists.dart';
 import '../../../../utils/component/custom_shimmer_effect.dart';
-
 
 class UpdateAttendance extends StatefulWidget {
   dynamic data;
@@ -52,8 +51,13 @@ class _UpdateAttendanceState extends State<UpdateAttendance> {
     String classId = widget.data['data']['classId'];
     String attendanceId = widget.data['data']['attendanceId'];
     Map attendanceStatus = widget.data['data']['attendanceList'];
-    String currentTime =
-        selectedTime != null ? selectedTime!.format(context) : time;
+
+    String period =
+        selectedTime != null && selectedTime!.hour < 12 ? 'AM' : 'PM';
+    String hour = selectedTime?.hourOfPeriod.toString().padLeft(2, '0') ?? '00';
+    String minute = selectedTime?.minute.toString().padLeft(2, '0') ?? '00';
+    String formattedTime = '$hour:$minute $period';
+    String currentTime = selectedTime != null ? formattedTime : time;
 
     return Scaffold(
       backgroundColor: AppColor.kBgColor,
@@ -89,7 +93,10 @@ class _UpdateAttendanceState extends State<UpdateAttendance> {
                   return const ErrorClass();
                 } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                   return const Center(
-                    child: Text('Nothing to update.',  style: TextStyle(color: AppColor.kTextGreyColor),),
+                    child: Text(
+                      'Nothing to update.',
+                      style: TextStyle(color: AppColor.kTextGreyColor),
+                    ),
                   );
                 } else {
                   List<StudentModel> snap = snapshot.data!.docs.map((doc) {

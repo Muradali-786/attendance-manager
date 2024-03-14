@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../constant/app_style/app_colors.dart';
 import '../../constant/app_style/app_styles.dart';
+import '../../size_config.dart';
 
 class ReUsableText extends StatelessWidget {
   final String title, value;
@@ -61,6 +62,32 @@ class ErrorClass extends StatelessWidget {
                 .defaultStyle(16, AppColor.kTextBlackColor, FontWeight.w400),
           )
         ],
+      ),
+    );
+  }
+}
+
+class AddStudentButton extends StatelessWidget {
+  final VoidCallback onTap;
+  const AddStudentButton({super.key, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: getProportionalHeight(60),
+        width: getProportionalHeight(60),
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          color: AppColor.kSecondaryColor,
+        ),
+        child: const Icon(
+          Icons.add,
+          size: 30,
+          color: AppColor.kWhite,
+        ),
       ),
     );
   }

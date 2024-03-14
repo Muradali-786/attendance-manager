@@ -2,6 +2,7 @@ import 'package:attendance_manager/constant/app_style/app_colors.dart';
 import 'package:attendance_manager/constant/constant_size.dart';
 import 'package:attendance_manager/utils/component/custom_round_botton.dart';
 import 'package:attendance_manager/utils/component/input_text_filed/custom_input_text_filed.dart';
+import 'package:attendance_manager/utils/routes/route_name.dart';
 import 'package:attendance_manager/utils/utils.dart';
 import 'package:attendance_manager/view_model/login/login_controller.dart';
 import 'package:flutter/material.dart';
@@ -111,6 +112,10 @@ class _LoginPageState extends State<LoginPage> {
                     );
                   },
                 ),
+                
+                TextButton(onPressed: (){
+                  Navigator.pushNamed(context, RouteName.signUp);
+                }, child: Text('click to sign up '))
               ],
             ),
           ),

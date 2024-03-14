@@ -4,9 +4,10 @@ import 'package:attendance_manager/model/attendance_model.dart';
 import 'package:attendance_manager/size_config.dart';
 import 'package:attendance_manager/utils/component/custom_round_botton.dart';
 import 'package:attendance_manager/utils/component/time_picker.dart';
-import 'package:attendance_manager/view_model/add_students/add_students_controller.dart';
+import 'package:attendance_manager/view_model/add_students/students_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../model/student_model.dart';
@@ -35,17 +36,21 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
     }
   }
 
+  final formatter = DateFormat('yMMMMd');
   final StudentController _studentController = StudentController();
   List<String> stdIdList = [];
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    String currentTime = selectedTime.format(context).toString();
+    String period = selectedTime.hour < 12 ? 'AM' : 'PM';
+    String hour = selectedTime.hourOfPeriod.toString().padLeft(2, '0');
+    String minute = selectedTime.minute.toString().padLeft(2, '0');
+    String currentTime = '$hour:$minute $period';
     String subjectId = widget.data['classId'].toString();
-    String selectedDate = widget.data['selectedDate'].substring(0, 10);
-
-
+    String selectedDate = widget.data['selectedDate'];
+    DateTime parsedDate = DateTime.parse(selectedDate);
+    String formattedDate = formatter.format(parsedDate);
 
     return Scaffold(
       backgroundColor: AppColor.kBgColor,
@@ -134,7 +139,7 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
             onPress: () async {
               AttendanceModel attendanceModel = AttendanceModel(
                 classId: subjectId,
-                selectedDate: selectedDate,
+                selectedDate: formattedDate,
                 currentTime: currentTime,
                 attendanceList: Map.fromIterables(
                   stdIdList,
