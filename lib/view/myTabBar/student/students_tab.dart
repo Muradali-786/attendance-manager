@@ -11,6 +11,7 @@ import 'package:attendance_manager/view_model/add_students/add_students_controll
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../../../utils/component/common.dart';
 import '../../../utils/component/custom_shimmer_effect.dart';
 
 import '../../home/home_page.dart';
@@ -46,7 +47,12 @@ class _StudentTabState extends State<StudentTab> {
                 return const ErrorClass();
               } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                 return const Center(
-                  child: Text('No student has been added in the class.',  style: TextStyle(color: AppColor.kTextGreyColor),),
+                  child: Text(
+                    'No student has been added in the class.',
+                    style: TextStyle(
+                      color: AppColor.kTextGreyColor,
+                    ),
+                  ),
                 );
               } else {
                 List<StudentModel> snap = snapshot.data!.docs.map((doc) {

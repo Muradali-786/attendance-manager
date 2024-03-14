@@ -105,7 +105,13 @@ class AttendanceController extends ChangeNotifier {
         .collection(CLASS)
         .doc(subjectId)
         .collection(ATTENDANCE)
-        .orderBy('currentTime', descending: true)
+        .snapshots();
+  }
+  Stream<QuerySnapshot> getAllStudentAttendanceByTime(String subjectId) {
+    return _fireStore
+        .collection(CLASS)
+        .doc(subjectId)
+        .collection(ATTENDANCE).orderBy('currentTime',descending: true)
         .snapshots();
   }
 

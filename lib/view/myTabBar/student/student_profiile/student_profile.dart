@@ -1,14 +1,17 @@
 import 'package:attendance_manager/constant/app_style/app_colors.dart';
-import 'package:attendance_manager/constant/app_style/app_styles.dart';
 import 'package:attendance_manager/model/student_model.dart';
 import 'package:attendance_manager/size_config.dart';
-
-import 'package:attendance_manager/view/home/home_page.dart';
 import 'package:attendance_manager/view_model/add_students/add_students_controller.dart';
+import 'package:attendance_manager/view_model/attendance/attendance_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../model/attendance_model.dart';
+import '../../../../utils/component/common.dart';
+import '../../../../utils/component/custom_attendance_lists.dart';
+import '../../../../utils/component/custom_shimmer_effect.dart';
 import '../../../../utils/component/dialoge_boxes/update_std_dialog.dart';
+import '../../../../utils/component/custom_std_profile.dart';
 
 class StudentProfile extends StatefulWidget {
   Map data;
@@ -20,8 +23,10 @@ class StudentProfile extends StatefulWidget {
 
 class _StudentProfileState extends State<StudentProfile> {
   final StudentController _studentController = StudentController();
+  final AttendanceController _controller = AttendanceController();
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     String studentId = widget.data['data']['studentId'];
     String subjectId = widget.data['subjectId'];
 
@@ -47,87 +52,61 @@ class _StudentProfileState extends State<StudentProfile> {
                   return const ErrorClass();
                 } else {
                   dynamic data = snapshot.data!.data() as Map<String, dynamic>;
-
                   StudentModel stdInfo = StudentModel.fromMap(data);
                   return SizedBox(
                     height: SizeConfig.screenHeight! * 0.26,
-                    child: Stack(
-                      children: [
-                        Container(
-                          width: double.infinity,
-                          height: SizeConfig.screenHeight! * 0.26 -
-                              SizeConfig.screenHeight! * 0.06,
-                          decoration: const BoxDecoration(
-                            color: AppColor.kPrimaryColor,
-                          ),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                  height: SizeConfig.screenHeight! * 0.013),
-                              _text(stdInfo.studentName, 32),
-                              _text(stdInfo.studentRollNo, 28),
-                            ],
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: SizeConfig.screenWidth! * 0.06),
-                            child: Container(
-                              height: SizeConfig.screenHeight! * 0.120,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: AppColor.kBlack.withOpacity(0.3),
-                                    spreadRadius: 0,
-                                    blurRadius: 1.5,
-                                    offset: const Offset(0, 1),
-                                  ),
-                                ],
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  ReUsableText(
-                                      title: 'Present',
-                                      value:
-                                          stdInfo.totalPresent.toString()),
-                                  ReUsableText(
-                                      title: 'Absent',
-                                      value:
-                                          stdInfo.totalAbsent.toString()),
-                                  ReUsableText(
-                                      title: 'Leaves',
-                                      value:
-                                          stdInfo.totalLeaves.toString()),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          top: SizeConfig.screenHeight! * 0.01,
-                          right: SizeConfig.screenWidth! * 0.025,
-                          child: IconButton(
-                            onPressed: () async {
-                              await updateStudentDialog(
-                                context,
-                                subjectId,
-                                stdInfo.toMap(),
-                              );
-                            },
-                            icon: const Icon(
-                              Icons.edit,
-                              color: AppColor.kWhite,
-                              size: 32,
-                            ),
-                          ),
-                        ),
-                      ],
+                    child: StdProfile(
+                      stdInfo: stdInfo,
+                      onPressEdit: () async {
+                        await updateStudentDialog(
+                          context,
+                          subjectId,
+                          stdInfo.toMap(),
+                        );
+                      },
+                    ),
+                  );
+                }
+              },
+            ),
+            StreamBuilder<QuerySnapshot>(
+              stream: _controller.getAllStudentAttendance(subjectId),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Expanded(
+                    child:
+                        ShimmerLoadingEffect(height: getProportionalHeight(46)),
+                  );
+                } else if (snapshot.hasError) {
+                  return const ErrorClass();
+                } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      'No attendance has been taken of this class.',
+                      style: TextStyle(color: AppColor.kTextGreyColor),
+                    ),
+                  );
+                } else {
+                  List<AttendanceModel> snap = snapshot.data!.docs.map((doc) {
+                    Map<String, dynamic> data =
+                        doc.data() as Map<String, dynamic>;
+                    return AttendanceModel.fromMap(data);
+                  }).toList();
+                  return Expanded(
+                    child: ListView.builder(
+                      itemCount: snap.length,
+                      itemBuilder: (context, index) {
+                        if (snap[index].attendanceList.containsKey(studentId)) {
+                          return CustomAttendanceList3(
+                            dateTime:
+                                "${snap[index].selectedDate}\t\t${snap[index].currentTime}",
+                            attendanceStatus:
+                                snap[index].attendanceList[studentId],
+                          );
+                        } else {
+                          return Container();
+                        }
+                      },
                     ),
                   );
                 }
@@ -136,44 +115,6 @@ class _StudentProfileState extends State<StudentProfile> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _text(String title, double size) {
-    return Text(title,
-        style: AppStyles().defaultStyleWithHt(
-          getProportionalHeight(size),
-          AppColor.kTextWhiteColor,
-          FontWeight.bold,
-          1.5,
-        ));
-  }
-}
-
-class ReUsableText extends StatelessWidget {
-  final String title, value;
-  const ReUsableText({super.key, required this.title, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          value,
-          style: AppStyles().defaultStyle(
-            32,
-            AppColor.kPrimaryTextColor,
-            FontWeight.bold,
-          ),
-        ),
-        Text(
-          title,
-          style: AppStyles().defaultStyleWithHt(
-              18, AppColor.kTextGreyColor, FontWeight.w400, 1.5),
-        ),
-      ],
     );
   }
 }

@@ -8,6 +8,7 @@ import 'package:attendance_manager/view_model/class_input/class_input_controller
 import 'package:attendance_manager/view_model/login/login_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../../utils/component/common.dart';
 import '../../utils/component/custom_shimmer_effect.dart';
 
 class HomePage extends StatefulWidget {
@@ -115,36 +116,4 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class ErrorClass extends StatelessWidget {
-  const ErrorClass({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Icon(
-            Icons.error_outline,
-            color: AppColor.kAlertColor,
-            size: 45,
-          ),
-          Text(
-            'Oops..!',
-            style: AppStyles()
-                .defaultStyle(23, AppColor.kTextBlackColor, FontWeight.w600),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          Text(
-            'Sorry, Something went wrong',
-            style: AppStyles()
-                .defaultStyle(16, AppColor.kTextBlackColor, FontWeight.w400),
-          )
-        ],
-      ),
-    );
-  }
-}

@@ -9,6 +9,7 @@ import 'package:attendance_manager/view_model/add_students/add_students_controll
 import 'package:flutter/material.dart';
 
 Future<void> addStudentDialog(BuildContext context, String classId) async {
+  final _formKey = GlobalKey<FormState>();
   TextEditingController stdNameController = TextEditingController();
   FocusNode stdNameFocus = FocusNode();
   TextEditingController rollNController = TextEditingController();
@@ -60,34 +61,51 @@ Future<void> addStudentDialog(BuildContext context, String classId) async {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Column(
-                children: [
-                  DialogInputTextField(
-                    labelText: 'Student Name',
-                    myController: stdNameController,
-                    focusNode: stdNameFocus,
-                    onFieldSubmittedValue: (val) {
-                      Utils.onFocusChange(context, stdNameFocus, rollNoFocus);
-                    },
-                    hint: 'Student Name',
-                    onValidator: (val) {
-                      return null;
-                    },
-                    keyBoardType: TextInputType.text,
-                  ),
-                  DialogInputTextField(
-                    labelText: 'Roll Number / Registration#',
-                    myController: rollNController,
-                    focusNode: rollNoFocus,
-                    onFieldSubmittedValue: (val) {},
-                    hint: 'Roll Number / Registration#',
-                    onValidator: (val) {
-                      return null;
-                    },
-                    keyBoardType: TextInputType.number,
-                  ),
-                  const SizedBox(height: 10),
-                ],
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    DialogInputTextField(
+                      labelText: 'Student Name',
+                      myController: stdNameController,
+                      focusNode: stdNameFocus,
+                      onFieldSubmittedValue: (val) {
+                        Utils.onFocusChange(context, stdNameFocus, rollNoFocus);
+                      },
+                      hint: 'Student Name',
+                      onValidator: (val) {
+                        if (val.isEmpty) {
+                          return 'Please enter Student Name';
+                        } else if (val.length < 3) {
+                          return 'Student Name  at least 3 characters long';
+                        } else if (!RegExp(r'^[a-zA-Z0-9 ]+$').hasMatch(val)) {
+                          return 'Student Name cannot contain special characters';
+                        }
+                        return null;
+                      },
+                      keyBoardType: TextInputType.text,
+                    ),
+                    DialogInputTextField(
+                      labelText: 'Roll Number / Registration#',
+                      myController: rollNController,
+                      focusNode: rollNoFocus,
+                      onFieldSubmittedValue: (val) {},
+                      hint: 'Roll Number / Registration#',
+                      onValidator: (val) {
+                        if (val.isEmpty) {
+                          return 'Please enter student Roll No';
+                        } else if (val.length < 2) {
+                          return 'Roll No  at least 2 characters long';
+                        } else if (!RegExp(r'^[a-zA-Z0-9 ]+$').hasMatch(val)) {
+                          return 'Roll No cannot contain special characters';
+                        }
+                        return null;
+                      },
+                      keyBoardType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 10),
+                  ],
+                ),
               ),
             ),
             Padding(
@@ -100,13 +118,17 @@ Future<void> addStudentDialog(BuildContext context, String classId) async {
                         title: 'SAVE & CLOSE',
                         height: 35,
                         onPress: () {
-                          Navigator.pop(context);
-                          StudentModel studentModel = StudentModel(
-                              studentName: stdNameController.text,
-                              studentRollNo: rollNController.text.toString());
 
-                          StudentController()
-                              .addNewStudent(studentModel, classId);
+                          if(_formKey.currentState!.validate()){
+                            Navigator.pop(context);
+                            StudentModel studentModel = StudentModel(
+                                studentName: stdNameController.text,
+                                studentRollNo: rollNController.text.toString());
+
+                            StudentController()
+                                .addNewStudent(studentModel, classId);
+                          }
+
                         },
                         buttonColor: AppColor.kSecondaryColor),
                   ),
@@ -116,16 +138,20 @@ Future<void> addStudentDialog(BuildContext context, String classId) async {
                         title: 'ADD ANOTHER',
                         height: 35,
                         onPress: () {
-                          StudentModel studentModel = StudentModel(
-                              studentName: stdNameController.text,
-                              studentRollNo: rollNController.text.toString());
+                          if(_formKey.currentState!.validate()){
+                            StudentModel studentModel = StudentModel(
+                                studentName: stdNameController.text,
+                                studentRollNo: rollNController.text.toString());
 
-                          StudentController()
-                              .addNewStudent(studentModel, classId)
-                              .then((value) {
-                            stdNameController.clear();
-                            rollNController.clear();
-                          });
+                            StudentController()
+                                .addNewStudent(studentModel, classId)
+                                .then((value) {
+                              stdNameController.clear();
+                              rollNController.clear();
+                            });
+                          }
+
+
                         },
                         buttonColor: AppColor.kSecondaryColor),
                   )
@@ -138,4 +164,3 @@ Future<void> addStudentDialog(BuildContext context, String classId) async {
     },
   );
 }
-

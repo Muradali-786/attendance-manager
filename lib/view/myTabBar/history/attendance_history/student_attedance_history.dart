@@ -1,13 +1,13 @@
 import 'package:attendance_manager/constant/app_style/app_colors.dart';
 import 'package:attendance_manager/constant/app_style/app_styles.dart';
 import 'package:attendance_manager/size_config.dart';
-import 'package:attendance_manager/utils/component/custom_list_tile.dart';
 import 'package:attendance_manager/view_model/add_students/add_students_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../../../model/student_model.dart';
+import '../../../../utils/component/common.dart';
+import '../../../../utils/component/custom_attendance_lists.dart';
 import '../../../../utils/component/custom_shimmer_effect.dart';
-import '../../../home/home_page.dart';
 
 class StudentAttendanceHistory extends StatefulWidget {
   dynamic data;
@@ -27,6 +27,7 @@ class _StudentAttendanceHistoryState extends State<StudentAttendanceHistory> {
     String time = widget.data['data']['currentTime'];
     String classId = widget.data['data']['classId'];
     Map attendanceStatus = widget.data['data']['attendanceList'];
+
 
     return Scaffold(
       body: SafeArea(

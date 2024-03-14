@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../model/student_model.dart';
-import '../../../../utils/component/custom_list_tile.dart';
+import '../../../../utils/component/custom_attendance_lists.dart';
 import '../../../../utils/component/custom_shimmer_effect.dart';
 import '../../../../view_model/attendance/attendance_controller.dart';
 
@@ -44,6 +44,8 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
     String currentTime = selectedTime.format(context).toString();
     String subjectId = widget.data['classId'].toString();
     String selectedDate = widget.data['selectedDate'].substring(0, 10);
+
+
 
     return Scaffold(
       backgroundColor: AppColor.kBgColor,

@@ -1,13 +1,15 @@
 import 'package:attendance_manager/constant/app_style/app_colors.dart';
-import 'package:attendance_manager/constant/app_style/app_styles.dart';
 import 'package:attendance_manager/constant/constant_size.dart';
 import 'package:attendance_manager/size_config.dart';
+import 'package:attendance_manager/utils/component/custom_list_tile.dart';
 import 'package:attendance_manager/utils/routes/route_name.dart';
 import 'package:attendance_manager/view_model/attendance/attendance_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../../../model/attendance_model.dart';
+import '../../../utils/component/common.dart';
+import '../../../utils/component/custom_attendance_lists.dart';
 import '../../../utils/component/custom_round_botton.dart';
 import '../../../utils/component/custom_shimmer_effect.dart';
 import '../../home/home_page.dart';
@@ -80,7 +82,7 @@ class _AttendanceTabState extends State<AttendanceTab> {
             ),
           ),
           StreamBuilder<QuerySnapshot>(
-            stream: _controller.getAllStudentAttendance(widget.subjectId),
+            stream: _controller.getAllStudentAttendanceByTime(widget.subjectId),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Expanded(
@@ -110,72 +112,21 @@ class _AttendanceTabState extends State<AttendanceTab> {
                   child: ListView.builder(
                     itemCount: snap.length,
                     itemBuilder: (context, index) {
-                      return GestureDetector(
+                      return CustomAttendanceList2(
+                        title: snap[index].currentTime,
                         onTap: () {
                           Navigator.pushNamed(
                               context, RouteName.updateAttendance,
                               arguments: {'data': snap[index].toMap()});
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
-                          child: Container(
-                            height: 45,
-                            width: double.infinity,
-                            alignment: Alignment.center,
-                            padding: const EdgeInsets.only(left: 10, right: 10),
-                            decoration: BoxDecoration(
-                                color: AppColor.kWhite,
-                                borderRadius: BorderRadius.circular(4),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: AppColor.kBlack.withOpacity(0.3),
-                                    spreadRadius: 0,
-                                    blurRadius: 1.5,
-                                    offset: const Offset(
-                                      0,
-                                      1,
-                                    ), // controls the shadow position
-                                  )
-                                ]),
-                            child: Row(
-                              children: [
-                                Container(
-                                  height: 17,
-                                  width: 17,
-                                  decoration: BoxDecoration(
-                                    color:
-                                        AppColor.kPrimaryColor.withOpacity(0.5),
-                                    shape: BoxShape.circle,
-                                  ),
-                                ),
-                                SizedBox(width: SizeConfig.screenWidth! * 0.05),
-                                Text(
-                                  snap[index].currentTime,
-                                  style: AppStyles().defaultStyle(
-                                    getProportionalWidth(24),
-                                    AppColor.kTextBlackColor,
-                                    FontWeight.w400,
-                                  ),
-                                ),
-                                const Spacer(),
-                                IconButton(
-                                  onPressed: () async {
-                                    await _controller.deleteAttendanceRecord(
-                                      widget.subjectId,
-                                      snap[index].attendanceId!,
-                                    );
-                                    _controller.updateAttendanceCount(
-                                        widget.subjectId);
-                                  },
-                                  icon: const Icon(
-                                    Icons.delete,
-                                    color: AppColor.kSecondaryColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                        showDelete: true,
+                        onPressDelete: () async {
+                          await _controller.deleteAttendanceRecord(
+                            widget.subjectId,
+                            snap[index].attendanceId!,
+                          );
+                          _controller.updateAttendanceCount(widget.subjectId);
+                        },
                       );
                     },
                   ),

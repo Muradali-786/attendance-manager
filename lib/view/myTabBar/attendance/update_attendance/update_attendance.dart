@@ -12,9 +12,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../model/student_model.dart';
-import '../../../../utils/component/custom_list_tile.dart';
+import '../../../../utils/component/common.dart';
+import '../../../../utils/component/custom_attendance_lists.dart';
 import '../../../../utils/component/custom_shimmer_effect.dart';
-import '../../../home/home_page.dart';
+
 
 class UpdateAttendance extends StatefulWidget {
   dynamic data;

@@ -77,6 +77,13 @@ Future<void> updateStudentDialog(
                     },
                     hint: 'Student Name',
                     onValidator: (val) {
+                      if (val.isEmpty) {
+                        return 'Please enter Student Name';
+                      } else if (val.length < 3) {
+                        return 'Student Name  at least 3 characters long';
+                      } else if (!RegExp(r'^[a-zA-Z0-9 ]+$').hasMatch(val)) {
+                        return 'Student Name cannot contain special characters';
+                      }
                       return null;
                     },
                     keyBoardType: TextInputType.text,
@@ -88,6 +95,13 @@ Future<void> updateStudentDialog(
                     onFieldSubmittedValue: (val) {},
                     hint: 'Roll Number / Registration#',
                     onValidator: (val) {
+                      if (val.isEmpty) {
+                        return 'Please enter Roll No';
+                      } else if (val.length < 2) {
+                        return 'Roll No  at least 2 characters long';
+                      } else if (!RegExp(r'^[a-zA-Z0-9 ]+$').hasMatch(val)) {
+                        return 'Roll No cannot contain special characters';
+                      }
                       return null;
                     },
                     keyBoardType: TextInputType.number,
