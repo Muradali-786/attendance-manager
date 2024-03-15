@@ -5,6 +5,7 @@ import 'package:attendance_manager/size_config.dart';
 import 'package:attendance_manager/utils/component/custom_list_tile.dart';
 import 'package:attendance_manager/utils/component/custom_round_botton.dart';
 import 'package:attendance_manager/utils/component/dialoge_boxes/add_student_dialog.dart';
+import 'package:attendance_manager/utils/component/dialoge_boxes/delete_confirmations.dart';
 import 'package:attendance_manager/utils/component/dialoge_boxes/update_std_dialog.dart';
 import 'package:attendance_manager/utils/routes/route_name.dart';
 import 'package:attendance_manager/view_model/add_students/students_controller.dart';
@@ -13,7 +14,6 @@ import 'package:flutter/material.dart';
 
 import '../../../utils/component/common.dart';
 import '../../../utils/component/custom_shimmer_effect.dart';
-
 
 class StudentTab extends StatefulWidget {
   final String subjectId;
@@ -67,6 +67,7 @@ class _StudentTabState extends State<StudentTab> {
                     itemBuilder: (context, index) {
                       return CustomListTile(
                         title: snap[index].studentName.toString(),
+                        keyValue: snap[index].studentId.toString(),
                         subtitle: snap[index].studentRollNo.toString(),
                         trailingFirstText:
                             "${snap[index].attendancePercentage.toString()}%",
@@ -82,8 +83,12 @@ class _StudentTabState extends State<StudentTab> {
                           await updateStudentDialog(
                             context,
                             widget.subjectId,
-                              snap[index],
+                            snap[index],
                           );
+                        },
+                        onDismiss: () async {
+                          showDeleteStudentConfirmationDialog(
+                              context, snap[index], widget.subjectId);
                         },
                       );
                     },

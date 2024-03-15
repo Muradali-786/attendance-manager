@@ -113,12 +113,17 @@ class _AddStudentPageState extends State<AddStudentPage> {
                         itemBuilder: (context, index) {
                           return CustomListTile(
                             title: snap[index].studentName.toString(),
+                            keyValue: snap[index].studentId.toString(),
                             subtitle: snap[index].studentRollNo.toString(),
                             trailingFirstText:
                                 "${snap[index].attendancePercentage.toString()}%",
                             trailingSecondText: 'Attendance',
                             onPress: () {},
                             onLongPress: () async {},
+                            onDismiss: () async {
+                              await StudentController().deleteStudent(
+                                  snap[index].studentId.toString(), classId);
+                            },
                           );
                         },
                       ),

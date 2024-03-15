@@ -2,6 +2,7 @@ import 'package:attendance_manager/constant/app_style/app_colors.dart';
 import 'package:attendance_manager/constant/app_style/app_styles.dart';
 import 'package:attendance_manager/model/class_model.dart';
 import 'package:attendance_manager/utils/component/custom_list_tile.dart';
+import 'package:attendance_manager/utils/component/dialoge_boxes/delete_confirmations.dart';
 import 'package:attendance_manager/utils/component/dialoge_boxes/import_dialog_box.dart';
 import 'package:attendance_manager/utils/routes/route_name.dart';
 import 'package:attendance_manager/view/class_input/class_update/update_class_dialog.dart';
@@ -83,6 +84,7 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: (context, index) {
                       return CustomListTile(
                         title: snap[index].subjectName.toString(),
+                        keyValue: snap[index].subjectId.toString(),
                         subtitle:
                             "${snap[index].departmentName} - ${snap[index].batchName}",
                         trailingFirstText: snap[index].totalClasses.toString(),
@@ -95,6 +97,11 @@ class _HomePageState extends State<HomePage> {
                         },
                         onLongPress: () {
                           updateClassValueDialog(context, snap[index]);
+                        },
+                        onDismiss: (){
+                          showDeleteClassConfirmationDialog(context,snap[index]);
+
+
                         },
                       );
                     },
