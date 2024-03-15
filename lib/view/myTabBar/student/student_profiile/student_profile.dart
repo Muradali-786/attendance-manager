@@ -80,9 +80,10 @@ class _StudentProfileState extends State<StudentProfile> {
                 } else if (snapshot.hasError) {
                   return const ErrorClass();
                 } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return const Center(
-                    child: Text(
-                      'No attendance has been taken of this class.',
+                  return  Padding(
+                    padding: EdgeInsets.only(top: SizeConfig.screenHeight!*0.2),
+                    child: const  Text(
+                      'No attendance has been taken.',
                       style: TextStyle(color: AppColor.kTextGreyColor),
                     ),
                   );

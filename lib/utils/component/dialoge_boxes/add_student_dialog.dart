@@ -6,6 +6,7 @@ import 'package:attendance_manager/utils/component/custom_round_botton.dart';
 import 'package:attendance_manager/utils/component/input_text_filed/dialog_text_field.dart';
 import 'package:attendance_manager/utils/utils.dart';
 import 'package:attendance_manager/view_model/add_students/students_controller.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -119,8 +120,7 @@ Future<void> addStudentDialog(BuildContext context, String classId) async {
                         title: 'SAVE & CLOSE',
                         height: 35,
                         onPress: () {
-
-                          if(_formKey.currentState!.validate()){
+                          if (_formKey.currentState!.validate()) {
                             Navigator.pop(context);
                             StudentModel studentModel = StudentModel(
                                 studentName: stdNameController.text,
@@ -129,34 +129,34 @@ Future<void> addStudentDialog(BuildContext context, String classId) async {
                             StudentController()
                                 .addNewStudent(studentModel, classId);
                           }
-
                         },
                         buttonColor: AppColor.kSecondaryColor),
                   ),
                   const SizedBox(width: 5),
-                Consumer<StudentController>(builder: (context,provider,_){return   Expanded(
-                  child: CustomRoundButton(
-                      title: 'ADD ANOTHER',
-                      loading: provider.loading,
-                      height: 35,
-                      onPress: () {
-                        if(_formKey.currentState!.validate()){
-                          StudentModel studentModel = StudentModel(
-                              studentName: stdNameController.text,
-                              studentRollNo: rollNController.text.toString());
+                  Consumer<StudentController>(builder: (context, provider, _) {
+                    return Expanded(
+                      child: CustomRoundButton(
+                          title: 'ADD ANOTHER',
+                          loading: provider.loading,
+                          height: 35,
+                          onPress: () {
+                            if (_formKey.currentState!.validate()) {
+                              StudentModel studentModel = StudentModel(
+                                  studentName: stdNameController.text,
+                                  studentRollNo:
+                                      rollNController.text.toString());
 
-                          provider
-                              .addNewStudent(studentModel, classId)
-                              .then((value) {
-                            stdNameController.clear();
-                            rollNController.clear();
-                          });
-                        }
-
-
-                      },
-                      buttonColor: AppColor.kSecondaryColor),
-                );})
+                              provider
+                                  .addNewStudent(studentModel, classId)
+                                  .then((value) {
+                                stdNameController.clear();
+                                rollNController.clear();
+                              });
+                            }
+                          },
+                          buttonColor: AppColor.kSecondaryColor),
+                    );
+                  })
                 ],
               ),
             ),
@@ -166,3 +166,5 @@ Future<void> addStudentDialog(BuildContext context, String classId) async {
     },
   );
 }
+
+

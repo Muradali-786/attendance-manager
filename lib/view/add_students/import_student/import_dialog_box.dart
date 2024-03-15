@@ -3,6 +3,7 @@ import 'package:attendance_manager/constant/app_style/app_styles.dart';
 import 'package:attendance_manager/constant/constant_size.dart';
 import 'package:attendance_manager/size_config.dart';
 import 'package:attendance_manager/utils/component/custom_round_botton.dart';
+import 'package:attendance_manager/view/add_students/import_student/import_student_from_classes_dialog.dart';
 import 'package:flutter/material.dart';
 
 Future<void> showImportDialog(
@@ -79,7 +80,10 @@ Future<void> showImportDialog(
                   child: CustomRoundButton(
                       height: 35,
                       title: 'IMPORT FROM CLASS',
-                      onPress: () {},
+                      onPress: ()async {
+                        Navigator.pop(context);
+                        importStudentFromClassesDialog(context, null);
+                      },
                       buttonColor: AppColor.kSecondaryColor),
                 ),
                 SizedBox(

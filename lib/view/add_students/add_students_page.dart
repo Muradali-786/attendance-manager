@@ -4,7 +4,7 @@ import 'package:attendance_manager/size_config.dart';
 import 'package:attendance_manager/utils/component/custom_round_botton.dart';
 import 'package:attendance_manager/utils/component/custom_stepper.dart';
 import 'package:attendance_manager/utils/component/dialoge_boxes/add_student_dialog.dart';
-import 'package:attendance_manager/utils/component/dialoge_boxes/import_dialog_box.dart';
+import 'package:attendance_manager/view/add_students/import_student/import_dialog_box.dart';
 
 import 'package:attendance_manager/utils/routes/route_name.dart';
 import 'package:attendance_manager/view_model/add_students/students_controller.dart';
