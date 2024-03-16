@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'utils/routes/route_name.dart';
 import 'utils/routes/routes.dart';
-import 'view_model/services/navigation_services.dart';
+import 'view_model/services/navigation/navigation_services.dart';
 import 'view_model/sign_up/sign_up_controller.dart';
 
 void main() async {

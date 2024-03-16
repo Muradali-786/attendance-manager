@@ -5,7 +5,6 @@ import 'package:flutter/widgets.dart';
 
 import '../../constant/app_style/app_styles.dart';
 
-
 class StudentController with ChangeNotifier {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
@@ -63,14 +62,13 @@ class StudentController with ChangeNotifier {
 
   Future<List<StudentModel>> getAllStudentsFromClass(String classId) async {
     try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      QuerySnapshot querySnapshot = await _fireStore
           .collection(CLASS)
           .doc(classId)
           .collection(STUDENT)
           .get();
 
       List<StudentModel> students = [];
-      // querySnapshot.docs.forEach((doc) {
       for (var doc in querySnapshot.docs) {
         students.add(StudentModel.fromMap(doc.data() as Map));
       }
@@ -111,6 +109,7 @@ class StudentController with ChangeNotifier {
       setLoading(false);
     }
   }
+
 
   Future<void> updateStudentData(StudentModel studentModel, classId) async {
     try {

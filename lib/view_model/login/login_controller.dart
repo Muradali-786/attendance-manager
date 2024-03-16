@@ -1,5 +1,5 @@
 import 'package:attendance_manager/utils/utils.dart';
-import 'package:attendance_manager/view_model/services/navigation_services.dart';
+import 'package:attendance_manager/view_model/services/navigation/navigation_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

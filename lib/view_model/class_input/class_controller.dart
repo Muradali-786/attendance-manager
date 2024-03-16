@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../constant/app_style/app_styles.dart';
 import '../../utils/routes/route_name.dart';
-import '../services/navigation_services.dart';
+import '../services/navigation/navigation_services.dart';
 
 
 
