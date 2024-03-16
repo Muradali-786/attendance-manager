@@ -204,14 +204,15 @@ Future<void> importExcelSheetDialog(
               ),
             ),
             const Padding(
-              padding:  EdgeInsets.fromLTRB(25, 8, 25, 15),
-              child:  Column(
+              padding: EdgeInsets.fromLTRB(25, 8, 25, 15),
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     '-> Expected format of Excel is Roll#, Student Name',
-                    style: TextStyle(color: AppColor.kTextGreyColor,height: 1.5),
+                    style:
+                        TextStyle(color: AppColor.kTextGreyColor, height: 1.5),
                   ),
                   SizedBox(height: 5),
                   Text(
@@ -231,12 +232,20 @@ Future<void> importExcelSheetDialog(
                         title: 'SELECT FILE',
                         height: 35,
                         onPress: () {
-                         MediaServices().getStudentDataFromExcel().then((value) {
-                           print('e pehli ha ');
-                           print(value[0]);
-                           print(' enter e dowe ha');
-                           print(value[1]);
-                         });
+                          String classId = 'RZ7IxbnfyeKErqdUwVXy';
+
+                          MediaServices()
+                              .getStudentDataFromExcel()
+                              .then((value) async {
+                             if(value.isNotEmpty){
+                               await StudentController().addListOfStudent(classId, value[0], value[1]);
+                             }else{
+
+                               Utils.toastMessage('Error to while reading excel sheet');
+                             }
+
+
+                          });
 
                         },
                         buttonColor: AppColor.kSecondaryColor),

@@ -18,9 +18,9 @@ class MediaServices{
     return null;
   }
 
-  Future<List<List<String>>> getStudentDataFromExcel() async{
-    List<String> stdNameList = [];
-    List<String> stdRollNoList = [];
+  Future<List<List<dynamic>>> getStudentDataFromExcel() async{
+    List<dynamic> stdNameList = [];
+    List<dynamic> stdRollNoList = [];
 
     var path=await pickExcelSheetFromLibrary();
     if (path != null) {
@@ -29,8 +29,8 @@ class MediaServices{
 
       for (var table in excel.tables.keys) {
         for (var row in excel[table].rows.skip(1)) {
-          stdRollNoList.add(row[0]!.value.toString());
-          stdNameList.add(row[1]!.value.toString());
+          stdRollNoList.add(row.first!.value as dynamic);
+          stdNameList.add(row[1]!.value as dynamic);
         }
       }
     }

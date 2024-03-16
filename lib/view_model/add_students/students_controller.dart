@@ -80,6 +80,55 @@ class StudentController with ChangeNotifier {
     }
   }
 
+  Future<void> addListOfStudent(
+    String classId,
+    List stdRollNoList,
+    List stdNamesList,
+  ) async {
+    setLoading(true);
+
+    try {
+      WriteBatch batch = _fireStore.batch();
+
+      for (int i = 0; i < stdRollNoList.length; i++) {
+        String docId = _fireStore
+            .collection(CLASS)
+            .doc(classId)
+            .collection(STUDENT)
+            .doc()
+            .id;
+
+        batch.set(
+          _fireStore
+              .collection(CLASS)
+              .doc(classId)
+              .collection(STUDENT)
+              .doc(docId),
+          {
+            'studentName': stdNamesList[i].toString(),
+            'studentId': docId.toString(),
+            'attendancePercentage': 0,
+            'totalAbsent': 0,
+            'totalLeaves': 0,
+            'totalPresent': 0,
+            'studentRollNo': stdRollNoList[i].toString()
+          },
+        );
+      }
+
+      await batch.commit().then((_) {
+        setLoading(false);
+        Utils.toastMessage('Students Added successfully');
+      });
+      setLoading(false);
+    } catch (e) {
+      setLoading(false);
+      Utils.toastMessage('Error during Students Added');
+    } finally {
+      setLoading(false);
+    }
+  }
+
   Future<void> addNewStudent(StudentModel studentModel, String classId) async {
     setLoading(true);
 
@@ -109,7 +158,6 @@ class StudentController with ChangeNotifier {
       setLoading(false);
     }
   }
-
 
   Future<void> updateStudentData(StudentModel studentModel, classId) async {
     try {
