@@ -37,7 +37,7 @@ class _HistoryTabState extends State<HistoryTab> {
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Expanded(
-                  child: ShimmerLoadingEffect(height: 45),
+                  child: ShimmerLoadingEffect(),
                 );
               } else if (snapshot.hasError) {
                 return const ErrorClass();

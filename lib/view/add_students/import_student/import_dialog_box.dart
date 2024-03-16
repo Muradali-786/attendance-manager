@@ -5,6 +5,7 @@ import 'package:attendance_manager/size_config.dart';
 import 'package:attendance_manager/utils/component/custom_round_botton.dart';
 import 'package:attendance_manager/view/add_students/import_student/import_student_from_classes_dialog.dart';
 import 'package:flutter/material.dart';
+import 'import_excel_sheet_dialpg.dart';
 
 Future<void> showImportDialog(
   BuildContext context,String currentClassId
@@ -65,14 +66,17 @@ Future<void> showImportDialog(
                   child: CustomRoundButton(
                       height: 35,
                       title: 'IMPORT FROM EXCEL',
-                      onPress: () {},
+                      onPress: () async{
+                        Navigator.pop(context);
+                        await importExcelSheetDialog(context,currentClassId);
+                      },
                       buttonColor: AppColor.kSecondaryColor),
                 ),
                 SizedBox(
-                  width: SizeConfig.screenWidth! * 0.58,
+                  width: SizeConfig.screenWidth! * 0.54,
                   child: const Divider(
                     color: AppColor.kSecondaryColor,
-                    thickness: 1.3,
+                    thickness: 1,
                   ),
                 ),
                 Padding(
