@@ -41,7 +41,7 @@ class CustomRoundButton extends StatelessWidget {
                 child: Text(
                   title,
                   style: AppStyles().defaultStyle(
-                    17,
+                    14,
                     AppColor.kWhite,
                     FontWeight.w500,
                   ),

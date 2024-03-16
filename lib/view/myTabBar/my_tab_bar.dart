@@ -65,7 +65,7 @@ class _MyTabBarState extends State<MyTabBar>
                       controller: _tabController,
                       labelColor: AppColor.kTextWhiteColor,
                       labelStyle: AppStyles().defaultStyle(
-                          13, AppColor.kTextWhiteColor, FontWeight.bold),
+                          12, AppColor.kTextWhiteColor, FontWeight.bold),
                       unselectedLabelColor:
                           AppColor.kTextWhiteColor.withOpacity(0.8),
                       tabs: const [

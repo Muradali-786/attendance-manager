@@ -7,7 +7,7 @@ import 'package:attendance_manager/view/add_students/import_student/import_stude
 import 'package:flutter/material.dart';
 
 Future<void> showImportDialog(
-  BuildContext context,
+  BuildContext context,String currentClassId
 ) async {
   SizeConfig().init(context);
   await showDialog(
@@ -82,7 +82,7 @@ Future<void> showImportDialog(
                       title: 'IMPORT FROM CLASS',
                       onPress: ()async {
                         Navigator.pop(context);
-                        importStudentFromClassesDialog(context, null);
+                        importStudentFromClassesDialog(context, null,currentClassId);
                       },
                       buttonColor: AppColor.kSecondaryColor),
                 ),

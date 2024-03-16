@@ -9,13 +9,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../utils/component/common.dart';
 import 'show_all_available_classes_dialog.dart';
 
-
 Future<void> importStudentFromClassesDialog(
-    BuildContext context,
-    ClassInputModel? e,
-    ) async {
+    BuildContext context, ClassInputModel? e, String currentClassID) async {
   final ClassController classController = ClassController();
 
   await showDialog(
@@ -68,82 +66,93 @@ Future<void> importStudentFromClassesDialog(
                 StreamBuilder<QuerySnapshot>(
                   stream: classController.getOnlyOneClassData(),
                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
+                    if (!snapshot.hasData) {
                       return const Center(
                           child: CircularProgressIndicator(
-                            color: AppColor.kSecondaryColor,
-                          ));
-                    } else if (snapshot.hasError) {
-                      return const Text('Something went wrong');
-                    } else if (!snapshot.hasData ||
-                        snapshot.data!.docs.isEmpty) {
-                      return const Center(
-                        child: Text(
-                          'Click on the + button to add new Class',
-                          style: TextStyle(color: AppColor.kTextGreyColor),
-                        ),
-                      );
+                        color: AppColor.kSecondaryColor,
+                      ));
                     } else {
-                      Map data = snapshot.data!.docs.first.data() as Map;
+                      Map data = snapshot.data!.docs.last.data() as Map;
                       ClassInputModel model =
                           e ?? ClassInputModel.fromMap(data);
-
-                      return GestureDetector(
-                        onTap: () async {
-                          Navigator.pop(context);
-                          await showAllAvailableClassesDialog(context);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 20, horizontal: 33),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                      if (model.subjectId != currentClassID) {
+                        return GestureDetector(
+                          onTap: () async {
+                            Navigator.pop(context);
+                            await showAllAvailableClassesDialog(
+                                context, currentClassID);
+                          },
+                          child: Column(
                             children: [
-                              Expanded(
-                                child: Text(
-                                  "${model.subjectName}(${model.departmentName}-${model.batchName})",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(fontSize: 20),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 20, horizontal: 33),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        "${model.subjectName}(${model.departmentName}-${model.batchName})",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(fontSize: 20),
+                                      ),
+                                    ),
+                                    const Icon(Icons.arrow_drop_down_sharp)
+                                  ],
                                 ),
                               ),
-                              const Icon(Icons.arrow_drop_down_sharp)
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(20, 0, 20, 12),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Expanded(
+                                      child: CustomRoundButton(
+                                          title: 'CLOSE',
+                                          height: 35,
+                                          onPress: () {
+                                            Navigator.pop(context);
+                                          },
+                                          buttonColor:
+                                              AppColor.kSecondaryColor),
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Consumer<StudentController>(
+                                        builder: (context, provider, _) {
+                                      return Expanded(
+                                        child: CustomRoundButton(
+                                            title: 'IMPORT',
+                                            loading: provider.loading,
+                                            height: 35,
+                                            onPress: () {
+                                              provider
+                                                  .migrateStudentsToClass(
+                                                      model.subjectId
+                                                          .toString(),
+                                                      currentClassID)
+                                                  .then((value) {
+                                                Navigator.pop(context);
+                                              });
+                                            },
+                                            buttonColor:
+                                                AppColor.kSecondaryColor),
+                                      );
+                                    })
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
-                        ),
-                      );
+                        );
+                      } else {
+                        return const ErrorImportStudentClass();
+                      }
                     }
                   },
                 )
               ],
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Expanded(
-                    child: CustomRoundButton(
-                        title: 'CLOSE',
-                        height: 35,
-                        onPress: () {
-                          Navigator.pop(context);
-                        },
-                        buttonColor: AppColor.kSecondaryColor),
-                  ),
-                  const SizedBox(width: 5),
-                  Consumer<StudentController>(builder: (context, provider, _) {
-                    return Expanded(
-                      child: CustomRoundButton(
-                          title: 'IMPORT',
-                          loading: provider.loading,
-                          height: 35,
-                          onPress: () {},
-                          buttonColor: AppColor.kSecondaryColor),
-                    );
-                  })
-                ],
-              ),
             ),
           ],
         ),
@@ -151,3 +160,5 @@ Future<void> importStudentFromClassesDialog(
     },
   );
 }
+
+

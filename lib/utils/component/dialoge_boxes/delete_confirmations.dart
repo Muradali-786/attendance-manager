@@ -14,7 +14,7 @@ Future<void> showDeleteClassConfirmationDialog(
       return AlertDialog(
         title: const Text("Delete"),
         content: Text(
-            "Are you sure you want to delete class ${model.subjectName}(${model.departmentName}).All the attendance history for this class will be lost"),
+            "Are you sure you want to delete class ${model.subjectName}(${model.departmentName}-${model.batchName}).All the attendance history for this class will be lost"),
         actions: [
           TextButton(
             onPressed: () {

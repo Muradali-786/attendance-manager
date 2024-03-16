@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'import_student_from_classes_dialog.dart';
 
-Future<void> showAllAvailableClassesDialog(BuildContext context) async {
+Future<void> showAllAvailableClassesDialog(BuildContext context,currentClassId) async {
   final ClassController classController = ClassController();
   SizeConfig().init(context);
   return showDialog(
@@ -21,22 +21,12 @@ Future<void> showAllAvailableClassesDialog(BuildContext context) async {
                 StreamBuilder<QuerySnapshot>(
                   stream: classController.getClassData(),
                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
+                    if (!snapshot.hasData) {
                       return const Center(
                           child: CircularProgressIndicator(
                         color: AppColor.kSecondaryColor,
                       ));
-                    } else if (snapshot.hasError) {
-                      return const Text('Some thing went wrong');
-                    } else if (!snapshot.hasData ||
-                        snapshot.data!.docs.isEmpty) {
-                      return const Center(
-                        child: Text(
-                          'Click on the + button to add new Class',
-                          style: TextStyle(color: AppColor.kTextGreyColor),
-                        ),
-                      );
-                    } else {
+                    }else {
                       List<ClassInputModel> snap =
                           snapshot.data!.docs.map((doc) {
                         Map<String, dynamic> data =
@@ -48,21 +38,37 @@ Future<void> showAllAvailableClassesDialog(BuildContext context) async {
                         itemCount: snap.length,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () async {
-                              Navigator.pop(context);
-                              await importStudentFromClassesDialog(
-                                  context, snap[index]);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 20),
-                              child: Text(
-                                "${snap[index].subjectName}(${snap[index].departmentName}-${snap[index].batchName})",
-                                style: const TextStyle(fontSize: 20),
-                              ),
-                            ),
-                          );
+                          // this will not show  the current register class
+
+                          if(snap[index].subjectId!=currentClassId){
+                            return GestureDetector(
+                              onTap: () async {
+                                Navigator.pop(context);
+                                await importStudentFromClassesDialog(
+                                    context, snap[index],currentClassId);
+                              },
+
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 20),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        "${snap[index].subjectName}(${snap[index].departmentName}-${snap[index].batchName})",
+                                        style: const TextStyle(fontSize: 20),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),),
+                            );
+                          }else{
+                            return const SizedBox();
+                          }
+
                         },
                       );
                     }

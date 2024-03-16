@@ -71,7 +71,7 @@ class _AddStudentPageState extends State<AddStudentPage> {
                               title: 'IMPORT STUDENTS',
                               height: getProportionalHeight(40),
                               onPress: () {
-                                showImportDialog(context);
+                                showImportDialog(context,classId);
                               },
                               buttonColor: AppColor.kSecondaryColor),
                         ),
@@ -83,10 +83,10 @@ class _AddStudentPageState extends State<AddStudentPage> {
                         child: Text(
                           'Click on the + button to add students in this class',
                           style: AppStyles().defaultStyleWithHt(
-                            16,
+                            13,
                             AppColor.kTextGreyColor,
                             FontWeight.normal,
-                            3,
+                            2,
                           ),
                           textAlign: TextAlign.center,
                         ),
