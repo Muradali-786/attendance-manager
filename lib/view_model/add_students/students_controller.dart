@@ -192,6 +192,14 @@ class StudentController with ChangeNotifier {
         .snapshots();
   }
 
+  Future<dynamic> getStudentDataToExport(String classId) {
+    return _fireStore
+        .collection(CLASS)
+        .doc(classId)
+        .collection(STUDENT)
+        .get();
+  }
+
   Stream<DocumentSnapshot> getSingleStudentData(String classId, String stdId) {
     return _fireStore
         .collection(CLASS)
