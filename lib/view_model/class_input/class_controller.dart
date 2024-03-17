@@ -75,12 +75,7 @@ class ClassController with ChangeNotifier {
         .where('teacherId', isEqualTo: teacherId)
         .snapshots();
   }
-  Stream<QuerySnapshot> getSingleClassData(String currentClassId) {
-    return fireStore
-        .collection(CLASS)
-        .where('subjectId', isNotEqualTo: currentClassId).limit(1)
-        .snapshots();
-  }
+
 
 
   Future<void> deleteClass(String classId) async {
