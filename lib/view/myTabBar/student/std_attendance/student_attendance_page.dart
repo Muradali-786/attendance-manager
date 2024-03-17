@@ -52,6 +52,7 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
     DateTime parsedDate = DateTime.parse(selectedDate);
     String formattedDate = formatter.format(parsedDate);
 
+
     return Scaffold(
       backgroundColor: AppColor.kBgColor,
       body: SafeArea(
@@ -139,6 +140,7 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
             onPress: () async {
               AttendanceModel attendanceModel = AttendanceModel(
                 classId: subjectId,
+                sortOrder: parsedDate.day,
                 selectedDate: formattedDate,
                 currentTime: currentTime,
                 attendanceList: Map.fromIterables(

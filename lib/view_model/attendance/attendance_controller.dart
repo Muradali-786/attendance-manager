@@ -104,7 +104,7 @@ class AttendanceController extends ChangeNotifier {
     return _fireStore
         .collection(CLASS)
         .doc(subjectId)
-        .collection(ATTENDANCE)
+        .collection(ATTENDANCE).orderBy('sortOder',descending: false)
         .snapshots();
   }
 
@@ -112,7 +112,7 @@ class AttendanceController extends ChangeNotifier {
     return _fireStore
         .collection(CLASS)
         .doc(subjectId)
-        .collection(ATTENDANCE)
+        .collection(ATTENDANCE).orderBy('sortOder',descending: false)
         .get();
   }
 

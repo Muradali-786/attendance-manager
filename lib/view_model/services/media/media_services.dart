@@ -70,6 +70,11 @@ class MediaServices {
 
   String classId = 'X96F0ycFpqaeMFNAq71Y';
   Future<void> createAndShareExcelFile2() async {
+    List<CellValue> headerList = [
+      TextCellValue('Student Rolls'),
+      TextCellValue('Student Name'),
+    ];
+
     dynamic studentSnapshot =
         await _studentController.getStudentDataToExport(classId);
     dynamic attendanceSnapshot =
@@ -86,59 +91,43 @@ class MediaServices {
 
     Sheet sheet = excel['Sheet1'];
 
+    for (var date in attendanceList) {
+      AttendanceModel model = date;
+      headerList.add(TextCellValue(model.selectedDate));
+    }
+
+    sheet.appendRow(headerList);
     for (int i = 0; i < studentList.length; i++) {
       StudentModel std = studentList[i];
-      print('in first loop ');
-      print(std.studentName);
+      // Set student roll number and name
+      sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: i + 1))
+          .value = TextCellValue(std.studentRollNo);
+      sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: i + 1))
+          .value = TextCellValue(std.studentName);
 
-      for (int i = 0; i < attendanceList.length; i++) {
-        AttendanceModel model = attendanceList[i];
-        print('in second loop ');
-        print(model.currentTime);
-
+      // Set attendance status for each student
+      for (int j = 0; j < attendanceList.length; j++) {
+        AttendanceModel model = attendanceList[j];
+        sheet
+            .cell(
+                CellIndex.indexByColumnRow(columnIndex: j + 2, rowIndex: i + 1))
+            .value = TextCellValue(model.attendanceList[std.studentId]);
       }
     }
 
-    // sheet.appendRow(
-    //     [TextCellValue('Student Rolls'), TextCellValue('Student Name')]);
-    // for (int i = 0; i < studentList.length; i++) {
-    //   print(studentList[i].studentName);
-    //
-    //   var cell1 = sheet
-    //       .cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: i + 1));
-    //   var cell2 = sheet
-    //       .cell(CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: i + 1));
-    //
-    //   cell1.value = TextCellValue(studentList[i].studentRollNo);
-    //   cell2.value = TextCellValue(studentList[i].studentName);
-    // }
+    String name = 'student-attendance';
+    final fileName = '${DateTime.now().millisecondsSinceEpoch}$name.xlsx';
 
-    // sheet.appendRow(data1);
-    //   sheet.appendRow(data1);
-    //   sheet.appendRow(data1);
-    //   sheet.appendRow(data1);
+    final fileBytes = excel.save();
+    var directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/$fileName');
 
-    // print(snapshot.docs.data);
+    file
+      ..createSync(recursive: true)
+      ..writeAsBytesSync(fileBytes!);
 
-    // sheet.appendRow(snap);
-    // for (var student in snap) {
-    //   sheet.appendRow(snap);
-    // }
-
-    // List<CellValue> dataList = [TextCellValue('Roll Number'), TextCellValue('Names'), TextCellValue('Flutter'), TextCellValue('and'), TextCellValue('Flutter'), TextCellValue('loves'), TextCellValue('Excel')];
-    // sheet.insertRowIterables(dataList,0);
-
-    // String name = 'student-attendance';
-    // final fileName = '${DateTime.now().millisecondsSinceEpoch}$name.xlsx';
-    //
-    // final fileBytes = excel.save();
-    // var directory = await getApplicationDocumentsDirectory();
-    // final file = File('${directory.path}/$fileName');
-    //
-    // file
-    //   ..createSync(recursive: true)
-    //   ..writeAsBytesSync(fileBytes!);
-    //
-    // await Share.shareXFiles([XFile(file.path)], text: 'Student-attendance');
+    await Share.shareXFiles([XFile(file.path)], text: 'Student-attendance');
   }
 }

@@ -1,6 +1,7 @@
 class AttendanceModel {
-   final String classId;
-   String? attendanceId;
+  final String classId;
+  String? attendanceId;
+  final int sortOrder;
   final String selectedDate;
   final String currentTime;
   final Map<dynamic, dynamic> attendanceList;
@@ -8,6 +9,7 @@ class AttendanceModel {
   AttendanceModel({
     required this.classId,
     this.attendanceId,
+    this.sortOrder = 0,
     required this.selectedDate,
     required this.currentTime,
     required this.attendanceList,
@@ -15,7 +17,8 @@ class AttendanceModel {
 
   AttendanceModel.fromMap(Map<String, dynamic> res)
       : classId = res['classId'],
-        attendanceId=res['attendanceId'],
+        attendanceId = res['attendanceId'],
+        sortOrder = res['sortOder'],
         selectedDate = res['selectedDate'],
         currentTime = res['currentTime'],
         attendanceList = Map<String, String>.from(res['attendanceList']);
@@ -23,7 +26,8 @@ class AttendanceModel {
   Map<String, dynamic> toMap() {
     return {
       'classId': classId,
-      'attendanceId':attendanceId,
+      'attendanceId': attendanceId,
+      'sortOder': sortOrder,
       'selectedDate': selectedDate,
       'currentTime': currentTime,
       'attendanceList': attendanceList,

@@ -48,6 +48,7 @@ class _UpdateAttendanceState extends State<UpdateAttendance> {
     SizeConfig().init(context);
     String date = widget.data['data']['selectedDate'];
     String time = widget.data['data']['currentTime'];
+    int sortOrder = widget.data['data']['sortOder'];
     String classId = widget.data['data']['classId'];
     String attendanceId = widget.data['data']['attendanceId'];
     Map attendanceStatus = widget.data['data']['attendanceList'];
@@ -156,6 +157,7 @@ class _UpdateAttendanceState extends State<UpdateAttendance> {
                   AttendanceModel model = AttendanceModel(
                     classId: classId,
                     attendanceId: attendanceId,
+                    sortOrder: sortOrder,
                     selectedDate: date,
                     currentTime: currentTime,
                     attendanceList: provider.updatedStatusMap!,
