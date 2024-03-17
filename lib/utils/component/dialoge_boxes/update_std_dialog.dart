@@ -105,7 +105,7 @@ Future<void> updateStudentDialog(
                       }
                       return null;
                     },
-                    keyBoardType: TextInputType.number,
+                    keyBoardType: TextInputType.text,
                   ),
                   const SizedBox(height: 10),
                 ],

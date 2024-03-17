@@ -103,7 +103,7 @@ Future<void> addStudentDialog(BuildContext context, String classId) async {
                         }
                         return null;
                       },
-                      keyBoardType: TextInputType.number,
+                      keyBoardType: TextInputType.text,
                     ),
                     const SizedBox(height: 10),
                   ],

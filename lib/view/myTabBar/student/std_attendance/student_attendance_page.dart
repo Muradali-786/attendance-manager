@@ -4,6 +4,7 @@ import 'package:attendance_manager/model/attendance_model.dart';
 import 'package:attendance_manager/size_config.dart';
 import 'package:attendance_manager/utils/component/custom_round_botton.dart';
 import 'package:attendance_manager/utils/component/time_picker.dart';
+import 'package:attendance_manager/utils/utils.dart';
 import 'package:attendance_manager/view_model/add_students/students_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -138,22 +139,27 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
             title: 'SAVE ATTENDANCE',
             loading: provider.loading,
             onPress: () async {
-              AttendanceModel attendanceModel = AttendanceModel(
-                classId: subjectId,
-                sortOrder: parsedDate.day,
-                selectedDate: formattedDate,
-                currentTime: currentTime,
-                attendanceList: Map.fromIterables(
-                  stdIdList,
-                  provider.attendanceStatus,
-                ),
-              );
+              if(stdIdList.isNotEmpty){
+                AttendanceModel attendanceModel = AttendanceModel(
+                  classId: subjectId,
+                  sortOrder: parsedDate.day,
+                  selectedDate: formattedDate,
+                  currentTime: currentTime,
+                  attendanceList: Map.fromIterables(
+                    stdIdList,
+                    provider.attendanceStatus,
+                  ),
+                );
 
-              await provider
-                  .saveAllStudentAttendance(attendanceModel)
-                  .then((value) {
-                Navigator.pop(context);
-              });
+                await provider
+                    .saveAllStudentAttendance(attendanceModel)
+                    .then((value) {
+                  Navigator.pop(context);
+                });
+              }else{
+                Utils.toastMessage('Please add students for attendance.');
+              }
+
             },
             buttonColor: AppColor.kSecondaryColor,
           ),

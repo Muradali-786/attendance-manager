@@ -37,7 +37,7 @@ class _HistoryTabState extends State<HistoryTab> {
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Expanded(
-                  child: ShimmerLoadingEffect(),
+                  child: ShimmerLoadingEffect(height: 47),
                 );
               } else if (snapshot.hasError) {
                 return const ErrorClass();
@@ -88,9 +88,8 @@ class _HistoryTabState extends State<HistoryTab> {
             height: getProportionalHeight(38),
             title: 'EXPORT ATTENDANCE',
             loading: provider.loading,
-            onPress: () async{
-
-              await provider.createAndShareExcelSheet(widget.subjectId);
+            onPress: () async {
+              await provider.exportAndShareAttendanceSheet(widget.subjectId);
             },
             buttonColor: AppColor.kSecondaryColor,
           ),

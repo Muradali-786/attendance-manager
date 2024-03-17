@@ -43,6 +43,7 @@ class LoginController with ChangeNotifier {
     try {
       await _auth.signOut().then((value) {
         _navigationService.removeAndNavigateToRoute(RouteName.login);
+
       });
 
       Utils.toastMessage('Log out Successful');

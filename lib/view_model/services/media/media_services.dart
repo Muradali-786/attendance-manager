@@ -11,12 +11,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-class MediaServices with ChangeNotifier{
+class MediaServices with ChangeNotifier {
   final StudentController _studentController = StudentController();
   final AttendanceController _attendanceController = AttendanceController();
 
   bool _loading = false;
   bool get loading => _loading;
+
   void setLoading(bool value) {
     _loading = value;
     notifyListeners();
@@ -77,7 +78,7 @@ class MediaServices with ChangeNotifier{
     return attendanceList;
   }
 
-  void addHeaderOfSheet(Sheet sheet, attendanceList) {
+  void addSheetHeader(Sheet sheet, attendanceList) {
     List<CellValue> headerList = [
       const TextCellValue('Registration No'),
       const TextCellValue('Student Name'),
@@ -90,7 +91,8 @@ class MediaServices with ChangeNotifier{
     sheet.appendRow(headerList);
   }
 
-  void addDetailsToExcel(Sheet sheet, studentList, attendanceList) {
+  void addStudentAttendanceDetailsToSheet(
+      Sheet sheet, studentList, attendanceList) {
     for (int i = 0; i < studentList.length; i++) {
       StudentModel std = studentList[i];
       // Set student roll number and name
@@ -119,35 +121,40 @@ class MediaServices with ChangeNotifier{
     }
   }
 
-  Future<void> createAndShareExcelSheet(String classId) async {
+  Future<void> shareExcelFile(excel) async {
+    String name = 'Student-Attendance-';
+    final fileName = '$name${DateTime.now().millisecondsSinceEpoch}.xlsx';
+
+    final fileBytes = excel.save();
+    var directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/$fileName');
+
+    file
+      ..createSync(recursive: true)
+      ..writeAsBytesSync(fileBytes!);
+
+    await Share.shareXFiles([XFile(file.path)], text: 'Student-attendance');
+  }
+
+  Future<void> exportAndShareAttendanceSheet(String classId) async {
     setLoading(true);
     try {
       var excel = Excel.createExcel();
       Sheet sheet = excel['Sheet1'];
-
       final studentList = await getStudentDetails(classId);
       final attendanceList = await getAttendanceDetails(classId);
-
-      addHeaderOfSheet(sheet, attendanceList);
-      addDetailsToExcel(sheet, studentList, attendanceList);
-
-      String name = 'student-attendance';
-      final fileName = '${DateTime.now().millisecondsSinceEpoch}$name.xlsx';
-
-      final fileBytes = excel.save();
-      var directory = await getApplicationDocumentsDirectory();
-      final file = File('${directory.path}/$fileName');
-
-      file
-        ..createSync(recursive: true)
-        ..writeAsBytesSync(fileBytes!);
-
-      await Share.shareXFiles([XFile(file.path)], text: 'Student-attendance');
+      if(attendanceList.isNotEmpty){
+        addSheetHeader(sheet, attendanceList);
+        addStudentAttendanceDetailsToSheet(sheet, studentList, attendanceList);
+        await shareExcelFile(excel);
+      }else{
+        Utils.toastMessage('No attendance records to export');
+      }
       setLoading(false);
     } catch (e) {
       Utils.toastMessage('Some thing went wrong while Exporting Sheet');
       setLoading(false);
-    }finally{
+    } finally {
       setLoading(false);
     }
   }
