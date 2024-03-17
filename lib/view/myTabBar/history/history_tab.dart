@@ -81,7 +81,7 @@ class _HistoryTabState extends State<HistoryTab> {
         ],
       ),
       bottomNavigationBar:
-          Consumer<AttendanceController>(builder: (context, provider, child) {
+          Consumer<MediaServices>(builder: (context, provider, _) {
         return Padding(
           padding: const EdgeInsets.fromLTRB(95, 0, 95, 16),
           child: CustomRoundButton(
@@ -90,7 +90,7 @@ class _HistoryTabState extends State<HistoryTab> {
             loading: provider.loading,
             onPress: () async{
 
-              await MediaServices().createAndShareExcelFile2(widget.subjectId);
+              await provider.createAndShareExcelSheet(widget.subjectId);
             },
             buttonColor: AppColor.kSecondaryColor,
           ),
