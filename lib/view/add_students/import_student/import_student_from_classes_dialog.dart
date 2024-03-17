@@ -64,7 +64,7 @@ Future<void> importStudentFromClassesDialog(
             Column(
               children: [
                 StreamBuilder<QuerySnapshot>(
-                  stream: classController.getOnlyOneClassData(),
+                  stream: classController.getSingleClassData(currentClassID),
                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                     if (!snapshot.hasData) {
                       return const Center(
@@ -72,7 +72,7 @@ Future<void> importStudentFromClassesDialog(
                         color: AppColor.kSecondaryColor,
                       ));
                     } else {
-                      Map data = snapshot.data!.docs.last.data() as Map;
+                      Map data = snapshot.data!.docs.first.data() as Map;
                       ClassInputModel model =
                           e ?? ClassInputModel.fromMap(data);
                       if (model.subjectId != currentClassID) {
