@@ -11,7 +11,6 @@ import '../../../utils/component/custom_attendance_lists.dart';
 import '../../../utils/component/custom_shimmer_effect.dart';
 import '../../../view_model/attendance/attendance_controller.dart';
 import '../../../view_model/services/media/media_services.dart';
-import '../../home/home_page.dart';
 
 class HistoryTab extends StatefulWidget {
   final String subjectId;
@@ -91,7 +90,7 @@ class _HistoryTabState extends State<HistoryTab> {
             loading: provider.loading,
             onPress: () async{
 
-              await MediaServices().createAndShareExcelFile();
+              await MediaServices().createAndShareExcelFile2(widget.subjectId);
             },
             buttonColor: AppColor.kSecondaryColor,
           ),

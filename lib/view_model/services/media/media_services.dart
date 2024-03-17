@@ -68,8 +68,7 @@ class MediaServices {
     await Share.shareXFiles([XFile(file.path)], text: 'Student-attendance');
   }
 
-  String classId = 'X96F0ycFpqaeMFNAq71Y';
-  Future<void> createAndShareExcelFile2() async {
+  Future<void> createAndShareExcelFile2(String classId) async {
     List<CellValue> headerList = [
       TextCellValue('Student Rolls'),
       TextCellValue('Student Name'),

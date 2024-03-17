@@ -8,10 +8,7 @@ import 'package:attendance_manager/view/class_input/class_update/update_class_di
 import 'package:attendance_manager/view_model/add_students/students_controller.dart';
 import 'package:attendance_manager/view_model/class_input/class_controller.dart';
 import 'package:attendance_manager/view_model/login/login_controller.dart';
-import 'package:attendance_manager/view_model/services/media/media_services.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:flutter/material.dart';
 import '../../utils/component/common.dart';
 import '../../utils/component/custom_shimmer_effect.dart';
@@ -119,8 +116,8 @@ class _HomePageState extends State<HomePage> {
       )),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          // Navigator.pushNamed(context, RouteName.classInputPage);
-          MediaServices().createAndShareExcelFile2();
+          Navigator.pushNamed(context, RouteName.classInputPage);
+
 
         },
         backgroundColor: AppColor.kButtonColor,
