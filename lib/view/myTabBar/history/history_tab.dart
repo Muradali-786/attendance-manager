@@ -26,7 +26,7 @@ class _HistoryTabState extends State<HistoryTab> {
   final AttendanceController _controller = AttendanceController();
 
 
-  String formatDateTime(DateTime dateTime) {
+  String formatDate(DateTime dateTime) {
     final formatter = DateFormat('yMMMMd');
     return formatter.format(dateTime);
   }
@@ -68,10 +68,11 @@ class _HistoryTabState extends State<HistoryTab> {
                 return Expanded(
                   child: ListView.builder(
                     itemCount: snap.length,
+                    physics: const BouncingScrollPhysics(),
                     itemBuilder: (context, index) {
                       return CustomAttendanceList2(
                         title:
-                            "${formatDateTime(snap[index].selectedDate)}\t${snap[index].currentTime} ",
+                            "${formatDate(snap[index].selectedDate)}\t${snap[index].currentTime} ",
                         onTap: () {
                           Navigator.pushNamed(
                             context,

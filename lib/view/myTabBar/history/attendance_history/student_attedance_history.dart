@@ -22,7 +22,7 @@ class StudentAttendanceHistory extends StatefulWidget {
 class _StudentAttendanceHistoryState extends State<StudentAttendanceHistory> {
   final StudentController _studentController = StudentController();
 
-  String formatDateTime(DateTime dateTime) {
+  String formatDate(DateTime dateTime) {
     final formatter = DateFormat('yMMMMd');
     return formatter.format(dateTime);
   }
@@ -44,7 +44,7 @@ class _StudentAttendanceHistoryState extends State<StudentAttendanceHistory> {
           children: [
             Center(
               child: Text(
-        formatDateTime(date) ,
+        formatDate(date) ,
                 style: AppStyles().defaultStyleWithHt(getProportionalHeight(35),
                     AppColor.kPrimaryTextColor, FontWeight.w400, 1.6),
               ),

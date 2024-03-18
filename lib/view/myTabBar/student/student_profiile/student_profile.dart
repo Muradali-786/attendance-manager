@@ -5,6 +5,7 @@ import 'package:attendance_manager/view_model/add_students/students_controller.d
 import 'package:attendance_manager/view_model/attendance/attendance_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../model/attendance_model.dart';
 import '../../../../utils/component/common.dart';
@@ -24,6 +25,11 @@ class StudentProfile extends StatefulWidget {
 class _StudentProfileState extends State<StudentProfile> {
   final StudentController _studentController = StudentController();
   final AttendanceController _controller = AttendanceController();
+
+  String formatDate(DateTime dateTime) {
+    final formatter = DateFormat('yMMMMd');
+    return formatter.format(dateTime);
+  }
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -100,7 +106,7 @@ class _StudentProfileState extends State<StudentProfile> {
                         if (snap[index].attendanceList.containsKey(studentId)) {
                           return CustomAttendanceList3(
                             dateTime:
-                                "${snap[index].selectedDate}\t\t${snap[index].currentTime}",
+                                "${formatDate(snap[index].selectedDate)}\t\t${snap[index].currentTime}",
                             attendanceStatus:
                                 snap[index].attendanceList[studentId],
                           );

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../constant/app_style/app_colors.dart';
 import '../../constant/app_style/app_styles.dart';
 import '../../size_config.dart';
@@ -8,7 +7,11 @@ import 'custom_round_botton.dart';
 class ReUsableText extends StatelessWidget {
   final String title, value;
 
-  const ReUsableText({super.key, required this.title, required this.value});
+  const ReUsableText({
+    super.key,
+    required this.title,
+    required this.value,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +119,8 @@ class ErrorImportStudentClass extends StatelessWidget {
               Expanded(
                 child: Text(
                   "To import students, you need to have at least one existing class. Please create a class first.",
-                  style: TextStyle(fontSize: 16,color: AppColor.kTextGreyColor),
+                  style:
+                      TextStyle(fontSize: 16, color: AppColor.kTextGreyColor),
                   textAlign: TextAlign.center,
                 ),
               ),

@@ -22,7 +22,7 @@ class CustomAttendanceList extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 0),
       child: Container(
-        padding: const EdgeInsets.only(left: 15, right: 20),
+        padding: const EdgeInsets.only(left: 12, right: 17),
         width: double.infinity,
         height: getProportionalHeight(88),
         decoration: BoxDecoration(
@@ -41,12 +41,16 @@ class CustomAttendanceList extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Column(
+            Expanded(
+              flex: 2,
+              child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   stdName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: AppStyles().defaultStyle(
                     22,
                     AppColor.kTextBlackColor,
@@ -55,6 +59,8 @@ class CustomAttendanceList extends StatelessWidget {
                 ),
                 Text(
                   stdRollNo,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: AppStyles().defaultStyleWithHt(
                     17,
                     AppColor.kTextGreyColor,
@@ -63,8 +69,8 @@ class CustomAttendanceList extends StatelessWidget {
                   ),
                 ),
               ],
-            ),
-            Column(
+            ),),
+            Expanded(child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -90,7 +96,7 @@ class CustomAttendanceList extends StatelessWidget {
                   ),
                 ),
               ],
-            )
+            ),)
           ],
         ),
       ),

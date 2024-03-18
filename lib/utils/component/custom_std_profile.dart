@@ -84,6 +84,8 @@ class StdProfile extends StatelessWidget {
   Widget _text(String title, double size) {
     return Text(
       title,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
       style: AppStyles().defaultStyleWithHt(
         getProportionalHeight(size),
         AppColor.kTextWhiteColor,

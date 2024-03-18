@@ -50,7 +50,7 @@ class CustomListTile extends StatelessWidget {
             height: 85,
             width: double.infinity,
             alignment: Alignment.center,
-            padding: const EdgeInsets.only(left: 11, right: 21),
+            padding: const EdgeInsets.only(left: 11),
             decoration: BoxDecoration(
               color: AppColor.kWhite,
               borderRadius: BorderRadius.circular(2),
@@ -64,48 +64,60 @@ class CustomListTile extends StatelessWidget {
               ],
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.max,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      title,
-                      style: AppStyles().defaultStyle(
-                          22, AppColor.kTextBlackColor, FontWeight.w400),
-                    ),
-                    Text(
-                      subtitle,
-                      style: AppStyles().defaultStyleWithHt(
-                        16,
-                        AppColor.kTextGrey54Color,
-                        FontWeight.normal,
-                        2,
+               Expanded(
+                 flex: 2,
+                 child:  Column(
+                 crossAxisAlignment: CrossAxisAlignment.start,
+                 mainAxisAlignment: MainAxisAlignment.center,
+                 children: [
+                   Text(
+                     title,
+                     maxLines: 1,
+                     overflow: TextOverflow.ellipsis,
+                     style: AppStyles().defaultStyle(
+                         22, AppColor.kTextBlackColor, FontWeight.w400),
+                   ),
+                   Text(
+                     subtitle,
+                     maxLines: 1,
+                     overflow: TextOverflow.ellipsis,
+                     style: AppStyles().defaultStyleWithHt(
+                       16,
+                       AppColor.kTextGrey54Color,
+                       FontWeight.normal,
+                       1.5,
+                     ),
+                   ),
+                 ],
+               ),),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        trailingFirstText,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppStyles().defaultStyle(
+                          28,
+                          AppColor.kPrimaryTextColor,
+                          FontWeight.w700,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      trailingFirstText,
-                      style: AppStyles().defaultStyle(
-                        28,
-                        AppColor.kPrimaryTextColor,
-                        FontWeight.w700,
-                      ),
-                    ),
-                    Text(
-                      trailingSecondText,
-                      style: AppStyles().defaultStyleWithHt(
-                          16, AppColor.kTextGreyColor, FontWeight.normal, 1.5),
-                    )
-                  ],
+                      Text(
+                        trailingSecondText,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppStyles().defaultStyleWithHt(
+                            16, AppColor.kTextGreyColor, FontWeight.normal, 1.5),
+                      )
+                    ],
+                  ),
                 ),
               ],
             ),

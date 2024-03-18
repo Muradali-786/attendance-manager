@@ -62,7 +62,7 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
                 child: Text(
                   currentTime.toString(),
                   style: AppStyles().defaultStyle(
-                    SizeConfig.screenHeight! * 0.059,
+                    SizeConfig.screenHeight! * 0.057,
                     AppColor.kPrimaryColor,
                     FontWeight.w400,
                   ),

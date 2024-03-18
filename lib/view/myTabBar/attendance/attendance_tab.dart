@@ -109,6 +109,7 @@ class _AttendanceTabState extends State<AttendanceTab> {
                 return Expanded(
                   child: ListView.builder(
                     itemCount: snap.length,
+                    physics: const BouncingScrollPhysics(),
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 13),
