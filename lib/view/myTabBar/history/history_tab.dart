@@ -5,6 +5,7 @@ import 'package:attendance_manager/utils/component/custom_round_botton.dart';
 import 'package:attendance_manager/utils/routes/route_name.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../../utils/component/common.dart';
 import '../../../utils/component/custom_attendance_lists.dart';
@@ -23,8 +24,17 @@ class HistoryTab extends StatefulWidget {
 
 class _HistoryTabState extends State<HistoryTab> {
   final AttendanceController _controller = AttendanceController();
+
+
+  String formatDateTime(DateTime dateTime) {
+    final formatter = DateFormat('yMMMMd');
+    return formatter.format(dateTime);
+  }
+
   @override
   Widget build(BuildContext context) {
+
+
     SizeConfig().init(context);
     return Scaffold(
       backgroundColor: AppColor.kBgColor,
@@ -61,7 +71,7 @@ class _HistoryTabState extends State<HistoryTab> {
                     itemBuilder: (context, index) {
                       return CustomAttendanceList2(
                         title:
-                            "${snap[index].selectedDate}\t\t${snap[index].currentTime} ",
+                            "${formatDateTime(snap[index].selectedDate)}\t${snap[index].currentTime} ",
                         onTap: () {
                           Navigator.pushNamed(
                             context,

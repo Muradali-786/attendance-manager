@@ -4,6 +4,7 @@ import 'package:attendance_manager/size_config.dart';
 import 'package:attendance_manager/view_model/add_students/students_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../../../model/student_model.dart';
 import '../../../../utils/component/common.dart';
 import '../../../../utils/component/custom_attendance_lists.dart';
@@ -20,10 +21,16 @@ class StudentAttendanceHistory extends StatefulWidget {
 
 class _StudentAttendanceHistoryState extends State<StudentAttendanceHistory> {
   final StudentController _studentController = StudentController();
+
+  String formatDateTime(DateTime dateTime) {
+    final formatter = DateFormat('yMMMMd');
+    return formatter.format(dateTime);
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    String date = widget.data['data']['selectedDate'];
+    DateTime date = widget.data['data']['selectedDate'];
     String time = widget.data['data']['currentTime'];
     String classId = widget.data['data']['classId'];
     Map attendanceStatus = widget.data['data']['attendanceList'];
@@ -37,15 +44,15 @@ class _StudentAttendanceHistoryState extends State<StudentAttendanceHistory> {
           children: [
             Center(
               child: Text(
-                date,
-                style: AppStyles().defaultStyleWithHt(getProportionalHeight(40),
+        formatDateTime(date) ,
+                style: AppStyles().defaultStyleWithHt(getProportionalHeight(35),
                     AppColor.kPrimaryTextColor, FontWeight.w400, 1.6),
               ),
             ),
             Center(
               child: Text(
                 time,
-                style: AppStyles().defaultStyleWithHt(getProportionalHeight(38),
+                style: AppStyles().defaultStyleWithHt(getProportionalHeight(35),
                     AppColor.kPrimaryTextColor, FontWeight.w400, 1.2),
               ),
             ),

@@ -8,7 +8,6 @@ import 'package:attendance_manager/utils/utils.dart';
 import 'package:attendance_manager/view_model/add_students/students_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../model/student_model.dart';
@@ -37,7 +36,7 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
     }
   }
 
-  final formatter = DateFormat('yMMMMd');
+
   final StudentController _studentController = StudentController();
   List<String> stdIdList = [];
 
@@ -49,9 +48,7 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
     String minute = selectedTime.minute.toString().padLeft(2, '0');
     String currentTime = '$hour:$minute $period';
     String subjectId = widget.data['classId'].toString();
-    String selectedDate = widget.data['selectedDate'];
-    DateTime parsedDate = DateTime.parse(selectedDate);
-    String formattedDate = formatter.format(parsedDate);
+    DateTime selectedDate = widget.data['selectedDate'];
 
 
     return Scaffold(
@@ -142,8 +139,7 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
               if(stdIdList.isNotEmpty){
                 AttendanceModel attendanceModel = AttendanceModel(
                   classId: subjectId,
-                  sortOrder: parsedDate.day,
-                  selectedDate: formattedDate,
+                  selectedDate: selectedDate,
                   currentTime: currentTime,
                   attendanceList: Map.fromIterables(
                     stdIdList,

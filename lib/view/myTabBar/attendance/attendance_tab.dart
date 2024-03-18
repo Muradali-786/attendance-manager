@@ -110,21 +110,24 @@ class _AttendanceTabState extends State<AttendanceTab> {
                   child: ListView.builder(
                     itemCount: snap.length,
                     itemBuilder: (context, index) {
-                      return CustomAttendanceList2(
-                        title: snap[index].currentTime,
-                        onTap: () {
-                          Navigator.pushNamed(
-                              context, RouteName.updateAttendance,
-                              arguments: {'data': snap[index].toMap()});
-                        },
-                        showDelete: true,
-                        onPressDelete: () async {
-                          await _controller.deleteAttendanceRecord(
-                            widget.subjectId,
-                            snap[index].attendanceId!,
-                          );
-                          _controller.updateAttendanceCount(widget.subjectId);
-                        },
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 13),
+                        child: CustomAttendanceList2(
+                          title: snap[index].currentTime,
+                          onTap: () {
+                            Navigator.pushNamed(
+                                context, RouteName.updateAttendance,
+                                arguments: {'data': snap[index].toMap()});
+                          },
+                          showDelete: true,
+                          onPressDelete: () async {
+                            await _controller.deleteAttendanceRecord(
+                              widget.subjectId,
+                              snap[index].attendanceId!,
+                            );
+                            _controller.updateAttendanceCount(widget.subjectId);
+                          },
+                        ),
                       );
                     },
                   ),
@@ -145,7 +148,7 @@ class _AttendanceTabState extends State<AttendanceTab> {
             RouteName.studentAttendancePage,
             arguments: {
               'classId': widget.subjectId,
-              'selectedDate': _selectedDay.toString(),
+              'selectedDate': _selectedDay,
             },
           ),
           buttonColor: AppColor.kSecondaryColor,

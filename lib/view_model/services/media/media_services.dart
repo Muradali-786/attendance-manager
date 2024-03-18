@@ -8,6 +8,7 @@ import 'package:attendance_manager/view_model/attendance/attendance_controller.d
 import 'package:excel/excel.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -79,16 +80,34 @@ class MediaServices with ChangeNotifier {
   }
 
   void addSheetHeader(Sheet sheet, attendanceList) {
-    List<CellValue> headerList = [
-      const TextCellValue('Registration No'),
-      const TextCellValue('Student Name'),
-    ];
+    List<CellValue> headerList = [];
+    CellStyle headerStyle = CellStyle(
+      backgroundColorHex: '#808080',
+      fontColorHex: '#FFFFFF',
+      fontFamily: getFontFamily(FontFamily.Calibri),
+    );
+    var cell1 =
+        sheet.cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 0));
+    cell1.cellStyle = headerStyle;
+    cell1.value = const TextCellValue('Registration No');
+    headerList.add(cell1.value!);
+    var cell2 =
+        sheet.cell(CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: 0));
+    cell2.cellStyle = headerStyle;
+    cell2.value = const TextCellValue('Student Name');
+    headerList.add(cell2.value!);
 
-    for (var date in attendanceList) {
-      AttendanceModel model = date;
-      headerList.add(TextCellValue(model.selectedDate));
+    for (int i = 0; i < attendanceList.length; i++) {
+      AttendanceModel model = attendanceList[i];
+      final formatter = DateFormat('yMMMMd');
+      String formattedDate = formatter.format(model.selectedDate);
+      headerList.add(TextCellValue(formattedDate));
+
+      var cell = sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: i + 2, rowIndex: 0));
+      cell.cellStyle = headerStyle;
+      cell.value = TextCellValue(formattedDate);
     }
-    sheet.appendRow(headerList);
   }
 
   void addStudentAttendanceDetailsToSheet(
@@ -141,13 +160,14 @@ class MediaServices with ChangeNotifier {
     try {
       var excel = Excel.createExcel();
       Sheet sheet = excel['Sheet1'];
+
       final studentList = await getStudentDetails(classId);
       final attendanceList = await getAttendanceDetails(classId);
-      if(attendanceList.isNotEmpty){
+      if (attendanceList.isNotEmpty) {
         addSheetHeader(sheet, attendanceList);
         addStudentAttendanceDetailsToSheet(sheet, studentList, attendanceList);
         await shareExcelFile(excel);
-      }else{
+      } else {
         Utils.toastMessage('No attendance records to export');
       }
       setLoading(false);

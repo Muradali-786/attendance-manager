@@ -116,10 +116,10 @@ class CustomAttendanceList2 extends StatelessWidget {
   final VoidCallback? onPressDelete;
   const CustomAttendanceList2(
       {super.key,
-        required this.title,
-        this.showDelete = false,
-        required this.onTap,
-        this.onPressDelete});
+      required this.title,
+      this.showDelete = false,
+      required this.onTap,
+      this.onPressDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +127,7 @@ class CustomAttendanceList2 extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 14, 10, 0),
+        padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
         child: Container(
           height: getProportionalHeight(47),
           width: double.infinity,
@@ -158,13 +158,15 @@ class CustomAttendanceList2 extends StatelessWidget {
                 ),
               ),
               SizedBox(width: SizeConfig.screenWidth! * 0.05),
-              Text(
-                title,
-
-                style: AppStyles().defaultStyle(getProportionalWidth(20),
-                    AppColor.kTextBlackColor, FontWeight.w400),
+              Expanded(
+                child: Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppStyles().defaultStyle(getProportionalWidth(18),
+                      AppColor.kTextBlackColor, FontWeight.w400),
+                ),
               ),
-              const Spacer(),
               if (showDelete)
                 IconButton(
                   onPressed: onPressDelete,
@@ -180,7 +182,6 @@ class CustomAttendanceList2 extends StatelessWidget {
     );
   }
 }
-
 
 class CustomAttendanceList3 extends StatelessWidget {
   final String dateTime, attendanceStatus;
