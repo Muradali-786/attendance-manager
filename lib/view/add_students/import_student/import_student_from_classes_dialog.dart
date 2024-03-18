@@ -28,7 +28,7 @@ Future<void> importStudentFromClassesDialog(
           children: [
             Container(
               width: double.infinity,
-              height: 50,
+              height: 40,
               decoration: const BoxDecoration(
                 color: AppColor.kSecondaryColor,
                 borderRadius: BorderRadius.only(
@@ -46,18 +46,20 @@ Future<void> importStudentFromClassesDialog(
                   Text(
                     'Import Students',
                     style: AppStyles().defaultStyle(
-                        24, AppColor.kTextWhiteColor, FontWeight.w400),
+                        22, AppColor.kTextWhiteColor, FontWeight.w400),
                   ),
                   const Spacer(),
-                  IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(
-                        Icons.cancel,
-                        color: AppColor.kWhite,
-                        size: 30,
-                      ))
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    child: const Icon(
+                      Icons.cancel,
+                      color: AppColor.kWhite,
+                      size: 28,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
                 ],
               ),
             ),
@@ -108,14 +110,14 @@ Future<void> importStudentFromClassesDialog(
                               ),
                               Padding(
                                 padding:
-                                    const EdgeInsets.fromLTRB(20, 0, 20, 12),
+                                    const EdgeInsets.fromLTRB(25, 0, 25, 12),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Expanded(
                                       child: CustomRoundButton(
                                           title: 'CLOSE',
-                                          height: 35,
+                                          height: 32,
                                           onPress: () {
                                             Navigator.pop(context);
                                           },
@@ -129,7 +131,7 @@ Future<void> importStudentFromClassesDialog(
                                         child: CustomRoundButton(
                                             title: 'IMPORT',
                                             loading: provider.loading,
-                                            height: 35,
+                                            height: 32,
                                             onPress: () {
                                               provider
                                                   .migrateStudentsToClass(

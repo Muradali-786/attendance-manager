@@ -23,7 +23,7 @@ Future<void> showImportDialog(
           children: [
             Container(
               width: double.infinity,
-              height: 45,
+              height: 40,
               decoration: const BoxDecoration(
                 color: AppColor.kSecondaryColor,
                 borderRadius: BorderRadius.only(
@@ -32,7 +32,8 @@ Future<void> showImportDialog(
                 ),
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+               mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Spacer(
                     flex: 2,
@@ -40,18 +41,20 @@ Future<void> showImportDialog(
                   Text(
                     'Import Students',
                     style: AppStyles().defaultStyle(
-                        23, AppColor.kTextWhiteColor, FontWeight.w400),
+                        22, AppColor.kTextWhiteColor, FontWeight.w400),
                   ),
                   const Spacer(),
-                  IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(
-                        Icons.cancel,
-                        color: AppColor.kWhite,
-                        size: 30,
-                      ))
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    child: const Icon(
+                      Icons.cancel,
+                      color: AppColor.kWhite,
+                      size: 28,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
                 ],
               ),
             ),

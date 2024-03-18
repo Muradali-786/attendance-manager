@@ -28,7 +28,7 @@ Future<void> addStudentDialog(BuildContext context, String classId) async {
           children: [
             Container(
               width: double.infinity,
-              height: 50,
+              height: 40,
               decoration: const BoxDecoration(
                 color: AppColor.kSecondaryColor,
                 borderRadius: BorderRadius.only(
@@ -46,18 +46,20 @@ Future<void> addStudentDialog(BuildContext context, String classId) async {
                   Text(
                     'Add Student',
                     style: AppStyles().defaultStyle(
-                        24, AppColor.kTextWhiteColor, FontWeight.w400),
+                        22, AppColor.kTextWhiteColor, FontWeight.w400),
                   ),
                   const Spacer(),
-                  IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(
-                        Icons.cancel,
-                        color: AppColor.kWhite,
-                        size: 30,
-                      ))
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    child: const Icon(
+                      Icons.cancel,
+                      color: AppColor.kWhite,
+                      size: 28,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
                 ],
               ),
             ),
@@ -105,7 +107,7 @@ Future<void> addStudentDialog(BuildContext context, String classId) async {
                       },
                       keyBoardType: TextInputType.text,
                     ),
-                    const SizedBox(height: 10),
+
                   ],
                 ),
               ),
@@ -118,7 +120,7 @@ Future<void> addStudentDialog(BuildContext context, String classId) async {
                   Expanded(
                     child: CustomRoundButton(
                         title: 'SAVE & CLOSE',
-                        height: 35,
+                        height: 32,
                         onPress: () {
                           if (_formKey.currentState!.validate()) {
                             Navigator.pop(context);
@@ -138,7 +140,7 @@ Future<void> addStudentDialog(BuildContext context, String classId) async {
                       child: CustomRoundButton(
                           title: 'ADD ANOTHER',
                           loading: provider.loading,
-                          height: 35,
+                          height: 32,
                           onPress: () {
                             if (_formKey.currentState!.validate()) {
                               StudentModel studentModel = StudentModel(

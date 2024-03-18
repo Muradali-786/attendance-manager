@@ -23,7 +23,7 @@ Future<void> importExcelSheetDialog(
           children: [
             Container(
               width: double.infinity,
-              height: 50,
+              height: 40,
               decoration: const BoxDecoration(
                 color: AppColor.kSecondaryColor,
                 borderRadius: BorderRadius.only(
@@ -44,15 +44,17 @@ Future<void> importExcelSheetDialog(
                         21, AppColor.kTextWhiteColor, FontWeight.w400),
                   ),
                   const Spacer(),
-                  IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(
-                        Icons.cancel,
-                        color: AppColor.kWhite,
-                        size: 30,
-                      ))
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    child: const Icon(
+                      Icons.cancel,
+                      color: AppColor.kWhite,
+                      size: 28,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
                 ],
               ),
             ),

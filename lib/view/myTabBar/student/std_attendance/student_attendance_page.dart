@@ -36,7 +36,6 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
     }
   }
 
-
   final StudentController _studentController = StudentController();
   List<String> stdIdList = [];
 
@@ -49,7 +48,6 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
     String currentTime = '$hour:$minute $period';
     String subjectId = widget.data['classId'].toString();
     DateTime selectedDate = widget.data['selectedDate'];
-
 
     return Scaffold(
       backgroundColor: AppColor.kBgColor,
@@ -99,6 +97,11 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
                     if (provider.attendanceStatus.length != snap.length) {
                       provider.attendanceStatusProvider(snap.length);
                     }
+                    if (stdIdList.length != snap.length) {
+                      for (var std in snap) {
+                        stdIdList.add(std.studentId!);
+                      }
+                    }
 
                     return Expanded(
                       child: ListView.builder(
@@ -136,7 +139,7 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
             title: 'SAVE ATTENDANCE',
             loading: provider.loading,
             onPress: () async {
-              if(stdIdList.isNotEmpty){
+              if (stdIdList.isNotEmpty) {
                 AttendanceModel attendanceModel = AttendanceModel(
                   classId: subjectId,
                   selectedDate: selectedDate,
@@ -152,10 +155,9 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
                     .then((value) {
                   Navigator.pop(context);
                 });
-              }else{
+              } else {
                 Utils.toastMessage('Please add students for attendance.');
               }
-
             },
             buttonColor: AppColor.kSecondaryColor,
           ),

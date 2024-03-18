@@ -36,7 +36,8 @@ Future<void> updateClassValueDialog(BuildContext context,ClassInputModel model) 
           children: [
             Container(
               width: double.infinity,
-              height: getProportionalHeight(50),
+              height: getProportionalHeight(40),
+              alignment: Alignment.center,
               decoration: const BoxDecoration(
                   color: AppColor.kSecondaryColor,
                   borderRadius: BorderRadius.only(
@@ -44,6 +45,8 @@ Future<void> updateClassValueDialog(BuildContext context,ClassInputModel model) 
                     topRight: Radius.circular(kBorderRadius15),
                   )),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Spacer(
                     flex: 2,
@@ -51,19 +54,21 @@ Future<void> updateClassValueDialog(BuildContext context,ClassInputModel model) 
                   Text(
                     'Edit Class',
                     style: AppStyles().defaultStyle(
-                        24, AppColor.kTextWhiteColor, FontWeight.w400),
+                        22, AppColor.kTextWhiteColor, FontWeight.w400),
                   ),
                   const Spacer(),
-                  IconButton(
-                    onPressed: () {
+                  GestureDetector(
+                    onTap: (){
                       Navigator.pop(context);
                     },
-                    icon: const Icon(
+                    child: const Icon(
                       Icons.cancel,
                       color: AppColor.kWhite,
-                      size: 30,
+                      size: 28,
                     ),
                   ),
+                  const SizedBox(width: 8),
+
                 ],
               ),
             ),
@@ -160,13 +165,13 @@ Future<void> updateClassValueDialog(BuildContext context,ClassInputModel model) 
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 22, 20, 12),
+              padding: const EdgeInsets.fromLTRB(30, 22, 30, 12),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Expanded(
                     child: CustomRoundButton(
-                        height: 38,
+                        height: 32,
                         title: 'CLOSE',
                         onPress: () {
                           Navigator.pop(context);
@@ -176,7 +181,7 @@ Future<void> updateClassValueDialog(BuildContext context,ClassInputModel model) 
                   const SizedBox(width: 5),
                   Expanded(
                     child: CustomRoundButton(
-                      height: 38,
+                      height: 32,
                       title: 'UPDATE',
                       onPress: () async {
 

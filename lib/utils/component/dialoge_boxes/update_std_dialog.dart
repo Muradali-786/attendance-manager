@@ -32,7 +32,7 @@ Future<void> updateStudentDialog(
           children: [
             Container(
               width: double.infinity,
-              height: 50,
+              height: 40,
               decoration: const BoxDecoration(
                 color: AppColor.kSecondaryColor,
                 borderRadius: BorderRadius.only(
@@ -50,18 +50,20 @@ Future<void> updateStudentDialog(
                   Text(
                     'Edit Student',
                     style: AppStyles().defaultStyle(
-                        24, AppColor.kTextWhiteColor, FontWeight.w400),
+                        22, AppColor.kTextWhiteColor, FontWeight.w400),
                   ),
                   const Spacer(),
-                  IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(
-                        Icons.cancel,
-                        color: AppColor.kWhite,
-                        size: 30,
-                      ))
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    child: const Icon(
+                      Icons.cancel,
+                      color: AppColor.kWhite,
+                      size: 28,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
                 ],
               ),
             ),
@@ -107,19 +109,18 @@ Future<void> updateStudentDialog(
                     },
                     keyBoardType: TextInputType.text,
                   ),
-                  const SizedBox(height: 10),
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 22, 20, 12),
+              padding: const EdgeInsets.fromLTRB(25, 22, 25, 12),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Expanded(
                     child: CustomRoundButton(
                         title: 'CLOSE',
-                        height: 35,
+                        height: 32,
                         onPress: () {
                           Navigator.pop(context);
                         },
@@ -129,7 +130,7 @@ Future<void> updateStudentDialog(
                   Expanded(
                     child: CustomRoundButton(
                       title: 'SAVE',
-                      height: 35,
+                      height: 32,
                       onPress: () async {
                         Navigator.pop(context);
                         StudentModel studentModel = StudentModel(
