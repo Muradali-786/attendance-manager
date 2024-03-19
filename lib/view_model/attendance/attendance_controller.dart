@@ -127,7 +127,7 @@ class AttendanceController extends ChangeNotifier {
 
   Future<int> getAttendanceCount(String classId) async {
     final attendanceCollection =
-        _fireStore.collection(CLASS).doc(classId).collection(ATTENDANCE);
+    _fireStore.collection(CLASS).doc(classId).collection(ATTENDANCE);
     final querySnapshot = await attendanceCollection.get();
 
     return querySnapshot.docs.length;
@@ -169,4 +169,3 @@ class AttendanceController extends ChangeNotifier {
     notifyListeners();
   }
 }
-

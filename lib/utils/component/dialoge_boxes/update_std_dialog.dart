@@ -13,6 +13,7 @@ Future<void> updateStudentDialog(
   String classId,
   StudentModel model,
 ) async {
+  final _formKey = GlobalKey<FormState>();
   TextEditingController stdNameController =
       TextEditingController(text: model.studentName);
   FocusNode stdNameFocus = FocusNode();
@@ -69,7 +70,9 @@ Future<void> updateStudentDialog(
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Column(
+              child: Form(
+                  key: _formKey,
+                  child: Column(
                 children: [
                   DialogInputTextField(
                     labelText: 'Student Name',
@@ -84,7 +87,7 @@ Future<void> updateStudentDialog(
                         return 'Please enter Student Name';
                       } else if (val.length < 3) {
                         return 'Student Name  at least 3 characters long';
-                      } else if (!RegExp(r'^[a-zA-Z0-9 ]+$').hasMatch(val)) {
+                      } else if (!RegExp(r'^[a-zA-Z0-9 -]+$').hasMatch(val)) {
                         return 'Student Name cannot contain special characters';
                       }
                       return null;
@@ -102,7 +105,7 @@ Future<void> updateStudentDialog(
                         return 'Please enter Roll No';
                       } else if (val.length < 2) {
                         return 'Roll No  at least 2 characters long';
-                      } else if (!RegExp(r'^[a-zA-Z0-9 ]+$').hasMatch(val)) {
+                      } else if (!RegExp(r'^[a-zA-Z0-9 -]+$').hasMatch(val)) {
                         return 'Roll No cannot contain special characters';
                       }
                       return null;
@@ -110,7 +113,7 @@ Future<void> updateStudentDialog(
                     keyBoardType: TextInputType.text,
                   ),
                 ],
-              ),
+              )),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(25, 22, 25, 12),
@@ -132,16 +135,19 @@ Future<void> updateStudentDialog(
                       title: 'SAVE',
                       height: 32,
                       onPress: () async {
-                        Navigator.pop(context);
-                        StudentModel studentModel = StudentModel(
-                          studentId: model.studentId,
-                          studentName: stdNameController.text,
-                          studentRollNo: rollNController.text,
-                        );
-                        await StudentController().updateStudentData(
-                          studentModel,
-                          classId,
-                        );
+                        if(_formKey.currentState!.validate()){
+                          Navigator.pop(context);
+                          StudentModel studentModel = StudentModel(
+                            studentId: model.studentId,
+                            studentName: stdNameController.text,
+                            studentRollNo: rollNController.text,
+                          );
+                          await StudentController().updateStudentData(
+                            studentModel,
+                            classId,
+                          );
+                        }
+
                       },
                       buttonColor: AppColor.kSecondaryColor,
                     ),

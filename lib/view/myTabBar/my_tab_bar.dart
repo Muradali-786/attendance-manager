@@ -48,24 +48,27 @@ class _MyTabBarState extends State<MyTabBar>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 27, top: 16),
+                    padding: const EdgeInsets.only(left: 22, top: 16),
                     child: Text(
                       "$subName ($batch-$depName)",
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: AppStyles().defaultStyle(
                           20, AppColor.kTextWhiteColor, FontWeight.bold),
                     ),
                   ),
                   SizedBox(
-                    height: SizeConfig.screenHeight! * 0.026,
+                    height: SizeConfig.screenHeight! * 0.015,
                   ),
                   TabBar(
-                      padding: const EdgeInsets.symmetric(horizontal: 14),
+                      padding: EdgeInsets.zero,
                       indicatorSize: TabBarIndicatorSize.tab,
                       indicatorColor: AppColor.kSecondaryColor,
                       controller: _tabController,
+
                       labelColor: AppColor.kTextWhiteColor,
                       labelStyle: AppStyles().defaultStyle(
-                          12, AppColor.kTextWhiteColor, FontWeight.bold),
+                          13, AppColor.kTextWhiteColor, FontWeight.w500),
                       unselectedLabelColor:
                           AppColor.kTextWhiteColor.withOpacity(0.8),
                       tabs: const [

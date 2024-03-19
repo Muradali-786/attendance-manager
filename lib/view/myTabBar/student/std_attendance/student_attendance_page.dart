@@ -139,6 +139,7 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
             title: 'SAVE ATTENDANCE',
             loading: provider.loading,
             onPress: () async {
+
               if (stdIdList.isNotEmpty) {
                 AttendanceModel attendanceModel = AttendanceModel(
                   classId: subjectId,

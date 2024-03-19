@@ -45,17 +45,23 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<SignUpController>(
-            create: (_) => SignUpController()),
+          create: (_) => SignUpController(),
+        ),
         ChangeNotifierProvider<LoginController>(
-            create: (_) => LoginController()),
+          create: (_) => LoginController(),
+        ),
         ChangeNotifierProvider<ClassController>(
-            create: (_) => ClassController()),
+          create: (_) => ClassController(),
+        ),
         ChangeNotifierProvider<AttendanceController>(
-            create: (_) => AttendanceController()),
+          create: (_) => AttendanceController(),
+        ),
         ChangeNotifierProvider<StudentController>(
-            create: (_) => StudentController()),
+          create: (_) => StudentController(),
+        ),
         ChangeNotifierProvider<MediaServices>(
-            create: (_) => MediaServices()),
+          create: (_) => MediaServices(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
