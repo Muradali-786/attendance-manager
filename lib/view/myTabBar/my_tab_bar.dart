@@ -32,6 +32,9 @@ class _MyTabBarState extends State<MyTabBar>
     String batch = widget.data['data']['batchName'];
     String depName = widget.data['data']['departmentName'];
     String subId = widget.data['data']['subjectId'];
+    int percentageReq = widget.data['data']['percentage'];
+
+
 
     SizeConfig().init(context);
     return Scaffold(
@@ -90,7 +93,7 @@ class _MyTabBarState extends State<MyTabBar>
                 controller: _tabController,
                 children: [
                   AttendanceTab(subjectId: subId),
-                  StudentTab(subjectId: subId),
+                  StudentTab(subjectId: subId,attendancePercentage: percentageReq,),
                   HistoryTab(subjectId: subId),
                 ],
               ),

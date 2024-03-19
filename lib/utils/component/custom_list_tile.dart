@@ -6,16 +6,18 @@ class CustomListTile extends StatelessWidget {
   final String title;
   final String subtitle;
   final String keyValue;
+  final Color percentageColor;
   final String trailingFirstText;
   final String trailingSecondText;
   final VoidCallback onPress;
   final VoidCallback onLongPress;
   final VoidCallback onDismiss;
 
-  const CustomListTile({
+   const CustomListTile({
     Key? key,
     required this.title,
     required this.keyValue,
+    this.percentageColor=AppColor.kPrimaryTextColor,
     required this.subtitle,
     required this.trailingFirstText,
     required this.trailingSecondText,
@@ -105,7 +107,7 @@ class CustomListTile extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: AppStyles().defaultStyle(
                           28,
-                          AppColor.kPrimaryTextColor,
+                          percentageColor,
                           FontWeight.w700,
                         ),
                       ),

@@ -1,12 +1,16 @@
 import 'package:attendance_manager/model/student_model.dart';
 import 'package:attendance_manager/utils/utils.dart';
+import 'package:attendance_manager/view_model/attendance/attendance_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../constant/app_style/app_styles.dart';
+import '../../model/attendance_model.dart';
+
 
 class StudentController with ChangeNotifier {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+  final AttendanceController _attendanceController = AttendanceController();
 
   bool _loading = false;
   get loading => _loading;
@@ -14,6 +18,66 @@ class StudentController with ChangeNotifier {
   setLoading(bool value) {
     _loading = value;
     notifyListeners();
+  }
+
+  Future<List<dynamic>> getAttendanceDetailsToCalculate(String classId) async {
+    dynamic attendanceSnapshot =
+        await _attendanceController.getAllStudentAttendanceToExport(classId);
+
+    final attendanceList = attendanceSnapshot.docs
+        .map((doc) => AttendanceModel.fromMap(doc.data()))
+        .toList();
+    return attendanceList;
+  }
+
+  Future<void> calculateStudentAttendance(
+    String classId,
+    List<dynamic> stdIdList,
+  ) async {
+    WriteBatch batch = _fireStore.batch();
+
+    try {
+      final attendanceList = await getAttendanceDetailsToCalculate(classId);
+
+      for (int i = 0; i < stdIdList.length; i++) {
+        int totalPresent = 0;
+        int totalAbsent = 0;
+        int totalLeaves = 0;
+        for (var attendance in attendanceList) {
+          AttendanceModel e = attendance;
+          if (e.attendanceList.containsKey(stdIdList[i])) {
+            if (e.attendanceList[stdIdList[i]] == 'P') {
+              totalPresent += 1;
+            } else if (e.attendanceList[stdIdList[i]] == 'L') {
+              totalLeaves += 1;
+            } else {
+              totalAbsent += 1;
+            }
+          } else {
+            continue;
+          }
+        }
+        int total = totalLeaves + totalPresent + totalAbsent;
+        int stdAttend = totalLeaves + totalPresent;
+        int percentage = ((stdAttend / total) * 100).toInt();
+
+        DocumentReference stdDocRef = _fireStore
+            .collection(CLASS)
+            .doc(classId)
+            .collection(STUDENT)
+            .doc(stdIdList[i]);
+
+        batch.update(stdDocRef, {
+          'totalAbsent': totalAbsent,
+          'totalLeaves': totalLeaves,
+          'totalPresent': totalPresent,
+          'attendancePercentage': percentage,
+        });
+      }
+      await batch.commit();
+    } catch (e) {
+      Utils.toastMessage('Student Details Update');
+    }
   }
 
   Future<void> migrateStudentsToClass(
@@ -193,11 +257,7 @@ class StudentController with ChangeNotifier {
   }
 
   Future<dynamic> getStudentDataToExport(String classId) {
-    return _fireStore
-        .collection(CLASS)
-        .doc(classId)
-        .collection(STUDENT)
-        .get();
+    return _fireStore.collection(CLASS).doc(classId).collection(STUDENT).get();
   }
 
   Stream<DocumentSnapshot> getSingleStudentData(String classId, String stdId) {

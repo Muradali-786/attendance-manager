@@ -17,7 +17,9 @@ import '../../../utils/component/custom_shimmer_effect.dart';
 
 class StudentTab extends StatefulWidget {
   final String subjectId;
-  const StudentTab({super.key, this.subjectId = ''});
+  final int attendancePercentage;
+  const StudentTab(
+      {super.key, this.subjectId = '', this.attendancePercentage = 0});
 
   @override
   State<StudentTab> createState() => _StudentTabState();
@@ -71,6 +73,10 @@ class _StudentTabState extends State<StudentTab> {
                         subtitle: snap[index].studentRollNo.toString(),
                         trailingFirstText:
                             "${snap[index].attendancePercentage.toString()}%",
+                        percentageColor: snap[index].attendancePercentage <
+                                widget.attendancePercentage
+                            ? AppColor.kSecondaryTextColor
+                            : AppColor.kPrimaryTextColor,
                         trailingSecondText: 'Attendance',
                         onPress: () {
                           Navigator.pushNamed(context, RouteName.studentProfile,
@@ -90,7 +96,6 @@ class _StudentTabState extends State<StudentTab> {
                           showDeleteStudentConfirmationDialog(
                               context, snap[index], widget.subjectId);
                           snap.removeAt(index);
-
                         },
                       );
                     },

@@ -139,7 +139,6 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
             title: 'SAVE ATTENDANCE',
             loading: provider.loading,
             onPress: () async {
-
               if (stdIdList.isNotEmpty) {
                 AttendanceModel attendanceModel = AttendanceModel(
                   classId: subjectId,
@@ -156,6 +155,11 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
                     .then((value) {
                   Navigator.pop(context);
                 });
+
+                await StudentController().calculateStudentAttendance(
+                  subjectId,
+                  stdIdList,
+                );
               } else {
                 Utils.toastMessage('Please add students for attendance.');
               }

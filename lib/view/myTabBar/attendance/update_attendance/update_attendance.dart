@@ -25,8 +25,8 @@ class UpdateAttendance extends StatefulWidget {
 }
 
 class _UpdateAttendanceState extends State<UpdateAttendance> {
-  List<String> studentStatusList = [];
-  List<String> studentIdList = [];
+ 
+  List<dynamic> studentIdList = [];
   bool isChange = false;
   TimeOfDay? selectedTime;
 
@@ -40,7 +40,7 @@ class _UpdateAttendanceState extends State<UpdateAttendance> {
     }
   }
 
-  List<String> stdIdsList = [];
+  List<dynamic> stdIdsList = [];
   final StudentController _studentController = StudentController();
 
   @override
@@ -51,6 +51,8 @@ class _UpdateAttendanceState extends State<UpdateAttendance> {
     String classId = widget.data['data']['classId'];
     String attendanceId = widget.data['data']['attendanceId'];
     Map attendanceStatus = widget.data['data']['attendanceList'];
+    stdIdsList=attendanceStatus.keys.toList();
+    
 
     String period =
         selectedTime != null && selectedTime!.hour < 12 ? 'AM' : 'PM';
@@ -164,6 +166,8 @@ class _UpdateAttendanceState extends State<UpdateAttendance> {
                   await provider.updateStudentAttendance(model).then((value) {
                     Navigator.pop(context);
                   });
+
+                  await _studentController.calculateStudentAttendance(classId, stdIdsList);
                 } else {
                   Utils.toastMessage('you did not Update any thing');
                 }

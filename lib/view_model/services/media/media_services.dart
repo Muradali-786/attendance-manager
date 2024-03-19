@@ -107,6 +107,32 @@ class MediaServices with ChangeNotifier {
           .cell(CellIndex.indexByColumnRow(columnIndex: i + 2, rowIndex: 0));
       cell.cellStyle = headerStyle;
       cell.value = TextCellValue(formattedDate);
+
+    }
+    if (headerList.length > attendanceList.length) {
+      var totalPresentCell = sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: attendanceList.length + 3, rowIndex: 0));
+      totalPresentCell.cellStyle = headerStyle;
+      totalPresentCell.value = const TextCellValue('Total Absent');
+      headerList.add(totalPresentCell.value!);
+
+      var totalLeavesCell = sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: attendanceList.length + 4, rowIndex: 0));
+      totalLeavesCell.cellStyle = headerStyle;
+      totalLeavesCell.value = const TextCellValue('Total Leaves');
+      headerList.add(totalLeavesCell.value!);
+
+      var totalAbsentCell = sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: attendanceList.length + 5, rowIndex: 0));
+      totalAbsentCell.cellStyle = headerStyle;
+      totalAbsentCell.value = const TextCellValue('Total Present');
+      headerList.add(totalAbsentCell.value!);
+
+      var totalPercentageCell = sheet
+          .cell(CellIndex.indexByColumnRow(columnIndex: attendanceList.length + 7, rowIndex: 0));
+      totalPercentageCell.cellStyle = headerStyle;
+      totalPercentageCell.value = const TextCellValue('Percentage');
+      headerList.add(totalPercentageCell.value!);
     }
   }
 
@@ -136,6 +162,20 @@ class MediaServices with ChangeNotifier {
                   columnIndex: j + 2, rowIndex: i + 1))
               .value = const TextCellValue('--');
         }
+        // write total leaves present and absent leaves,percentage
+        int columnIndex = attendanceList.length + 2;
+        sheet
+            .cell(CellIndex.indexByColumnRow(columnIndex: columnIndex+1, rowIndex: i + 1))
+            .value = TextCellValue(std.totalAbsent.toString());
+        sheet
+            .cell(CellIndex.indexByColumnRow(columnIndex: columnIndex+2, rowIndex: i + 1))
+            .value = TextCellValue(std.totalLeaves.toString());
+        sheet
+            .cell(CellIndex.indexByColumnRow(columnIndex: columnIndex+3, rowIndex: i + 1))
+            .value = TextCellValue(std.totalPresent.toString());
+        sheet
+            .cell(CellIndex.indexByColumnRow(columnIndex: columnIndex+5, rowIndex: i + 1))
+            .value = TextCellValue("${std.attendancePercentage.toString()}%");
       }
     }
   }
