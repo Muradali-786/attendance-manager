@@ -1,8 +1,10 @@
 import 'package:attendance_manager/constant/app_style/app_colors.dart';
+import 'package:attendance_manager/model/attendance_model.dart';
 import 'package:attendance_manager/model/class_model.dart';
 import 'package:attendance_manager/model/student_model.dart';
 import 'package:attendance_manager/utils/routes/route_name.dart';
 import 'package:attendance_manager/view_model/add_students/students_controller.dart';
+import 'package:attendance_manager/view_model/attendance/attendance_controller.dart';
 import 'package:attendance_manager/view_model/class_input/class_controller.dart';
 import 'package:flutter/material.dart';
 
@@ -76,4 +78,43 @@ Future<void> showDeleteStudentConfirmationDialog(
   );
 }
 
+Future<void> showDeleteAttendanceConfirmationDialog(
+    BuildContext context, AttendanceModel model, String subjectId) async {
+  return showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text("Delete"),
+        content: Text(
+            "Are you sure you want to delete the selected attendance(${model.currentTime})."),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              "CANCEL",
+              style: TextStyle(color: AppColor.kSecondaryColor),
+            ),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.of(context).pop();
+              await AttendanceController().deleteAttendanceRecord(
+                subjectId,
+                model.attendanceId!,
+              );
 
+              await AttendanceController().updateAttendanceCount(subjectId);
+
+              await StudentController().calculateStudentAttendance(
+                  subjectId, model.attendanceList.keys.toList());
+            },
+            child: const Text("DELETE",
+                style: TextStyle(color: AppColor.kSecondaryColor)),
+          ),
+        ],
+      );
+    },
+  );
+}

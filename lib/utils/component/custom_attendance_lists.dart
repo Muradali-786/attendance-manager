@@ -24,7 +24,7 @@ class CustomAttendanceList extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.only(left: 12, right: 17),
         width: double.infinity,
-        height: getProportionalHeight(88),
+        height: 80,
         decoration: BoxDecoration(
           color: AppColor.kWhite,
           borderRadius: BorderRadius.circular(2),

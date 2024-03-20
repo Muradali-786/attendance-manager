@@ -41,7 +41,8 @@ class _SignUpPageState extends State<SignUpPage> {
     confirmPassFocus.dispose();
     super.dispose();
   }
-
+  bool _isObscure=false;
+  bool _isConfirmObscure=false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,6 +109,12 @@ class _SignUpPageState extends State<SignUpPage> {
                                   context, passFocus, confirmPassFocus);
                             },
                             labelText: 'Password',
+                            isPasswordField: true,
+                            obsecureText: _isObscure,
+                            suffixWidget:  IconButton(
+                              icon: Icon(_isObscure ? Icons.visibility : Icons.visibility_off),
+                              onPressed: _togglePasswordVisibility,
+                            ),
                             onValidator: (value) {
                               if (value.isEmpty) {
                                 return 'Please enter your password';
@@ -123,11 +130,17 @@ class _SignUpPageState extends State<SignUpPage> {
                             focusNode: confirmPassFocus,
                             onFieldSubmittedValue: (val) {},
                             labelText: 'Confirm Password',
+                            isPasswordField: true,
+                            obsecureText: _isConfirmObscure,
+                            suffixWidget:  IconButton(
+                              icon: Icon(_isConfirmObscure  ? Icons.visibility : Icons.visibility_off),
+                              onPressed: _toggleConfirmPasswordVisibility,
+                            ),
                             onValidator: (value) {
                               if (value.isEmpty) {
                                 return 'Please confirm your password';
                               } else if (value !=
-                                  confirmPassController.value.text) {
+                                  pasController.value.text) {
                                 return 'Please enter same Password';
                               }
 
@@ -174,5 +187,17 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
           ),
         ));
+  }
+
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _isObscure = !_isObscure;
+    });
+  }
+  void _toggleConfirmPasswordVisibility() {
+    setState(() {
+      _isConfirmObscure = !_isConfirmObscure ;
+    });
   }
 }

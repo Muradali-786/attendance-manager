@@ -9,10 +9,10 @@ class SplashServices {
 
   void isLogin(BuildContext context) {
     if (_auth.currentUser != null) {
-      Timer(const Duration(seconds: 3),
+      Timer(const Duration(seconds: 1),
           () => Navigator.pushReplacementNamed(context, RouteName.homePage));
     } else {
-      Timer(const Duration(seconds: 3),
+      Timer(const Duration(seconds: 1),
           () => Navigator.pushReplacementNamed(context, RouteName.login));
     }
   }

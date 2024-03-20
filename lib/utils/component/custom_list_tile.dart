@@ -49,7 +49,7 @@ class CustomListTile extends StatelessWidget {
           onLongPress: onLongPress,
           onTap: onPress,
           child: Container(
-            height: 85,
+            height: 80,
             width: double.infinity,
             alignment: Alignment.center,
             padding: const EdgeInsets.only(left: 11),

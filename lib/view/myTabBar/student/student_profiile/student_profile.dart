@@ -49,11 +49,8 @@ class _StudentProfileState extends State<StudentProfile> {
                 studentId,
               ),
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                      child: CircularProgressIndicator(
-                    color: AppColor.kPrimaryColor,
-                  ));
+                if (snapshot.connectionState==ConnectionState.waiting) {
+                  return const StdProfileShimmerEffect();
                 } else if (snapshot.hasError) {
                   return const ErrorClass();
                 } else {

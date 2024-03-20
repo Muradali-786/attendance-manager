@@ -1,13 +1,14 @@
 import 'package:attendance_manager/constant/app_style/app_colors.dart';
 import 'package:attendance_manager/constant/constant_size.dart';
 import 'package:attendance_manager/size_config.dart';
+import 'package:attendance_manager/utils/component/dialoge_boxes/delete_confirmations.dart';
 import 'package:attendance_manager/utils/routes/route_name.dart';
-import 'package:attendance_manager/view_model/add_students/students_controller.dart';
 import 'package:attendance_manager/view_model/attendance/attendance_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../../../model/attendance_model.dart';
+
 import '../../../utils/component/common.dart';
 import '../../../utils/component/custom_attendance_lists.dart';
 import '../../../utils/component/custom_round_botton.dart';
@@ -27,8 +28,6 @@ class _AttendanceTabState extends State<AttendanceTab> {
   DateTime _selectedDay = DateTime.now();
 
   final AttendanceController _controller = AttendanceController();
-  final StudentController _studentController = StudentController();
-  List<String> stdIdList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +52,7 @@ class _AttendanceTabState extends State<AttendanceTab> {
             selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
             firstDay: DateTime(2015),
             lastDay: DateTime(2099),
+
             onDaySelected: _handleDaySelected,
             calendarFormat: _calendarFormat,
             startingDayOfWeek: StartingDayOfWeek.monday,
@@ -125,14 +125,9 @@ class _AttendanceTabState extends State<AttendanceTab> {
                           },
                           showDelete: true,
                           onPressDelete: () async {
-                            await _controller.deleteAttendanceRecord(
-                              widget.subjectId,
-                              snap[index].attendanceId!,
-                            );
-                            _studentController.calculateStudentAttendance(
-                                widget.subjectId,
-                                snap[index].attendanceList.keys.toList());
-                            _controller.updateAttendanceCount(widget.subjectId);
+
+                            showDeleteAttendanceConfirmationDialog(context, snap[index],widget.subjectId);
+
                           },
                         ),
                       );

@@ -31,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
 
     super.dispose();
   }
-
+  bool _isObscure=false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,6 +73,12 @@ class _LoginPageState extends State<LoginPage> {
                         focusNode: passFocus,
                         onFieldSubmittedValue: (val) {},
                         labelText: 'Password',
+                        isPasswordField: true,
+                          obsecureText: _isObscure,
+                          suffixWidget:  IconButton(
+                            icon: Icon(_isObscure ? Icons.visibility : Icons.visibility_off),
+                            onPressed: _togglePasswordVisibility,
+                          ),
                         onValidator: (value) {
                           if (value.isEmpty) {
                             return 'Please enter your password';
@@ -115,12 +121,18 @@ class _LoginPageState extends State<LoginPage> {
                 
                 TextButton(onPressed: (){
                   Navigator.pushNamed(context, RouteName.signUp);
-                }, child: Text('click to sign up '))
+                }, child: const Text('click to sign up '))
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _isObscure = !_isObscure;
+    });
   }
 }

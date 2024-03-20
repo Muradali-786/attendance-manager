@@ -13,7 +13,10 @@ class CustomInputTextField extends StatelessWidget {
   final bool obsecureText;
   final String labelText;
   final Color cursorColor;
-  final bool enable, autoFocus;
+  final Widget? suffixWidget;
+
+
+  final bool enable, autoFocus,isPasswordField;
   const CustomInputTextField({
     Key? key,
     this.cursorColor = AppColor.kSecondaryColor,
@@ -23,6 +26,8 @@ class CustomInputTextField extends StatelessWidget {
     required this.labelText,
     required this.onValidator,
     required this.keyBoardType,
+    this.isPasswordField=false,
+    this.suffixWidget,
     this.obsecureText = false,
     this.enable = true,
     this.autoFocus = true,
@@ -39,7 +44,9 @@ class CustomInputTextField extends StatelessWidget {
         validator: onValidator,
         keyboardType: keyBoardType,
         cursorColor: cursorColor,
+        obscureText: obsecureText,
         enabled: enable,
+        obscuringCharacter: 'x',
         onTapOutside: (event) => FocusScope.of(context).unfocus(),
         style: AppStyles().defaultStyle(
           16,
@@ -57,6 +64,10 @@ class CustomInputTextField extends StatelessWidget {
                 : AppColor.kTextGreyColor,
             FontWeight.w400,
           ),
+        suffixIcon: isPasswordField ? suffixWidget : null,
+        suffixIconColor: focusNode.hasFocus
+        ? AppColor.kPrimaryColor
+            : AppColor.kGrey,
           contentPadding: const EdgeInsets.all(18),
           border: OutlineInputBorder(
             borderSide: const BorderSide(
@@ -88,5 +99,4 @@ class CustomInputTextField extends StatelessWidget {
     );
   }
 }
-
 

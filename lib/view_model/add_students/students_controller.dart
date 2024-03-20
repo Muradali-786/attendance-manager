@@ -7,7 +7,6 @@ import 'package:flutter/widgets.dart';
 import '../../constant/app_style/app_styles.dart';
 import '../../model/attendance_model.dart';
 
-
 class StudentController with ChangeNotifier {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   final AttendanceController _attendanceController = AttendanceController();
@@ -39,41 +38,64 @@ class StudentController with ChangeNotifier {
     try {
       final attendanceList = await getAttendanceDetailsToCalculate(classId);
 
-      for (int i = 0; i < stdIdList.length; i++) {
-        int totalPresent = 0;
-        int totalAbsent = 0;
-        int totalLeaves = 0;
-        for (var attendance in attendanceList) {
-          AttendanceModel e = attendance;
-          if (e.attendanceList.containsKey(stdIdList[i])) {
-            if (e.attendanceList[stdIdList[i]] == 'P') {
-              totalPresent += 1;
-            } else if (e.attendanceList[stdIdList[i]] == 'L') {
-              totalLeaves += 1;
-            } else {
-              totalAbsent += 1;
-            }
-          } else {
-            continue;
-          }
+      if (attendanceList.isEmpty) {
+        for (int i = 0; i < stdIdList.length; i++) {
+          int totalPresent = 0;
+          int totalAbsent = 0;
+          int totalLeaves = 0;
+          int percentage = 0;
+
+          DocumentReference stdDocRef = _fireStore
+              .collection(CLASS)
+              .doc(classId)
+              .collection(STUDENT)
+              .doc(stdIdList[i]);
+
+          batch.update(stdDocRef, {
+            'totalAbsent': totalAbsent,
+            'totalLeaves': totalLeaves,
+            'totalPresent': totalPresent,
+            'attendancePercentage': percentage,
+          });
         }
-        int total = totalLeaves + totalPresent + totalAbsent;
-        int stdAttend = totalLeaves + totalPresent;
-        int percentage = ((stdAttend / total) * 100).toInt();
+      } else {
+        for (int i = 0; i < stdIdList.length; i++) {
+          int totalPresent = 0;
+          int totalAbsent = 0;
+          int totalLeaves = 0;
+          for (var attendance in attendanceList) {
+            AttendanceModel e = attendance;
+            if (e.attendanceList.containsKey(stdIdList[i])) {
+              if (e.attendanceList[stdIdList[i]] == 'P') {
+                totalPresent += 1;
+              } else if (e.attendanceList[stdIdList[i]] == 'L') {
+                totalLeaves += 1;
+              } else {
+                totalAbsent += 1;
+              }
+            } else {
+              continue;
+            }
+          }
+          int total = totalLeaves + totalPresent + totalAbsent;
+          int stdAttend = totalLeaves + totalPresent;
+          int percentage = ((stdAttend / total) * 100).toInt();
 
-        DocumentReference stdDocRef = _fireStore
-            .collection(CLASS)
-            .doc(classId)
-            .collection(STUDENT)
-            .doc(stdIdList[i]);
+          DocumentReference stdDocRef = _fireStore
+              .collection(CLASS)
+              .doc(classId)
+              .collection(STUDENT)
+              .doc(stdIdList[i]);
 
-        batch.update(stdDocRef, {
-          'totalAbsent': totalAbsent,
-          'totalLeaves': totalLeaves,
-          'totalPresent': totalPresent,
-          'attendancePercentage': percentage,
-        });
+          batch.update(stdDocRef, {
+            'totalAbsent': totalAbsent,
+            'totalLeaves': totalLeaves,
+            'totalPresent': totalPresent,
+            'attendancePercentage': percentage,
+          });
+        }
       }
+
       await batch.commit();
     } catch (e) {
       Utils.toastMessage('Student Details Update');

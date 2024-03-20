@@ -107,6 +107,13 @@ class AttendanceController extends ChangeNotifier {
         .collection(ATTENDANCE).orderBy('selectedDate',descending: false)
         .snapshots();
   }
+  Stream<QuerySnapshot> getAllStudentAttendanceBySelectedDate(String subjectId,DateTime date) {
+    return _fireStore
+        .collection(CLASS)
+        .doc(subjectId)
+        .collection(ATTENDANCE).where('electedDate',isEqualTo:date)
+        .snapshots();
+  }
 
   Future<QuerySnapshot> getAllStudentAttendanceToExport(String subjectId) {
     return _fireStore

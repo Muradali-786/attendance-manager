@@ -1,6 +1,5 @@
 import 'package:attendance_manager/size_config.dart';
 import 'package:flutter/material.dart';
-
 import '../../constant/app_style/app_colors.dart';
 import '../../constant/app_style/app_styles.dart';
 import '../../model/student_model.dart';
@@ -20,7 +19,7 @@ class StdProfile extends StatelessWidget {
         Container(
           width: double.infinity,
           height:
-          SizeConfig.screenHeight! * 0.26 - SizeConfig.screenHeight! * 0.06,
+              SizeConfig.screenHeight! * 0.26 - SizeConfig.screenHeight! * 0.06,
           decoration: const BoxDecoration(
             color: AppColor.kPrimaryColor,
           ),
@@ -95,3 +94,5 @@ class StdProfile extends StatelessWidget {
     );
   }
 }
+
+
