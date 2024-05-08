@@ -12,7 +12,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../utils/component/common.dart';
 import '../../utils/component/custom_shimmer_effect.dart';
-
+import '../../utils/component/user_profile_drawer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -24,13 +24,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final LoginController _loginController = LoginController();
   final ClassController _classController = ClassController();
-  final StudentController _studentController=StudentController();
-
-
+  final StudentController _studentController = StudentController();
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColor.kBgColor,
@@ -43,15 +40,9 @@ class _HomePageState extends State<HomePage> {
             FontWeight.w600,
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: () async {
-              await _loginController.logOutAsTeacher();
-            },
-            icon: const Icon(Icons.logout),
-          )
-        ],
+
       ),
+      drawer: const UserProfile(),
       body: SafeArea(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -117,8 +108,6 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           Navigator.pushNamed(context, RouteName.classInputPage);
-
-
         },
         backgroundColor: AppColor.kButtonColor,
         elevation: 4,
@@ -129,241 +118,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
-
 }
 
-// class ImportExportStudentInfo {
-//
-//   void exportINExcel(BuildContext MainContext) async {
-//
-//
-//
-//       // _excelFileNameController.text = 'StudentInfo';
-//       // checkValueForGroupName = '.xlsx';
-//
-//       showDialog(
-//           context: MainContext,
-//           builder: (context) {
-//             return StatefulBuilder(
-//               builder: (context, state) => Padding(
-//                 padding: const EdgeInsets.all(16.0),
-//                 child: Center(
-//                   child: SizedBox(
-//                     height: 350,
-//                     width: MediaQuery.of(context).size.width,
-//                     child: Material(
-//                       child: Padding(
-//                         padding: const EdgeInsets.all(8.0),
-//                         child: Column(
-//                           mainAxisAlignment: MainAxisAlignment.center,
-//                           children: [
-//
-//                             Padding(
-//                               padding: const EdgeInsets.all(8.0),
-//                               child: Row(
-//                                 mainAxisAlignment:
-//                                 MainAxisAlignment.spaceBetween,
-//                                 children: [
-//                                   Column(
-//                                     children: [
-//
-//                             Align(
-//                                 alignment: Alignment.topLeft,
-//                                 child: Column(
-//                                   crossAxisAlignment: CrossAxisAlignment.start,
-//                                   children: [
-//                                     TextButton(
-//                                         onPressed: () async {
-//                                           var excel = Excel.createExcel();
-//                                           List<List> allDataInRow = [];
-//
-//
-//
-//                                           if (dataOFAllStudent.isNotEmpty) {
-//                                             Map allCOlName =
-//                                             dataOFAllStudent[0];
-//
-//                                             List<String> data =
-//                                             allCOlName.keys as List<String>;
-//                                             allDataInRow.add(data);
-//                                             for (int i = 0;
-//                                             i < dataOFAllStudent.length;
-//                                             i++) {
-//                                               List<String> singleValue = [];
-//                                               Map allCOlvalue =
-//                                               dataOFAllStudent[i];
-//
-//                                               allCOlvalue.values
-//                                                   .forEach((element) {
-//                                                 singleValue
-//                                                     .add(element.toString());
-//                                               });
-//
-//                                               allDataInRow.add(singleValue);
-//                                             }
-//                                             Sheet sheetObject = excel["Sheet1"];
-//                                             for (int i = 0;
-//                                             i < allDataInRow.length;
-//                                             i++) {
-//                                               // sheetObject
-//                                               //     .appendRow(allDataInRow[i]);
-//                                             }
-//                                             String? selectedDirectory =
-//                                             await FilePicker.platform
-//                                                 .getDirectoryPath();
-//                                             final path =
-//                                                 "$selectedDirectory/${_excelFileNameController.text.toString().trim()}$checkValueForGroupName";
-//
-//                                             final File file = File(path);
-//
-//                                             var list = excel.encode();
-//                                             file
-//                                               ..createSync(recursive: true)
-//                                               ..writeAsBytesSync(list!);
-//
-//                                             Navigator.pop(context);
-//                                           } else {
-//                                             ScaffoldMessenger.of(MainContext)
-//                                                 .showSnackBar(SnackBar(
-//                                               content:
-//                                               Text('NO Data available'),
-//                                               backgroundColor: Colors.red,
-//                                             ));
-//                                           }
-//                                         },
-//                                         child: Text('Export All Student')),
-//                                     TextButton(
-//                                         onPressed: () async {
-//                                           var excel = Excel.createExcel();
-//                                           List<List> allDataInRow = [];
-//                                           List dataOFAllStudent =
-//                                           await _schoolSQL
-//                                               .dataForAllPresentStudent();
-//
-//                                           if (dataOFAllStudent.isNotEmpty) {
-//                                             Map allCOlName =
-//                                             dataOFAllStudent[0];
-//
-//                                             List<String> data =
-//                                             allCOlName.keys as List<String>;
-//                                             allDataInRow.add(data);
-//                                             for (int i = 0;
-//                                             i < dataOFAllStudent.length;
-//                                             i++) {
-//                                               List<String> singleValue = [];
-//                                               Map allCOlvalue =
-//                                               dataOFAllStudent[i];
-//
-//                                               allCOlvalue.values
-//                                                   .forEach((element) {
-//                                                 singleValue
-//                                                     .add(element.toString());
-//                                               });
-//
-//                                               allDataInRow.add(singleValue);
-//                                             }
-//                                             Sheet sheetObject = excel["Sheet1"];
-//                                             for (int i = 0;
-//                                             i < allDataInRow.length;
-//                                             i++) {
-//                                               // sheetObject
-//                                               //     .appendRow(allDataInRow[i]);
-//                                             }
-//                                             String? selectedDirectory =
-//                                             await FilePicker.platform
-//                                                 .getDirectoryPath();
-//                                             final path =
-//                                                 "$selectedDirectory/${_excelFileNameController.text.toString().trim()}$checkValueForGroupName";
-//
-//                                             final File file = File(path);
-//
-//                                             var list = excel.encode();
-//                                             file
-//                                               ..createSync(recursive: true)
-//                                               ..writeAsBytesSync(list!);
-//
-//                                             Navigator.pop(context);
-//                                           } else {
-//                                             ScaffoldMessenger.of(MainContext)
-//                                                 .showSnackBar(SnackBar(
-//                                               content:
-//                                               Text('NO Data available'),
-//                                               backgroundColor: Colors.red,
-//                                             ));
-//                                           }
-//                                         },
-//                                         child: Text('Export Present Student')),
-//                                     TextButton(
-//                                         onPressed: () async {
-//                                           var excel = Excel.createExcel();
-//                                           List<List> allDataInRow = [];
-//                                           List dataOFAllStudent = await _schoolSQL
-//                                               .dataForAllStudentClosedAdmission();
-//
-//                                           if (dataOFAllStudent.isNotEmpty) {
-//                                             Map allCOlName =
-//                                             dataOFAllStudent[0];
-//
-//                                             List<String> data =
-//                                             allCOlName.keys as List<String>;
-//                                             allDataInRow.add(data);
-//                                             for (int i = 0;
-//                                             i < dataOFAllStudent.length;
-//                                             i++) {
-//                                               List<String> singleValue = [];
-//                                               Map allCOlvalue =
-//                                               dataOFAllStudent[i];
-//
-//                                               allCOlvalue.values
-//                                                   .forEach((element) {
-//                                                 singleValue
-//                                                     .add(element.toString());
-//                                               });
-//
-//                                               allDataInRow.add(singleValue);
-//                                             }
-//                                             Sheet sheetObject = excel["Sheet1"];
-//                                             for (int i = 0;
-//                                             i < allDataInRow.length;
-//                                             i++) {
-//                                               // sheetObject
-//                                               //     .appendRow(allDataInRow[i]);
-//                                             }
-//                                             String? selectedDirectory =
-//                                             await FilePicker.platform
-//                                                 .getDirectoryPath();
-//                                             final path =
-//                                                 "$selectedDirectory/${_excelFileNameController.text.toString().trim()}$checkValueForGroupName";
-//
-//                                             final File file = File(path);
-//
-//                                             var list = excel.encode();
-//                                             file
-//                                               ..createSync(recursive: true)
-//                                               ..writeAsBytesSync(list!);
-//
-//                                             Navigator.pop(context);
-//                                           } else {
-//                                             ScaffoldMessenger.of(MainContext)
-//                                                 .showSnackBar(SnackBar(
-//                                               content:
-//                                               Text('NO Data available'),
-//                                               backgroundColor: Colors.red,
-//                                             ));
-//                                           }
-//                                         },
-//                                         child: Text('Export Closed Student')),
-//                                   ],
-//                                 ))
-//                           ],
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//             );
-//           });
-//     }
-//   }
+
