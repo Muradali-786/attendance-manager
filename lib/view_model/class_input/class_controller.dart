@@ -34,8 +34,7 @@ class ClassController with ChangeNotifier {
           .then(
         (value) {
           setLoading(false);
-          updateSubjectCount();
-          updateCreditHourCount();
+          updateCreditAndSubjectCount();
           _navigationService.removeAndNavigateToRoute(RouteName.addStudentPage,
               id: docId);
         },
@@ -76,72 +75,58 @@ class ClassController with ChangeNotifier {
         .snapshots();
   }
 
-  Future<int> getSubjectCountByTeacherId(String teacherId) async {
-    final subjectsCollection = fireStore.collection(CLASS);
-    final querySnapshot =
-        await subjectsCollection.where("teacherId", isEqualTo: teacherId).get();
-    if (querySnapshot.docs.isNotEmpty) {
-      return querySnapshot.size;
-    } else {
-      return 0;
-    }
-  }
 
-  Future<int> getTotalCreditHours(String teacherId) async {
+
+  Future<List<int>> getCreditAndSubjectCount(String teacherId) async {
+
     int creditHour = 0;
+    int courseLoad = 0;
     final subjectsCollection = fireStore.collection(CLASS);
+
     final querySnapshot =
-        await subjectsCollection.where("teacherId", isEqualTo: teacherId).get();
-    final subjectList = querySnapshot.docs
-        .map((doc) => ClassInputModel.fromMap(doc.data()))
-        .toList();
+    await subjectsCollection.where("teacherId", isEqualTo: teacherId).get();
 
-    subjectList.forEach((doc) {
-      int c = int.parse(doc.creditHour);
-      creditHour += c;
-    });
 
-    return creditHour;
+    if(querySnapshot.docs.isNotEmpty){
+      final subjectList = querySnapshot.docs
+          .map((doc) => ClassInputModel.fromMap(doc.data()))
+          .toList();
+
+      courseLoad = subjectList.length;
+
+      subjectList.forEach((doc) {
+        int c = int.parse(doc.creditHour);
+        creditHour += c;
+      });
+    }
+
+
+    return [creditHour, courseLoad];
   }
 
-  Future<void> updateCreditHourCount() async {
+  Future<void> updateCreditAndSubjectCount() async {
     String teacherId = _auth.currentUser!.uid;
 
     try {
-      final Future<int> creditHourCountFuture = getTotalCreditHours(teacherId);
-      final int creditCount = await creditHourCountFuture;
+      final List<int> counts = await getCreditAndSubjectCount(teacherId);
+      final int creditCount = counts[0];
+      final int courseLoad = counts[1];
 
       await fireStore
           .collection(TEACHER)
           .doc(teacherId)
-          .update({'totalCreditHour': creditCount.toString()});
+          .update({'totalCreditHour': creditCount.toString(), 'courseLoad': courseLoad.toString()});
+      print('success');
     } catch (e) {
       print('Error while updating credit hour Count');
     }
   }
 
-  Future<void> updateSubjectCount() async {
-    String teacherId = _auth.currentUser!.uid;
-
-    try {
-      final Future<int> subjectCountFuture =
-          getSubjectCountByTeacherId(teacherId);
-      final int subjectCount = await subjectCountFuture;
-
-      await fireStore
-          .collection(TEACHER)
-          .doc(teacherId)
-          .update({'courseLoad': subjectCount.toString()});
-    } catch (e) {
-      print('Error while updating subject Count');
-    }
-  }
 
   Future<void> deleteClass(String classId) async {
     try {
       await fireStore.collection(CLASS).doc(classId).delete().then((value) {
-        updateSubjectCount();
-        updateCreditHourCount();
+        updateCreditAndSubjectCount();
       });
 
       Utils.toastMessage('Class deleted successfully');
