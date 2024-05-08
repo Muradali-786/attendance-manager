@@ -35,6 +35,7 @@ class DialogInputTextField extends StatelessWidget {
       controller: myController,
       focusNode: focusNode,
       onFieldSubmitted: onFieldSubmittedValue,
+      textCapitalization: TextCapitalization.sentences,
       validator: onValidator,
       keyboardType: keyBoardType,
       cursorColor: cursorColor,

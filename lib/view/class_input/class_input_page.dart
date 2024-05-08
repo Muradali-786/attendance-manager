@@ -29,6 +29,8 @@ class _ClassInputPageState extends State<ClassInputPage> {
   FocusNode departmentFocus = FocusNode();
   TextEditingController percentageController = TextEditingController();
   FocusNode percentageFocus = FocusNode();
+  TextEditingController cHourController = TextEditingController();
+  FocusNode cHourFocus = FocusNode();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   @override
@@ -41,6 +43,8 @@ class _ClassInputPageState extends State<ClassInputPage> {
     departmentFocus.dispose();
     percentageController.dispose();
     percentageFocus.dispose();
+    cHourController.dispose();
+    cHourFocus.dispose();
     super.dispose();
   }
 
@@ -112,7 +116,7 @@ class _ClassInputPageState extends State<ClassInputPage> {
                           focusNode: batchFocus,
                           onFieldSubmittedValue: (val) {
                             Utils.onFocusChange(
-                                context, batchFocus, percentageFocus);
+                                context, batchFocus, cHourFocus);
                           },
                           labelText: 'Semester/Batch',
                           onValidator: (val) {
@@ -128,6 +132,23 @@ class _ClassInputPageState extends State<ClassInputPage> {
                             return null;
                           },
                           keyBoardType: TextInputType.streetAddress),
+                      CustomInputTextField(
+                          myController: cHourController,
+                          focusNode: cHourFocus,
+                          onFieldSubmittedValue: (val) {
+                            Utils.onFocusChange(
+                                context,cHourFocus,percentageFocus);
+                          },
+                          labelText: 'Credit Hour',
+                          onValidator: (val) {
+                            if (val.isEmpty) {
+                              return 'Please enter a credit Hour';
+                            } else if (val.length != 1 || !(val == '2' || val == '3' || val == '4')) {
+                              return 'Please Enter 2, 3, or 4';
+                            }
+                            return null;
+                          },
+                          keyBoardType: TextInputType.number),
                       CustomInputTextField(
                           myController: percentageController,
                           focusNode: percentageFocus,
@@ -168,6 +189,7 @@ class _ClassInputPageState extends State<ClassInputPage> {
                   departmentName: departmentController.text,
                   teacherId: teacherId,
                   batchName: batchController.text,
+                  creditHour: cHourController.text,
                   percentage: int.tryParse(percentageController.text),
                 );
                 provider.createNewClass(classInputModel).then(
@@ -175,6 +197,7 @@ class _ClassInputPageState extends State<ClassInputPage> {
                     subjectController.clear();
                     batchController.clear();
                     departmentController.clear();
+                    cHourController.clear();
                     batchController.clear();
                   },
                 );

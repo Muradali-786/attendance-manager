@@ -45,7 +45,9 @@ class CustomInputTextField extends StatelessWidget {
         keyboardType: keyBoardType,
         cursorColor: cursorColor,
         obscureText: obsecureText,
+        textCapitalization: TextCapitalization.sentences,
         enabled: enable,
+
         obscuringCharacter: 'x',
         onTapOutside: (event) => FocusScope.of(context).unfocus(),
         style: AppStyles().defaultStyle(

@@ -1,4 +1,5 @@
 import 'package:attendance_manager/model/sign_up_model.dart';
+import 'package:attendance_manager/view_model/class_input/class_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,11 +7,10 @@ import 'package:flutter/material.dart';
 import '../../constant/app_style/app_styles.dart';
 import '../../utils/utils.dart';
 
-
-
 class SignUpController with ChangeNotifier {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
+
 
   bool _loading = false;
   get loading => _loading;
@@ -40,6 +40,12 @@ class SignUpController with ChangeNotifier {
     }
   }
 
+  Future<QuerySnapshot> getTeacherData() {
+    return fireStore.collection(TEACHER).get();
+  }
+
+
+
   Future<void> saveTeacherData(SignUpModel signUpModel) async {
     try {
       await fireStore
@@ -53,4 +59,6 @@ class SignUpController with ChangeNotifier {
       print('error while storing  teacher data ');
     }
   }
+
+
 }

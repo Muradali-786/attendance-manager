@@ -194,6 +194,7 @@ Future<void> updateClassValueDialog(BuildContext context,ClassInputModel model) 
                             totalClasses: model.totalClasses,
                             departmentName: departmentController.text,
                             batchName: batchController.text,
+                            creditHour: model.creditHour.toString(),
                             percentage:
                             int.tryParse(attendancePercentageController.text),
                           );
