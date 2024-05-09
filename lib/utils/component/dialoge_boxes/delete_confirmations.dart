@@ -6,6 +6,7 @@ import 'package:attendance_manager/utils/routes/route_name.dart';
 import 'package:attendance_manager/view_model/add_students/students_controller.dart';
 import 'package:attendance_manager/view_model/attendance/attendance_controller.dart';
 import 'package:attendance_manager/view_model/class_input/class_controller.dart';
+import 'package:attendance_manager/view_model/login/login_controller.dart';
 import 'package:flutter/material.dart';
 
 Future<void> showDeleteClassConfirmationDialog(
@@ -111,6 +112,37 @@ Future<void> showDeleteAttendanceConfirmationDialog(
                   subjectId, model.attendanceList.keys.toList());
             },
             child: const Text("DELETE",
+                style: TextStyle(color: AppColor.kSecondaryColor)),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future<void> showLogOutConfirmationDialog(BuildContext context) async {
+  return showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text("Log Out"),
+        content: const Text("Are you sure you want to log out?"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              "CANCEL",
+              style: TextStyle(color: AppColor.kSecondaryColor),
+            ),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.of(context).pop();
+              await LoginController().logOutAsTeacher();
+            },
+            child: const Text("LOG-OUT",
                 style: TextStyle(color: AppColor.kSecondaryColor)),
           ),
         ],

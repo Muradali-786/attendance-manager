@@ -59,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                           onValidator: (value) {
                             final RegExp emailRegExp =
                                 RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-                            if (value.isEmpty) {
+                            if (value.trim().isEmpty) {
                               return 'Please enter your email';
                             } else if (!emailRegExp.hasMatch(value)) {
                               return 'Please enter a valid email address';
@@ -80,9 +80,9 @@ class _LoginPageState extends State<LoginPage> {
                             onPressed: _togglePasswordVisibility,
                           ),
                         onValidator: (value) {
-                          if (value.isEmpty) {
+                          if (value.trim().isEmpty) {
                             return 'Please enter your password';
-                          } else if (value.length < 6) {
+                          } else if (value.trim().length < 6) {
                             return 'Password must be at least 6 characters long';
                           }
                           return null;
@@ -103,8 +103,8 @@ class _LoginPageState extends State<LoginPage> {
                       onPress: () async {
                         if (_loginFormKey.currentState!.validate()) {
                           await provider.loginAsTeacher(
-                            emailController.text,
-                            pasController.text,
+                            emailController.text.trim(),
+                            pasController.text.trim(),
                           ).then((value) {
                             emailController.clear();
                             pasController.clear();

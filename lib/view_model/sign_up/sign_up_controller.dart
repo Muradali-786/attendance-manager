@@ -43,6 +43,15 @@ class SignUpController with ChangeNotifier {
   Future<QuerySnapshot> getTeacherData() {
     return fireStore.collection(TEACHER).get();
   }
+  Future<void> updateTeacherProfile(String teacherId,String name) {
+    return fireStore.collection(TEACHER).doc(teacherId).update({
+      'name':name,
+    }).then((value) {
+      Utils.toastMessage('Profile Updated');
+    }).onError((error, stackTrace) {
+      Utils.toastMessage('Error While updating Profile');
+    });
+  }
 
 
 

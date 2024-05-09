@@ -78,9 +78,9 @@ Future<void> addStudentDialog(BuildContext context, String classId) async {
                       },
                       hint: 'Student Name',
                       onValidator: (val) {
-                        if (val.isEmpty) {
+                        if (val.trim().isEmpty) {
                           return 'Please enter Student Name';
-                        } else if (val.length < 3) {
+                        } else if (val.trim().length < 3) {
                           return 'Student Name  at least 3 characters long';
                         } else if (!RegExp(r'^[a-zA-Z0-9 ]+$').hasMatch(val)) {
                           return 'Student Name cannot contain special characters';
@@ -96,9 +96,9 @@ Future<void> addStudentDialog(BuildContext context, String classId) async {
                       onFieldSubmittedValue: (val) {},
                       hint: 'Roll Number / Registration#',
                       onValidator: (val) {
-                        if (val.isEmpty) {
+                        if (val.trim().isEmpty) {
                           return 'Please enter student Roll No';
-                        } else if (val.length < 2) {
+                        } else if (val.trim().length < 2) {
                           return 'Roll No  at least 2 characters long';
                         } else if (!RegExp(r'^[a-zA-Z0-9 ]+$').hasMatch(val)) {
                           return 'Roll No cannot contain special characters';
@@ -125,8 +125,8 @@ Future<void> addStudentDialog(BuildContext context, String classId) async {
                           if (_formKey.currentState!.validate()) {
                             Navigator.pop(context);
                             StudentModel studentModel = StudentModel(
-                                studentName: stdNameController.text,
-                                studentRollNo: rollNController.text.toString());
+                                studentName: stdNameController.text.trim(),
+                                studentRollNo: rollNController.text.trim().toString());
 
                             StudentController()
                                 .addNewStudent(studentModel, classId);
@@ -144,9 +144,9 @@ Future<void> addStudentDialog(BuildContext context, String classId) async {
                           onPress: () {
                             if (_formKey.currentState!.validate()) {
                               StudentModel studentModel = StudentModel(
-                                  studentName: stdNameController.text,
+                                  studentName: stdNameController.text.trim(),
                                   studentRollNo:
-                                      rollNController.text.toString());
+                                      rollNController.text.trim().toString());
 
                               provider
                                   .addNewStudent(studentModel, classId)

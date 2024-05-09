@@ -9,7 +9,8 @@ import 'package:attendance_manager/utils/utils.dart';
 import 'package:attendance_manager/view_model/class_input/class_controller.dart';
 import 'package:flutter/material.dart';
 
-Future<void> updateClassValueDialog(BuildContext context,ClassInputModel model) async {
+Future<void> updateClassValueDialog(
+    BuildContext context, ClassInputModel model) async {
   final formKey = GlobalKey<FormState>();
   TextEditingController subjectController =
       TextEditingController(text: model.subjectName);
@@ -39,11 +40,12 @@ Future<void> updateClassValueDialog(BuildContext context,ClassInputModel model) 
               height: getProportionalHeight(40),
               alignment: Alignment.center,
               decoration: const BoxDecoration(
-                  color: AppColor.kSecondaryColor,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(kBorderRadius15),
-                    topRight: Radius.circular(kBorderRadius15),
-                  )),
+                color: AppColor.kSecondaryColor,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(kBorderRadius15),
+                  topRight: Radius.circular(kBorderRadius15),
+                ),
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -58,7 +60,7 @@ Future<void> updateClassValueDialog(BuildContext context,ClassInputModel model) 
                   ),
                   const Spacer(),
                   GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       Navigator.pop(context);
                     },
                     child: const Icon(
@@ -68,7 +70,6 @@ Future<void> updateClassValueDialog(BuildContext context,ClassInputModel model) 
                     ),
                   ),
                   const SizedBox(width: 8),
-
                 ],
               ),
             ),
@@ -78,89 +79,94 @@ Future<void> updateClassValueDialog(BuildContext context,ClassInputModel model) 
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                 Form(
-                     key: formKey,
-                     child: Column(children: [
-                   DialogInputTextField(
-                       labelText: 'Subject',
-                       myController: subjectController,
-                       focusNode: subjectFocus,
-                       onFieldSubmittedValue: (val) {
-                         Utils.onFocusChange(
-                             context, subjectFocus, departmentFocus);
-                       },
-                       hint: 'Subject',
-                       onValidator: (val) {
-                         if (val.isEmpty) {
-                           return 'Please enter a subject';
-                         } else if (val.length < 3) {
-                           return 'Subject cannot contain special characters';
-                         } else if (!RegExp(r'^[a-zA-Z0-9 ]+$').hasMatch(val)) {
-                           return 'Subject cannot contain special characters';
-                         }
-                         return null;
-                       },
-                       keyBoardType: TextInputType.text),
-                   DialogInputTextField(
-                       labelText: 'Department',
-                       myController: departmentController,
-                       focusNode: departmentFocus,
-                       onFieldSubmittedValue: (val) {
-                         Utils.onFocusChange(
-                             context, departmentFocus, batchFocus);
-                       },
-                       hint: 'Department',
-                       onValidator: (val) {
-                         if (val.isEmpty) {
-                           return 'Please enter a department';
-                         } else if (val.length < 2) {
-                           return 'Subject must be at least 2 characters long';
-                         } else if (!RegExp(r'^[a-zA-Z0-9 ]+$').hasMatch(val)) {
-                           return 'Department cannot contain special characters';
-                         }
-                         return null;
-                       },
-                       keyBoardType: TextInputType.text),
-                   DialogInputTextField(
-                       labelText: 'Standard/Batch',
-                       myController: batchController,
-                       focusNode: batchFocus,
-                       onFieldSubmittedValue: (val) {
-                         Utils.onFocusChange(
-                             context, batchFocus, attendanceFocus);
-                       },
-                       hint: 'Standard/Batch',
-                       onValidator: (val) {
-                         if (val.isEmpty) {
-                           return 'Please enter a Semester/Batch';
-                         } else if (val.length < 4) {
-                           return 'Semester/Batch must be at least 4 characters long';
-                         } else if (!RegExp(r'^[a-zA-Z0-9 ]+$').hasMatch(val)) {
-                           return 'Semester/Batch cannot contain special characters';
-                         }
+                  Form(
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          DialogInputTextField(
+                              labelText: 'Subject',
+                              myController: subjectController,
+                              focusNode: subjectFocus,
+                              onFieldSubmittedValue: (val) {
+                                Utils.onFocusChange(
+                                    context, subjectFocus, departmentFocus);
+                              },
+                              hint: 'Subject',
+                              onValidator: (val) {
+                                if (val.trim().isEmpty) {
+                                  return 'Please enter a subject';
+                                } else if (val.trim().length < 3) {
+                                  return 'Subject cannot contain special characters';
+                                } else if (!RegExp(r'^[a-zA-Z0-9 ]+$')
+                                    .hasMatch(val)) {
+                                  return 'Subject cannot contain special characters';
+                                }
+                                return null;
+                              },
+                              keyBoardType: TextInputType.text),
+                          DialogInputTextField(
+                              labelText: 'Department',
+                              myController: departmentController,
+                              focusNode: departmentFocus,
+                              onFieldSubmittedValue: (val) {
+                                Utils.onFocusChange(
+                                    context, departmentFocus, batchFocus);
+                              },
+                              hint: 'Department',
+                              onValidator: (val) {
+                                if (val.trim().isEmpty) {
+                                  return 'Please enter a department';
+                                } else if (val.trim().length < 2) {
+                                  return 'Subject must be at least 2 characters long';
+                                } else if (!RegExp(r'^[a-zA-Z0-9 ]+$')
+                                    .hasMatch(val)) {
+                                  return 'Department cannot contain special characters';
+                                }
+                                return null;
+                              },
+                              keyBoardType: TextInputType.text),
+                          DialogInputTextField(
+                              labelText: 'Standard/Batch',
+                              myController: batchController,
+                              focusNode: batchFocus,
+                              onFieldSubmittedValue: (val) {
+                                Utils.onFocusChange(
+                                    context, batchFocus, attendanceFocus);
+                              },
+                              hint: 'Standard/Batch',
+                              onValidator: (val) {
+                                if (val.trim().isEmpty) {
+                                  return 'Please enter a Semester/Batch';
+                                } else if (val.trim().length < 4) {
+                                  return 'Semester/Batch must be at least 4 characters long';
+                                } else if (!RegExp(r'^[a-zA-Z0-9 ]+$')
+                                    .hasMatch(val)) {
+                                  return 'Semester/Batch cannot contain special characters';
+                                }
 
-                         return null;
-                       },
-                       keyBoardType: TextInputType.text),
-                   DialogInputTextField(
-                       labelText: 'Attendance Requirement(%)',
-                       myController: attendancePercentageController,
-                       focusNode: attendanceFocus,
-                       onFieldSubmittedValue: (val) {},
-                       hint: 'Attendance Requirement(%)',
-                       onValidator: (val) {
-                         if (val == null || val.isEmpty) {
-                           return 'Please enter attendance percentage.';
-                         } else if (double.tryParse(val) == null) {
-                           return 'Please enter a valid number.';
-                         } else if (double.parse(val) >= 100 ||
-                             double.parse(val) < 10) {
-                           return 'Enter attendance (10% - 100%)';
-                         }
-                         return null;
-                       },
-                       keyBoardType: TextInputType.number),
-                 ],))
+                                return null;
+                              },
+                              keyBoardType: TextInputType.text),
+                          DialogInputTextField(
+                              labelText: 'Attendance Requirement(%)',
+                              myController: attendancePercentageController,
+                              focusNode: attendanceFocus,
+                              onFieldSubmittedValue: (val) {},
+                              hint: 'Attendance Requirement(%)',
+                              onValidator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  return 'Please enter attendance percentage.';
+                                } else if (double.tryParse(val) == null) {
+                                  return 'Please enter a valid number.';
+                                } else if (double.parse(val) >= 100 ||
+                                    double.parse(val) < 10) {
+                                  return 'Enter attendance (10% - 100%)';
+                                }
+                                return null;
+                              },
+                              keyBoardType: TextInputType.number),
+                        ],
+                      ))
                 ],
               ),
             ),
@@ -184,25 +190,23 @@ Future<void> updateClassValueDialog(BuildContext context,ClassInputModel model) 
                       height: 32,
                       title: 'UPDATE',
                       onPress: () async {
-
-                        if (formKey.currentState!.validate()){
+                        if (formKey.currentState!.validate()) {
                           Navigator.pop(context);
                           ClassInputModel classInputModel = ClassInputModel(
-                            subjectName: subjectController.text,
+                            subjectName: subjectController.text.trim(),
                             teacherId: model.teacherId,
                             subjectId: model.subjectId,
                             totalClasses: model.totalClasses,
-                            departmentName: departmentController.text,
-                            batchName: batchController.text,
+                            departmentName: departmentController.text.trim(),
+                            batchName: batchController.text.trim(),
                             creditHour: model.creditHour.toString(),
-                            percentage:
-                            int.tryParse(attendancePercentageController.text),
+                            percentage: int.tryParse(
+                                attendancePercentageController.text),
                           );
 
                           await ClassController()
                               .updateClassData(classInputModel);
                         }
-
                       },
                       buttonColor: AppColor.kSecondaryColor,
                     ),

@@ -79,9 +79,9 @@ class _ClassInputPageState extends State<ClassInputPage> {
                         },
                         labelText: 'Subject',
                         onValidator: (val) {
-                          if (val.isEmpty) {
+                          if (val.trim().isEmpty) {
                             return 'Please enter a subject';
-                          } else if (val.length < 3) {
+                          } else if (val.trim().length < 3) {
                             return 'Subject cannot contain special characters';
                           } else if (!RegExp(r'^[a-zA-Z0-9 ]+$')
                               .hasMatch(val)) {
@@ -100,9 +100,9 @@ class _ClassInputPageState extends State<ClassInputPage> {
                           },
                           labelText: 'Department',
                           onValidator: (val) {
-                            if (val.isEmpty) {
+                            if (val.trim().isEmpty) {
                               return 'Please enter a department';
-                            } else if (val.length < 2) {
+                            } else if (val.trim().length < 2) {
                               return 'Subject must be at least 2 characters long';
                             } else if (!RegExp(r'^[a-zA-Z0-9 ]+$')
                                 .hasMatch(val)) {
@@ -120,9 +120,9 @@ class _ClassInputPageState extends State<ClassInputPage> {
                           },
                           labelText: 'Semester/Batch',
                           onValidator: (val) {
-                            if (val.isEmpty) {
+                            if (val.trim().isEmpty) {
                               return 'Please enter a Semester/Batch';
-                            } else if (val.length < 4) {
+                            } else if (val.trim().length < 4) {
                               return 'Semester/Batch must be at least 4 characters long';
                             } else if (!RegExp(r'^[a-zA-Z0-9 ]+$')
                                 .hasMatch(val)) {
@@ -185,10 +185,10 @@ class _ClassInputPageState extends State<ClassInputPage> {
             onPress: () async {
               if (_formKey.currentState!.validate()) {
                 ClassInputModel classInputModel = ClassInputModel(
-                  subjectName: subjectController.text,
-                  departmentName: departmentController.text,
+                  subjectName: subjectController.text.trim(),
+                  departmentName: departmentController.text.trim(),
                   teacherId: teacherId,
-                  batchName: batchController.text,
+                  batchName: batchController.text.trim(),
                   creditHour: cHourController.text,
                   percentage: int.tryParse(percentageController.text),
                 );

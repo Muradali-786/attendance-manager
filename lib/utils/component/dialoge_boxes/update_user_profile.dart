@@ -1,25 +1,15 @@
 import 'package:attendance_manager/constant/app_style/app_colors.dart';
 import 'package:attendance_manager/constant/app_style/app_styles.dart';
-import 'package:attendance_manager/model/student_model.dart';
 import 'package:attendance_manager/utils/component/custom_round_botton.dart';
 import 'package:attendance_manager/utils/component/input_text_filed/dialog_text_field.dart';
-import 'package:attendance_manager/utils/utils.dart';
-import 'package:attendance_manager/view_model/add_students/students_controller.dart';
+import 'package:attendance_manager/view_model/sign_up/sign_up_controller.dart';
 import 'package:flutter/material.dart';
 
-
-Future<void> updateStudentDialog(
-  BuildContext context,
-  String classId,
-  StudentModel model,
-) async {
+Future<void> updateUserProfileDialog(
+    BuildContext context, String id, String name) async {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController stdNameController =
-      TextEditingController(text: model.studentName);
-  FocusNode stdNameFocus = FocusNode();
-  TextEditingController rollNController =
-      TextEditingController(text: model.studentRollNo);
-  FocusNode rollNoFocus = FocusNode();
+  TextEditingController nameController = TextEditingController(text: name);
+  FocusNode nameFocus = FocusNode();
 
   await showDialog(
     context: context,
@@ -49,13 +39,13 @@ Future<void> updateStudentDialog(
                     flex: 2,
                   ),
                   Text(
-                    'Edit Student',
+                    'Update Profile',
                     style: AppStyles().defaultStyle(
                         22, AppColor.kTextWhiteColor, FontWeight.w400),
                   ),
                   const Spacer(),
                   GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       Navigator.pop(context);
                     },
                     child: const Icon(
@@ -73,47 +63,28 @@ Future<void> updateStudentDialog(
               child: Form(
                   key: _formKey,
                   child: Column(
-                children: [
-                  DialogInputTextField(
-                    labelText: 'Student Name',
-                    myController: stdNameController,
-                    focusNode: stdNameFocus,
-                    onFieldSubmittedValue: (val) {
-                      Utils.onFocusChange(context, stdNameFocus, rollNoFocus);
-                    },
-                    hint: 'Student Name',
-                    onValidator: (val) {
-                      if (val.trim().isEmpty) {
-                        return 'Please enter Student Name';
-                      } else if (val.trim().length < 3) {
-                        return 'Student Name  at least 3 characters long';
-                      } else if (!RegExp(r'^[a-zA-Z0-9 -]+$').hasMatch(val)) {
-                        return 'Student Name cannot contain special characters';
-                      }
-                      return null;
-                    },
-                    keyBoardType: TextInputType.text,
-                  ),
-                  DialogInputTextField(
-                    labelText: 'Roll Number / Registration#',
-                    myController: rollNController,
-                    focusNode: rollNoFocus,
-                    onFieldSubmittedValue: (val) {},
-                    hint: 'Roll Number / Registration#',
-                    onValidator: (val) {
-                      if (val.trim().isEmpty) {
-                        return 'Please enter Roll No';
-                      } else if (val.trim().length < 2) {
-                        return 'Roll No  at least 2 characters long';
-                      } else if (!RegExp(r'^[a-zA-Z0-9 -]+$').hasMatch(val)) {
-                        return 'Roll No cannot contain special characters';
-                      }
-                      return null;
-                    },
-                    keyBoardType: TextInputType.text,
-                  ),
-                ],
-              )),
+                    children: [
+                      DialogInputTextField(
+                        labelText: 'Profile Name',
+                        myController: nameController,
+                        focusNode: nameFocus,
+                        onFieldSubmittedValue: (val) {},
+                        hint: 'Profile Name',
+                        onValidator: (val) {
+                          if (val.trim().isEmpty) {
+                            return 'Please enter Name';
+                          } else if (val.trim().length < 3) {
+                            return 'Name  at least 3 characters long';
+                          } else if (!RegExp(r'^[a-zA-Z0-9 -]+$')
+                              .hasMatch(val)) {
+                            return 'Student Name cannot contain special characters';
+                          }
+                          return null;
+                        },
+                        keyBoardType: TextInputType.text,
+                      ),
+                    ],
+                  )),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(25, 22, 25, 12),
@@ -132,22 +103,16 @@ Future<void> updateStudentDialog(
                   const SizedBox(width: 5),
                   Expanded(
                     child: CustomRoundButton(
-                      title: 'SAVE',
+                      title: 'UPDATE',
                       height: 32,
                       onPress: () async {
-                        if(_formKey.currentState!.validate()){
+                        if (_formKey.currentState!.validate()) {
                           Navigator.pop(context);
-                          StudentModel studentModel = StudentModel(
-                            studentId: model.studentId,
-                            studentName: stdNameController.text.trim(),
-                            studentRollNo: rollNController.text.trim(),
-                          );
-                          await StudentController().updateStudentData(
-                            studentModel,
-                            classId,
+                          SignUpController().updateTeacherProfile(
+                            id,
+                            nameController.text.trim(),
                           );
                         }
-
                       },
                       buttonColor: AppColor.kSecondaryColor,
                     ),
@@ -161,4 +126,3 @@ Future<void> updateStudentDialog(
     },
   );
 }
-

@@ -5,9 +5,7 @@ import 'package:attendance_manager/utils/component/custom_list_tile.dart';
 import 'package:attendance_manager/utils/component/dialoge_boxes/delete_confirmations.dart';
 import 'package:attendance_manager/utils/routes/route_name.dart';
 import 'package:attendance_manager/view/class_input/class_update/update_class_dialog.dart';
-import 'package:attendance_manager/view_model/add_students/students_controller.dart';
 import 'package:attendance_manager/view_model/class_input/class_controller.dart';
-import 'package:attendance_manager/view_model/login/login_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../utils/component/common.dart';
@@ -22,9 +20,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final LoginController _loginController = LoginController();
   final ClassController _classController = ClassController();
-  final StudentController _studentController = StudentController();
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +36,6 @@ class _HomePageState extends State<HomePage> {
             FontWeight.w600,
           ),
         ),
-
       ),
       drawer: const UserProfile(),
       body: SafeArea(
@@ -119,5 +114,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-

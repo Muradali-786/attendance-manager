@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:attendance_manager/constant/app_style/app_colors.dart';
 import 'package:attendance_manager/constant/constant_size.dart';
 import 'package:attendance_manager/model/sign_up_model.dart';
@@ -68,9 +66,9 @@ class _SignUpPageState extends State<SignUpPage> {
                           },
                           labelText: 'Name',
                           onValidator: (value) {
-                            if (value.isEmpty) {
+                            if (value.trim().isEmpty) {
                               return 'Please enter your name';
-                            } else if (value.length < 3) {
+                            } else if (value.trim().length < 3) {
                               return 'Name must be at least 3 characters long';
                             } else if (!RegExp(r'^[a-zA-Z ]+$')
                                 .hasMatch(value)) {
@@ -92,7 +90,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             onValidator: (value) {
                               final RegExp emailRegExp =
                                   RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-                              if (value.isEmpty) {
+                              if (value.trim().isEmpty) {
                                 return 'Please enter your email';
                               } else if (!emailRegExp.hasMatch(value)) {
                                 return 'Please enter a valid email address';
@@ -116,9 +114,9 @@ class _SignUpPageState extends State<SignUpPage> {
                               onPressed: _togglePasswordVisibility,
                             ),
                             onValidator: (value) {
-                              if (value.isEmpty) {
+                              if (value.trim().isEmpty) {
                                 return 'Please enter your password';
-                              } else if (value.length < 6) {
+                              } else if (value.trim().length < 6) {
                                 return 'Password must be at least 6 characters long';
                               }
 
@@ -137,10 +135,10 @@ class _SignUpPageState extends State<SignUpPage> {
                               onPressed: _toggleConfirmPasswordVisibility,
                             ),
                             onValidator: (value) {
-                              if (value.isEmpty) {
+                              if (value.trim().isEmpty) {
                                 return 'Please confirm your password';
-                              } else if (value !=
-                                  pasController.value.text) {
+                              } else if (value.trim() !=
+                                  pasController.value.text.trim()) {
                                 return 'Please enter same Password';
                               }
 
@@ -161,8 +159,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         onPress: () async {
                           if (_signUpFormKey.currentState!.validate()) {
                             SignUpModel signUpModel = SignUpModel(
-                              name: nameController.text,
-                              email: emailController.text,
+                              name: nameController.text.trim(),
+                              email: emailController.text.trim(),
                             );
 
                             await provider
