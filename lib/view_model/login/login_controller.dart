@@ -1,5 +1,7 @@
+import 'package:attendance_manager/constant/app_style/app_styles.dart';
 import 'package:attendance_manager/utils/utils.dart';
 import 'package:attendance_manager/view_model/services/navigation/navigation_services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +10,7 @@ import '../../utils/routes/route_name.dart';
 class LoginController with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final NavigationService _navigationService = NavigationService();
+  final FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
   bool _loading = false;
   bool get loading => _loading;
@@ -26,24 +29,43 @@ class LoginController with ChangeNotifier {
         password: password.toString(),
       )
           .then((value) {
-        _navigationService.removeAndNavigateToRoute(RouteName.homePage);
+        checkTeacherStatus(value.user!.uid.toString());
         setLoading(false);
       });
-
-      Utils.toastMessage('Login Successful');
     } catch (e) {
       setLoading(false);
       Utils.toastMessage('Login failed. Please try again');
-    }finally{
+    } finally {
       setLoading(false);
     }
+  }
+
+  Future<void> checkTeacherStatus(String teacherId) async {
+    try {
+      final docSnapshot =
+          await fireStore.collection(TEACHER).doc(teacherId).get();
+
+      if (docSnapshot.exists) {
+        bool checkStatus = docSnapshot.data()!['status'];
+
+        if (checkStatus) {
+          Utils.toastMessage('Login Successful');
+          _navigationService.removeAndNavigateToRoute(RouteName.homePage);
+        } else {
+          Utils.toastMessage('Your are not allowed to login');
+        }
+      } else {
+        Utils.toastMessage('User Does not Exist');
+      }
+    } catch (e) {
+      Utils.toastMessage('Login failed. Please try again');
+    } finally {}
   }
 
   Future<void> logOutAsTeacher() async {
     try {
       await _auth.signOut().then((value) {
         _navigationService.removeAndNavigateToRoute(RouteName.login);
-
       });
 
       Utils.toastMessage('Log out Successful');

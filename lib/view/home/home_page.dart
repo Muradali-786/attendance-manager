@@ -6,6 +6,7 @@ import 'package:attendance_manager/utils/component/dialoge_boxes/delete_confirma
 import 'package:attendance_manager/utils/routes/route_name.dart';
 import 'package:attendance_manager/view/class_input/class_update/update_class_dialog.dart';
 import 'package:attendance_manager/view_model/class_input/class_controller.dart';
+import 'package:attendance_manager/view_model/login/login_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../utils/component/common.dart';
