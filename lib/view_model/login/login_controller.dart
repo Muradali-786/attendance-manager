@@ -62,6 +62,17 @@ class LoginController with ChangeNotifier {
     } finally {}
   }
 
+  Future<void> updateTeacherStatus(String teacherId, bool newStatus) async {
+    try {
+      await fireStore.collection(TEACHER).doc(teacherId).update({
+        'status': newStatus,
+      });
+      Utils.toastMessage('Status updated successfully');
+    } catch (e) {
+      Utils.toastMessage('Failed to update status');
+    }
+  }
+
   Future<void> logOutAsTeacher() async {
     try {
       await _auth.signOut().then((value) {
