@@ -38,8 +38,9 @@ class _UserProfileState extends State<UserProfile> {
                   physics: const NeverScrollableScrollPhysics(),
                   children: [
                     UserAccountsDrawerHeader(
-                        decoration: const BoxDecoration(
-                            color: AppColor.kSecondary54Color),
+                        decoration: BoxDecoration(
+                            color: AppColor.kSubmarine.withOpacity(0.6),
+                        ),
                         accountName: Text(data[0]['name'].toString(),
                             style: const TextStyle(fontSize: 17)),
                         accountEmail: Text(data[0]['email'].toString(),
@@ -112,12 +113,12 @@ class ReusableProfile extends StatelessWidget {
     return ListView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      children: const [
+      children:  [
         UserAccountsDrawerHeader(
-          decoration: BoxDecoration(color: AppColor.kSecondary54Color),
-          accountName: Text('####', style: TextStyle(fontSize: 17)),
-          accountEmail: Text('####@gmail.com', style: TextStyle(fontSize: 16)),
-          currentAccountPicture: CircleAvatar(
+          decoration: BoxDecoration(color:AppColor.kSubmarine.withOpacity(0.6),),
+          accountName: const Text('####', style: TextStyle(fontSize: 17)),
+          accountEmail:const  Text('####@gmail.com', style: TextStyle(fontSize: 16)),
+          currentAccountPicture:const  CircleAvatar(
             backgroundColor: AppColor.kPrimaryColor,
             child: Text(
               '#',
