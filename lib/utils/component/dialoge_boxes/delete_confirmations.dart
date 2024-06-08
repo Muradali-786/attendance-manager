@@ -7,8 +7,13 @@ import 'package:attendance_manager/view_model/add_students/students_controller.d
 import 'package:attendance_manager/view_model/attendance/attendance_controller.dart';
 import 'package:attendance_manager/view_model/class_input/class_controller.dart';
 import 'package:attendance_manager/view_model/login/login_controller.dart';
+import 'package:attendance_manager/view_model/sign_up/sign_up_controller.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
+final SignUpController _controller = SignUpController();
+final FirebaseAuth _auth = FirebaseAuth.instance;
 Future<void> showDeleteClassConfirmationDialog(
     BuildContext context, ClassInputModel model) async {
   return showDialog(
@@ -32,8 +37,15 @@ Future<void> showDeleteClassConfirmationDialog(
           TextButton(
             onPressed: () async {
               Navigator.of(context).pop();
+              bool isAllowed = await _controller
+                  .checkForAccessPermission(_auth.currentUser!.uid);
+              if (isAllowed) {
 
-              await ClassController().deleteClass(model.subjectId.toString());
+                await ClassController().deleteClass(model.subjectId.toString());
+              } else {
+                EasyLoading.showError('Access not allowed to Delete Subject',
+                    duration: const Duration(seconds: 2));
+              }
             },
             child: const Text("DELETE",
                 style: TextStyle(color: AppColor.kSecondaryColor)),
@@ -67,8 +79,16 @@ Future<void> showDeleteStudentConfirmationDialog(
             onPressed: () async {
               Navigator.of(context).pop();
 
-              await StudentController()
-                  .deleteStudent(model.studentId.toString(), classId);
+              Navigator.of(context).pop();
+              bool isAllowed = await _controller
+                  .checkForAccessPermission(_auth.currentUser!.uid);
+              if (isAllowed) {
+                await StudentController()
+                    .deleteStudent(model.studentId.toString(), classId);
+              } else {
+                EasyLoading.showError('Access not allowed to Delete Student',
+                    duration: const Duration(seconds: 2));
+              }
             },
             child: const Text("DELETE",
                 style: TextStyle(color: AppColor.kSecondaryColor)),

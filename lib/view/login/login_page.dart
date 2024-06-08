@@ -121,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                 
                 TextButton(onPressed: (){
                   Navigator.pushNamed(context, RouteName.signUp);
-                }, child: const Text('click to sign up '))
+                }, child: const Text("Don't have an account? Register",style: TextStyle(color: AppColor.kPrimaryTextColor),))
               ],
             ),
           ),

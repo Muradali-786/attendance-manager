@@ -7,6 +7,7 @@ import 'package:attendance_manager/view_model/services/media/media_services.dart
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'utils/routes/route_name.dart';
 import 'utils/routes/routes.dart';
@@ -74,7 +75,9 @@ class MyApp extends StatelessWidget {
           ),
         ),
         title: 'Attendance Manager',
+        builder: EasyLoading.init(),
         initialRoute: RouteName.splash,
+
         onGenerateRoute: Routes.generateRoute,
       ),
     );

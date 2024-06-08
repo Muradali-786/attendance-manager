@@ -9,8 +9,11 @@ import 'package:attendance_manager/utils/component/dialoge_boxes/delete_confirma
 import 'package:attendance_manager/utils/component/dialoge_boxes/update_std_dialog.dart';
 import 'package:attendance_manager/utils/routes/route_name.dart';
 import 'package:attendance_manager/view_model/add_students/students_controller.dart';
+import 'package:attendance_manager/view_model/sign_up/sign_up_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../../../utils/component/common.dart';
 import '../../../utils/component/custom_shimmer_effect.dart';
@@ -27,6 +30,8 @@ class StudentTab extends StatefulWidget {
 
 class _StudentTabState extends State<StudentTab> {
   final StudentController _studentController = StudentController();
+  final SignUpController _controller=SignUpController();
+  final FirebaseAuth _auth=FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -112,8 +117,15 @@ class _StudentTabState extends State<StudentTab> {
         child: CustomRoundButton(
           height: getProportionalHeight(38),
           title: 'ADD STUDENT',
-          onPress: () {
-            addStudentDialog(context, widget.subjectId);
+          onPress: () async{
+            bool isAllowed = await _controller
+                .checkForAccessPermission(_auth.currentUser!.uid);
+            if (isAllowed) {
+              addStudentDialog(context, widget.subjectId);
+            } else {
+              EasyLoading.showError('Access not allowed', duration: const Duration(seconds: 2));
+            }
+
           },
           buttonColor: AppColor.kSecondaryColor,
         ),

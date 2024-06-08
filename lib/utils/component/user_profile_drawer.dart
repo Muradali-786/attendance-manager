@@ -3,6 +3,7 @@ import 'package:attendance_manager/utils/component/dialoge_boxes/delete_confirma
 import 'package:attendance_manager/utils/component/dialoge_boxes/update_user_profile.dart';
 import 'package:attendance_manager/view_model/login/login_controller.dart';
 import 'package:attendance_manager/view_model/sign_up/sign_up_controller.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UserProfile extends StatefulWidget {
@@ -13,7 +14,7 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
-  final LoginController _controller = LoginController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final SignUpController _signUpController = SignUpController();
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,8 @@ class _UserProfileState extends State<UserProfile> {
         mainAxisSize: MainAxisSize.min,
         children: [
           FutureBuilder(
-            future: _signUpController.getTeacherData(),
+            future: _signUpController
+                .getTeacherData(_auth.currentUser!.uid.toString()),
             builder: (context, AsyncSnapshot snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const ReusableProfile();
@@ -31,35 +33,33 @@ class _UserProfileState extends State<UserProfile> {
               } else if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
                 final data = snapshot.data!.docs;
 
-
-
                 return ListView(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   children: [
                     UserAccountsDrawerHeader(
-                      decoration: const BoxDecoration(
-                          color: AppColor.kSecondary54Color),
-                      accountName: Text(data[0]['name'].toString(),
-                          style: const TextStyle(fontSize: 17)),
-                      accountEmail: Text(data[0]['email'].toString(),
-                          style: const TextStyle(fontSize: 16)),
-                      currentAccountPicture: GestureDetector(
-                        onTap: (){
-                          updateUserProfileDialog(context,data[0]['teacherId'],data[0]['name']);
-                        },
-                        child: CircleAvatar(
-                          backgroundColor: AppColor.kPrimaryColor,
-                          child: Text(
-                            data[0]['name'].toString().substring(0, 1),
-                            style: const TextStyle(
-                                fontSize: 25,
-                                color: AppColor.kWhite,
-                                fontWeight: FontWeight.bold),
+                        decoration: const BoxDecoration(
+                            color: AppColor.kSecondary54Color),
+                        accountName: Text(data[0]['name'].toString(),
+                            style: const TextStyle(fontSize: 17)),
+                        accountEmail: Text(data[0]['email'].toString(),
+                            style: const TextStyle(fontSize: 16)),
+                        currentAccountPicture: GestureDetector(
+                          onTap: () {
+                            updateUserProfileDialog(
+                                context, data[0]['teacherId'], data[0]['name']);
+                          },
+                          child: CircleAvatar(
+                            backgroundColor: AppColor.kPrimaryColor,
+                            child: Text(
+                              data[0]['name'].toString().substring(0, 1),
+                              style: const TextStyle(
+                                  fontSize: 25,
+                                  color: AppColor.kWhite,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
-                        ),
-                      )
-                    ),
+                        )),
                   ],
                 );
               } else {
@@ -77,7 +77,7 @@ class _UserProfileState extends State<UserProfile> {
           ),
           const ListTile(
             leading: Icon(Icons.share, color: AppColor.kPrimaryColor),
-            title:  Text(
+            title: Text(
               'Share',
               style: TextStyle(color: AppColor.kPrimaryTextColor),
             ),

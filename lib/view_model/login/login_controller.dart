@@ -4,6 +4,7 @@ import 'package:attendance_manager/view_model/services/navigation/navigation_ser
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../../utils/routes/route_name.dart';
 
@@ -41,6 +42,7 @@ class LoginController with ChangeNotifier {
   }
 
   Future<void> checkTeacherStatus(String teacherId) async {
+    EasyLoading.show(status: 'Checking access rights');
     try {
       final docSnapshot =
           await fireStore.collection(TEACHER).doc(teacherId).get();
@@ -50,9 +52,11 @@ class LoginController with ChangeNotifier {
 
         if (checkStatus) {
           Utils.toastMessage('Login Successful');
+          EasyLoading.dismiss();
           _navigationService.removeAndNavigateToRoute(RouteName.homePage);
         } else {
-          Utils.toastMessage('Your are not allowed to login');
+          EasyLoading.showError('Access not allowed',
+              duration: const Duration(seconds: 2));
         }
       } else {
         Utils.toastMessage('User Does not Exist');

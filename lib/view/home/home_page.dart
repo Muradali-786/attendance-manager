@@ -4,11 +4,15 @@ import 'package:attendance_manager/model/class_model.dart';
 import 'package:attendance_manager/utils/component/custom_list_tile.dart';
 import 'package:attendance_manager/utils/component/dialoge_boxes/delete_confirmations.dart';
 import 'package:attendance_manager/utils/routes/route_name.dart';
+import 'package:attendance_manager/utils/utils.dart';
 import 'package:attendance_manager/view/class_input/class_update/update_class_dialog.dart';
 import 'package:attendance_manager/view_model/class_input/class_controller.dart';
-import 'package:attendance_manager/view_model/login/login_controller.dart';
+import 'package:attendance_manager/view_model/services/navigation/navigation_services.dart';
+import 'package:attendance_manager/view_model/sign_up/sign_up_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../../utils/component/common.dart';
 import '../../utils/component/custom_shimmer_effect.dart';
 import '../../utils/component/user_profile_drawer.dart';
@@ -22,7 +26,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final ClassController _classController = ClassController();
-
+  final SignUpController _controller = SignUpController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,6 +94,8 @@ class _HomePageState extends State<HomePage> {
                           updateClassValueDialog(context, snap[index]);
                         },
                         onDismiss: () {
+
+
                           showDeleteClassConfirmationDialog(
                               context, snap[index]);
                         },
@@ -103,7 +110,14 @@ class _HomePageState extends State<HomePage> {
       )),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          Navigator.pushNamed(context, RouteName.classInputPage);
+          bool isAllowed = await _controller
+              .checkForAccessPermission(_auth.currentUser!.uid);
+          if (isAllowed) {
+            // Navigator.pushNamed(context, RouteName.classInputPage);
+            NavigationService().navigateToRoute(RouteName.classInputPage);
+          } else {
+            EasyLoading.showError('Access not allowed', duration: const Duration(seconds: 2));
+          }
         },
         backgroundColor: AppColor.kButtonColor,
         elevation: 4,

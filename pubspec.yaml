@@ -50,6 +50,7 @@ dependencies:
   path_provider: ^2.1.2
   provider: ^6.1.2
   popover: ^0.3.0
+  flutter_easyloading: ^3.0.5
 
 dev_dependencies:
   flutter_test:

@@ -7,6 +7,7 @@ import 'package:attendance_manager/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../utils/routes/route_name.dart';
 import '../../view_model/sign_up/sign_up_controller.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -39,8 +40,9 @@ class _SignUpPageState extends State<SignUpPage> {
     confirmPassFocus.dispose();
     super.dispose();
   }
-  bool _isObscure=false;
-  bool _isConfirmObscure=false;
+
+  bool _isObscure = false;
+  bool _isConfirmObscure = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,8 +111,10 @@ class _SignUpPageState extends State<SignUpPage> {
                             labelText: 'Password',
                             isPasswordField: true,
                             obsecureText: _isObscure,
-                            suffixWidget:  IconButton(
-                              icon: Icon(_isObscure ? Icons.visibility : Icons.visibility_off),
+                            suffixWidget: IconButton(
+                              icon: Icon(_isObscure
+                                  ? Icons.visibility
+                                  : Icons.visibility_off),
                               onPressed: _togglePasswordVisibility,
                             ),
                             onValidator: (value) {
@@ -130,8 +134,10 @@ class _SignUpPageState extends State<SignUpPage> {
                             labelText: 'Confirm Password',
                             isPasswordField: true,
                             obsecureText: _isConfirmObscure,
-                            suffixWidget:  IconButton(
-                              icon: Icon(_isConfirmObscure  ? Icons.visibility : Icons.visibility_off),
+                            suffixWidget: IconButton(
+                              icon: Icon(_isConfirmObscure
+                                  ? Icons.visibility
+                                  : Icons.visibility_off),
                               onPressed: _toggleConfirmPasswordVisibility,
                             ),
                             onValidator: (value) {
@@ -161,13 +167,11 @@ class _SignUpPageState extends State<SignUpPage> {
                             SignUpModel signUpModel = SignUpModel(
                               name: nameController.text.trim(),
                               email: emailController.text.trim(),
+                              password: pasController.text.trim(),
                             );
 
                             await provider
-                                .registerTeacher(
-                              signUpModel,
-                              pasController.text,
-                            )
+                                .registerTeacher(signUpModel)
                                 .then((value) {
                               nameController.clear();
                               emailController.clear();
@@ -179,7 +183,15 @@ class _SignUpPageState extends State<SignUpPage> {
                         buttonColor: AppColor.kPrimaryColor,
                       );
                     },
-                  )
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, RouteName.login);
+                      },
+                      child: const Text(
+                        "Already have an account? Login",
+                        style: TextStyle(color: AppColor.kPrimaryTextColor),
+                      ))
                 ],
               ),
             ),
@@ -187,15 +199,15 @@ class _SignUpPageState extends State<SignUpPage> {
         ));
   }
 
-
   void _togglePasswordVisibility() {
     setState(() {
       _isObscure = !_isObscure;
     });
   }
+
   void _toggleConfirmPasswordVisibility() {
     setState(() {
-      _isConfirmObscure = !_isConfirmObscure ;
+      _isConfirmObscure = !_isConfirmObscure;
     });
   }
 }
