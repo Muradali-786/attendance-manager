@@ -35,6 +35,12 @@ class SignUpController with ChangeNotifier {
         });
         setLoading(false);
         Utils.toastMessage('register Successful');
+        EasyLoading.showInfo(
+          'Account creation successful! Please wait for admin approval to log in.',
+          duration: const Duration(
+            seconds: 3,
+          ),
+        );
       });
     } catch (e) {
       setLoading(false);

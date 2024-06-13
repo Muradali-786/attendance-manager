@@ -1,4 +1,5 @@
 import 'package:attendance_manager/constant/app_style/app_colors.dart';
+import 'package:attendance_manager/view/splash/splash.dart';
 import 'package:attendance_manager/view_model/add_students/students_controller.dart';
 import 'package:attendance_manager/view_model/attendance/attendance_controller.dart';
 import 'package:attendance_manager/view_model/class_input/class_controller.dart';
@@ -79,6 +80,7 @@ class MyApp extends StatelessWidget {
         initialRoute: RouteName.splash,
 
         onGenerateRoute: Routes.generateRoute,
+
       ),
     );
   }

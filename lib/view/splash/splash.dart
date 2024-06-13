@@ -1,4 +1,5 @@
 import 'package:attendance_manager/constant/app_style/app_colors.dart';
+import 'package:attendance_manager/constant/image_constant/image_constant.dart';
 import 'package:attendance_manager/view_model/services/splash_services.dart';
 import 'package:flutter/material.dart';
 
@@ -20,18 +21,13 @@ class _SplashState extends State<Splash> {
 
   @override
   Widget build(BuildContext context) {
-    double h = MediaQuery.sizeOf(context).height;
-    double w = MediaQuery.sizeOf(context).width;
     return Scaffold(
-      body: Container(
-        width: w,
-        height: h,
-        decoration:  BoxDecoration(
-
-          color: AppColor.kWhite.withOpacity(0.5)
-        ),
+      backgroundColor: AppColor.kWhite,
+      body: SafeArea(
         child: Center(
-          child: Text('Splash Screen',style: TextStyle(color: AppColor.kBlack,fontSize: 24),),
+          child: Image(
+            image: AssetImage(ImageConstant.kLogo),
+          ),
         ),
       ),
     );

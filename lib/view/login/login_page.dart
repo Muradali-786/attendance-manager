@@ -1,5 +1,6 @@
 import 'package:attendance_manager/constant/app_style/app_colors.dart';
 import 'package:attendance_manager/constant/constant_size.dart';
+import 'package:attendance_manager/constant/image_constant/image_constant.dart';
 import 'package:attendance_manager/utils/component/custom_round_botton.dart';
 import 'package:attendance_manager/utils/component/input_text_filed/custom_input_text_filed.dart';
 import 'package:attendance_manager/utils/routes/route_name.dart';
@@ -31,20 +32,34 @@ class _LoginPageState extends State<LoginPage> {
 
     super.dispose();
   }
-  bool _isObscure=false;
+
+  bool _isObscure = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.kWhite,
-      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: kPadding15),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Image(
+                  height: 200,
+                  width: 200,
+                  image: AssetImage(ImageConstant.kLogo),
+                ),
+                const Text(
+                  "Welcome back!",
+                  style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w900,
+                      color: AppColor.kPrimaryColor),
+                ),
+                const Text(
+                  "Log in into your existing account",
+                  style: TextStyle(color: AppColor.kTextGreyColor, height: 2),
+                ),
                 Form(
                   key: _loginFormKey,
                   child: Column(
@@ -74,11 +89,13 @@ class _LoginPageState extends State<LoginPage> {
                         onFieldSubmittedValue: (val) {},
                         labelText: 'Password',
                         isPasswordField: true,
-                          obsecureText: _isObscure,
-                          suffixWidget:  IconButton(
-                            icon: Icon(_isObscure ? Icons.visibility : Icons.visibility_off),
-                            onPressed: _togglePasswordVisibility,
-                          ),
+                        obsecureText: _isObscure,
+                        suffixWidget: IconButton(
+                          icon: Icon(_isObscure
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                          onPressed: _togglePasswordVisibility,
+                        ),
                         onValidator: (value) {
                           if (value.trim().isEmpty) {
                             return 'Please enter your password';
@@ -92,6 +109,16 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                 ),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: TextButton(
+                    onPressed: () {},
+                    child: const Text(
+                      "Forgot Password?",
+                      style: TextStyle(color: AppColor.kPrimaryTextColor),
+                    ),
+                  ),
+                ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -99,29 +126,33 @@ class _LoginPageState extends State<LoginPage> {
                   builder: (context, provider, child) {
                     return CustomRoundButton(
                       title: 'Login',
+                      textSize: 18,
                       loading: provider.loading,
                       onPress: () async {
                         if (_loginFormKey.currentState!.validate()) {
-                          await provider.loginAsTeacher(
+                          await provider
+                              .loginAsTeacher(
                             emailController.text.trim(),
                             pasController.text.trim(),
-                          ).then((value) {
+                          )
+                              .then((value) {
                             emailController.clear();
                             pasController.clear();
-
                           });
-
-
                         }
                       },
                       buttonColor: AppColor.kPrimaryColor,
                     );
                   },
                 ),
-                
-                TextButton(onPressed: (){
-                  Navigator.pushNamed(context, RouteName.signUp);
-                }, child: const Text("Don't have an account? Register",style: TextStyle(color: AppColor.kPrimaryTextColor),))
+                TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, RouteName.signUp);
+                    },
+                    child: const Text(
+                      "Don't have an account? Register",
+                      style: TextStyle(color: AppColor.kPrimaryTextColor),
+                    ))
               ],
             ),
           ),

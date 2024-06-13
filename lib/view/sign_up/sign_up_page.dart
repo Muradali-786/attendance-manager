@@ -7,6 +7,7 @@ import 'package:attendance_manager/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../constant/image_constant/image_constant.dart';
 import '../../utils/routes/route_name.dart';
 import '../../view_model/sign_up/sign_up_controller.dart';
 
@@ -47,15 +48,29 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: AppColor.kWhite,
-        resizeToAvoidBottomInset: false,
+
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: kPadding15),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  Image(
+                    height: 160,
+                    width: 200,
+                    image: AssetImage(ImageConstant.kLogo),
+                  ),
+                  const Text(
+                    "Let's Get Started!",
+                    style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w900,
+                        color: AppColor.kPrimaryColor),
+                  ),
+                  const Text(
+                    "Register Your Account",
+                    style: TextStyle(color: AppColor.kTextGreyColor, height: 2),
+                  ),
                   Form(
                     key: _signUpFormKey,
                     child: Column(
@@ -162,7 +177,9 @@ class _SignUpPageState extends State<SignUpPage> {
                       return CustomRoundButton(
                         title: 'Sign Up',
                         loading: provider.loading,
+                        textSize: 18,
                         onPress: () async {
+
                           if (_signUpFormKey.currentState!.validate()) {
                             SignUpModel signUpModel = SignUpModel(
                               name: nameController.text.trim(),
@@ -185,13 +202,14 @@ class _SignUpPageState extends State<SignUpPage> {
                     },
                   ),
                   TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(context, RouteName.login);
-                      },
-                      child: const Text(
-                        "Already have an account? Login",
-                        style: TextStyle(color: AppColor.kPrimaryTextColor),
-                      ))
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, RouteName.login);
+                    },
+                    child: const Text(
+                      "Already have an account? Login",
+                      style: TextStyle(color: AppColor.kPrimaryTextColor),
+                    ),
+                  )
                 ],
               ),
             ),

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class CustomRoundButton extends StatelessWidget {
   final String title;
-  final double height;
+  final double height,textSize;
   final double width;
   final VoidCallback onPress;
   final Color buttonColor;
@@ -17,6 +17,7 @@ class CustomRoundButton extends StatelessWidget {
     required this.buttonColor,
     this.width = double.infinity,
     this.height = 50,
+    this.textSize = 14,
     this.loading = false,
   }) : super(key: key);
 
@@ -41,7 +42,7 @@ class CustomRoundButton extends StatelessWidget {
                 child: Text(
                   title,
                   style: AppStyles().defaultStyle(
-                    14,
+                    textSize,
                     AppColor.kWhite,
                     FontWeight.w500,
                   ),

@@ -55,8 +55,12 @@ class LoginController with ChangeNotifier {
           EasyLoading.dismiss();
           _navigationService.removeAndNavigateToRoute(RouteName.homePage);
         } else {
-          EasyLoading.showError('Access not allowed',
-              duration: const Duration(seconds: 2));
+          EasyLoading.showInfo(
+            'Admin approval required. Please contact administrator',
+            duration: const Duration(
+              seconds: 2,
+            ),
+          );
         }
       } else {
         Utils.toastMessage('User Does not Exist');
