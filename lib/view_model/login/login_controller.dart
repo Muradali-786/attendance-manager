@@ -42,7 +42,7 @@ class LoginController with ChangeNotifier {
   }
 
   Future<void> checkTeacherStatus(String teacherId) async {
-    EasyLoading.show(status: 'Checking access rights');
+    EasyLoading.show(status: 'Checking access rights...');
     try {
       final docSnapshot =
           await fireStore.collection(TEACHER).doc(teacherId).get();
