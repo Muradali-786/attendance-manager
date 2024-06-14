@@ -79,8 +79,9 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
                 } else if (snapshot.hasError) {
                   return const Text('Error');
                 } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return  Padding(
-                    padding: EdgeInsets.only(top:SizeConfig.screenHeight!*0.35),
+                  return Padding(
+                    padding:
+                        EdgeInsets.only(top: SizeConfig.screenHeight! * 0.35),
                     child: const Text(
                       'No student has been added in the class.',
                       style: TextStyle(color: AppColor.kTextGreyColor),
@@ -145,6 +146,7 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
                   classId: subjectId,
                   selectedDate: selectedDate,
                   currentTime: currentTime,
+                  createdAtDate: DateTime.now(),
                   attendanceList: Map.fromIterables(
                     stdIdList,
                     provider.attendanceStatus,

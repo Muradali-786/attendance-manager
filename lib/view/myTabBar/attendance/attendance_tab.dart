@@ -6,6 +6,7 @@ import 'package:attendance_manager/utils/routes/route_name.dart';
 import 'package:attendance_manager/view_model/attendance/attendance_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../../../model/attendance_model.dart';
 
@@ -52,7 +53,6 @@ class _AttendanceTabState extends State<AttendanceTab> {
             selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
             firstDay: DateTime(2015),
             lastDay: DateTime(2099),
-
             onDaySelected: _handleDaySelected,
             calendarFormat: _calendarFormat,
             startingDayOfWeek: StartingDayOfWeek.monday,
@@ -125,9 +125,20 @@ class _AttendanceTabState extends State<AttendanceTab> {
                           },
                           showDelete: true,
                           onPressDelete: () async {
+                            DateTime createdAtDate = snap[index].createdAtDate;
+                            DateTime currentDate = DateTime.now();
 
-                            showDeleteAttendanceConfirmationDialog(context, snap[index],widget.subjectId);
+                            int differenceInDays =
+                                currentDate.difference(createdAtDate).inDays;
 
+                            if (differenceInDays <= 29) {
+                              showDeleteAttendanceConfirmationDialog(
+                                  context, snap[index], widget.subjectId);
+                            } else {
+                              EasyLoading.showInfo(
+                                  'Attendance records can only be deleted within 30 days of creation. This record can no longer be removed.',
+                                  duration: const Duration(seconds: 2));
+                            }
                           },
                         ),
                       );

@@ -9,6 +9,7 @@ import 'package:attendance_manager/view_model/add_students/students_controller.d
 import 'package:attendance_manager/view_model/attendance/attendance_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../model/student_model.dart';
@@ -25,7 +26,6 @@ class UpdateAttendance extends StatefulWidget {
 }
 
 class _UpdateAttendanceState extends State<UpdateAttendance> {
- 
   List<dynamic> studentIdList = [];
   bool isChange = false;
   TimeOfDay? selectedTime;
@@ -47,12 +47,12 @@ class _UpdateAttendanceState extends State<UpdateAttendance> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     DateTime date = widget.data['data']['selectedDate'];
+    DateTime attendanceDate = widget.data['data']['createdAtDate'];
     String time = widget.data['data']['currentTime'];
     String classId = widget.data['data']['classId'];
     String attendanceId = widget.data['data']['attendanceId'];
     Map attendanceStatus = widget.data['data']['attendanceList'];
-    stdIdsList=attendanceStatus.keys.toList();
-    
+    stdIdsList = attendanceStatus.keys.toList();
 
     String period =
         selectedTime != null && selectedTime!.hour < 12 ? 'AM' : 'PM';
@@ -154,20 +154,34 @@ class _UpdateAttendanceState extends State<UpdateAttendance> {
               loading: provider.loading,
               title: 'UPDATE ATTENDANCE',
               onPress: () async {
+                DateTime currentDate = DateTime.now();
+
+                int differenceInDays =
+                    currentDate.difference(attendanceDate).inDays;
+
                 if (isChange) {
-                  AttendanceModel model = AttendanceModel(
-                    classId: classId,
-                    attendanceId: attendanceId,
-                    selectedDate: date,
-                    currentTime: currentTime,
-                    attendanceList: provider.updatedStatusMap!,
-                  );
+                  if (differenceInDays <= 29) {
+                    AttendanceModel model = AttendanceModel(
+                      classId: classId,
+                      attendanceId: attendanceId,
+                      selectedDate: date,
+                      createdAtDate: attendanceDate,
+                      currentTime: currentTime,
+                      attendanceList: provider.updatedStatusMap!,
+                    );
 
-                  await provider.updateStudentAttendance(model).then((value) {
-                    Navigator.pop(context);
-                  });
+                    await provider.updateStudentAttendance(model).then((value) {
+                      Navigator.pop(context);
+                    });
 
-                  await _studentController.calculateStudentAttendance(classId, stdIdsList);
+                    await _studentController.calculateStudentAttendance(
+                        classId, stdIdsList);
+                  } else {
+                    EasyLoading.showInfo(
+                      'Attendance records can only be updated within 30 days of creation. This record can no longer be modified',
+                      duration: const Duration(seconds: 2),
+                    );
+                  }
                 } else {
                   Utils.toastMessage('you did not Update any thing');
                 }
