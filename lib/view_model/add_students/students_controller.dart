@@ -3,6 +3,7 @@ import 'package:attendance_manager/utils/utils.dart';
 import 'package:attendance_manager/view_model/attendance/attendance_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../../constant/app_style/app_styles.dart';
 import '../../model/attendance_model.dart';
@@ -177,12 +178,21 @@ class StudentController with ChangeNotifier {
       WriteBatch batch = _fireStore.batch();
 
       for (int i = 0; i < stdRollNoList.length; i++) {
+        bool isExist = await doesStudentExist(classId, stdRollNoList[i]);
         if (stdNamesList[i].toString().length < 3 ||
             stdRollNoList[i].toString().length < 2) {
           Utils.toastMessage(
               'Attention: Student ${stdNamesList[i]} (${stdRollNoList[i]}) is not added due to short details');
 
           continue;
+        } else if (!isExist) {
+          Utils.toastMessage(
+              "A student with the same reg# (${stdRollNoList[i]}) already exists");
+          EasyLoading.showInfo(
+              "Make sure there are no duplicate roll numbers\n in the subject and the Excel sheet Exist",
+              duration: const Duration(seconds: 3));
+          setLoading(false);
+          break;
         }
         String docId = _fireStore
             .collection(CLASS)
@@ -222,6 +232,18 @@ class StudentController with ChangeNotifier {
     }
   }
 
+  Future<bool> doesStudentExist(String classId, String studentRollNo) async {
+    final querySnapshot = await _fireStore
+        .collection(CLASS)
+        .doc(classId)
+        .collection(STUDENT)
+        .where('studentRollNo', isEqualTo: studentRollNo)
+        .limit(1)
+        .get();
+
+    return querySnapshot.docs.isNotEmpty;
+  }
+
   Future<void> addNewStudent(StudentModel studentModel, String classId) async {
     setLoading(true);
 
@@ -233,16 +255,25 @@ class StudentController with ChangeNotifier {
           .doc()
           .id;
       studentModel.studentId = docId;
+      bool isExist =
+          await doesStudentExist(classId, studentModel.studentRollNo);
+      if (!isExist) {
+        await _fireStore
+            .collection(CLASS)
+            .doc(classId)
+            .collection(STUDENT)
+            .doc(docId)
+            .set(studentModel.toMap())
+            .then((value) {
+          setLoading(false);
+          Utils.toastMessage('Student Added');
+        });
+      } else {
+        setLoading(false);
+        Utils.toastMessage(
+            "Student with the same reg# (${studentModel.studentRollNo}) already exist");
+      }
 
-      await _fireStore
-          .collection(CLASS)
-          .doc(classId)
-          .collection(STUDENT)
-          .doc(docId)
-          .set(studentModel.toMap())
-          .then((value) {
-        Utils.toastMessage('Student Added');
-      });
       setLoading(false);
     } catch (e) {
       Utils.toastMessage('Error during Student Added');
@@ -254,17 +285,24 @@ class StudentController with ChangeNotifier {
 
   Future<void> updateStudentData(StudentModel studentModel, classId) async {
     try {
-      await _fireStore
-          .collection(CLASS)
-          .doc(classId)
-          .collection(STUDENT)
-          .doc(studentModel.studentId)
-          .update({
-        'studentName': studentModel.studentName,
-        'studentRollNo': studentModel.studentRollNo,
-      }).then((value) {
-        Utils.toastMessage('Student data Updated');
-      });
+      bool isExist =
+          await doesStudentExist(classId, studentModel.studentRollNo);
+      if (!isExist) {
+        await _fireStore
+            .collection(CLASS)
+            .doc(classId)
+            .collection(STUDENT)
+            .doc(studentModel.studentId)
+            .update({
+          'studentName': studentModel.studentName,
+          'studentRollNo': studentModel.studentRollNo,
+        }).then((value) {
+          Utils.toastMessage('Student data Updated');
+        });
+      } else {
+        Utils.toastMessage(
+            "Student with the same reg# (${studentModel.studentRollNo}) already exist");
+      }
     } catch (e) {
       Utils.toastMessage('Error during Student data updation');
     }
