@@ -178,21 +178,13 @@ class StudentController with ChangeNotifier {
       WriteBatch batch = _fireStore.batch();
 
       for (int i = 0; i < stdRollNoList.length; i++) {
-        bool isExist = await doesStudentExist(classId, stdRollNoList[i]);
+
         if (stdNamesList[i].toString().length < 3 ||
             stdRollNoList[i].toString().length < 2) {
           Utils.toastMessage(
               'Attention: Student ${stdNamesList[i]} (${stdRollNoList[i]}) is not added due to short details');
 
           continue;
-        } else if (!isExist) {
-          Utils.toastMessage(
-              "A student with the same reg# (${stdRollNoList[i]}) already exists");
-          EasyLoading.showInfo(
-              "Make sure there are no duplicate roll numbers\n in the subject and the Excel sheet Exist",
-              duration: const Duration(seconds: 3));
-          setLoading(false);
-          break;
         }
         String docId = _fireStore
             .collection(CLASS)

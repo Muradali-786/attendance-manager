@@ -129,6 +129,7 @@ class _ClassInputPageState extends State<ClassInputPage> {
                               return 'Semester/Batch cannot contain special characters';
                             }
 
+
                             return null;
                           },
                           keyBoardType: TextInputType.streetAddress),
